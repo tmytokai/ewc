@@ -1,0 +1,388 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "src\resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+//#include "afxres.h"
+#include <windows.h>
+#define IDC_STATIC -1
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 日本語 resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
+#ifdef _WIN32
+LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
+#pragma code_page(932)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_EDITWEDIT DIALOG DISCARDABLE  0, 0, 263, 243
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "編集メニュー"
+FONT 9, "ＭＳ Ｐゴシック"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,12,8,43,14
+    PUSHBUTTON      "キャンセル",IDCANCEL,12,27,43,14
+    PUSHBUTTON      "分割",IDC_BTSPLIT,12,61,43,14
+    PUSHBUTTON      "切り取り",IDC_BTSTARTCUT,12,81,43,14
+    PUSHBUTTON      "CM カット",IDC_BTSTARTCUTCM,12,102,43,14
+    PUSHBUTTON      "全体保存",IDC_BTSTART,12,123,43,14
+    PUSHBUTTON      "試聴",IDC_BTWAVEOUT,12,143,43,14
+    PUSHBUTTON      "設定保存",IDC_BTSAVESETTING,12,190,43,14
+    PUSHBUTTON      "設定読込",IDC_BTLOADSETTING,12,213,43,14
+    PUSHBUTTON      "クリア",IDC_BTCLEAR,68,216,43,14
+    EDITTEXT        IDC_EDITSETTING,67,30,189,180,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
+    LTEXT           "WAVEFLT2 追加オプション設定",IDC_STATIC,67,14,93,8
+    GROUPBOX        "編集",IDC_STATIC,7,48,54,118,BS_CENTER
+    GROUPBOX        "設定ファイル",IDC_STATIC,7,174,53,62,BS_CENTER
+    PUSHBUTTON      "WAVEFLT2 のヘルプ",IDC_BTHELP,166,9,74,14
+END
+
+IDD_EDITFIND DIALOG DISCARDABLE  0, 0, 175, 239
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "ジャンプ"
+FONT 9, "ＭＳ Ｐゴシック"
+BEGIN
+    EDITTEXT        IDC_EDITHOUR,7,7,25,12,ES_RIGHT | WS_GROUP
+    CONTROL         "Spin3",IDC_SPINHOUR,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_NOTHOUSANDS,13,56,10,12
+    GROUPBOX        "無音部検索",IDC_STATIC,7,45,161,184
+    EDITTEXT        IDC_EDITMIN,53,7,25,12,ES_RIGHT | WS_GROUP
+    CONTROL         "Spin3",IDC_SPINMIN,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_NOTHOUSANDS,7,23,10,12
+    EDITTEXT        IDC_EDITSEC,92,7,25,12,ES_RIGHT | WS_GROUP
+    CONTROL         "Spin3",IDC_SPINSEC,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_NOTHOUSANDS,23,25,10,12
+    DEFPUSHBUTTON   "移動",IDC_BTJUMP,140,7,29,14
+    EDITTEXT        IDC_EDITTRACK,92,28,35,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPINTRACK,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_NOTHOUSANDS,55,36,10,13
+    PUSHBUTTON      "移動",IDC_BTMOVETRACK,139,28,29,14
+    PUSHBUTTON      "分割マークセット",IDC_BTSERCHSPLIT,30,60,54,14
+    PUSHBUTTON      "次に移動",IDC_BTSEARCH,89,60,54,14
+    CONTROL         "平均音量値で検索",IDC_CHKAVR,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,12,80,70,10
+    CONTROL         "先頭",IDC_RADIOTOP,"Button",BS_AUTORADIOBUTTON | 
+                    WS_GROUP | WS_TABSTOP,21,109,30,10
+    CONTROL         "中間",IDC_RADIOMID,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,72,109,30,10
+    CONTROL         "最後",IDC_RADIOEND,"Button",BS_AUTORADIOBUTTON | 
+                    WS_TABSTOP,123,109,30,10
+    CONTROL         "Slider1",IDC_SLIDERCOUNT,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_GROUP | WS_TABSTOP,14,142,110,18
+    PUSHBUTTON      "主マークの位置から最適値を推定",IDC_BTOPTVAL,35,181,104,
+                    14
+    CONTROL         "Slider2",IDC_SLIDERBOUND,"msctls_trackbar32",TBS_BOTH | 
+                    TBS_NOTICKS | WS_GROUP | WS_TABSTOP,14,201,110,18
+    LTEXT           "分",IDC_STATIC,81,11,8,8
+    LTEXT           "秒",IDC_STATIC,120,11,8,8
+    GROUPBOX        "検索後の位置",IDC_STATIC,11,95,152,30
+    GROUPBOX        "無音部の秒数",IDC_STATIC,11,132,152,30
+    GROUPBOX        "しきい値",IDC_STATIC,11,169,152,54
+    EDITTEXT        IDC_EDITCOUNT,132,146,27,12,ES_READONLY | NOT WS_BORDER | 
+                    NOT WS_TABSTOP
+    EDITTEXT        IDC_EDITBOUND,132,206,28,12,ES_READONLY | NOT WS_BORDER | 
+                    NOT WS_TABSTOP
+    LTEXT           "トラック",IDC_STATIC,65,30,22,8
+    LTEXT           "時間",IDC_STATIC,35,11,15,8
+END
+
+IDD_COPYFILE DIALOG DISCARDABLE  0, 0, 106, 49
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "保存中"
+FONT 9, "ＭＳ Ｐゴシック"
+BEGIN
+    PUSHBUTTON      "中止",IDCANCEL,29,12,46,25
+END
+
+IDD_MYMBOXDLG DIALOG DISCARDABLE  0, 0, 105, 83
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "ﾀﾞｲｱﾛｸﾞ"
+FONT 9, "ＭＳ Ｐゴシック"
+BEGIN
+END
+
+IDD_SETTINGDIAG DIALOG DISCARDABLE  0, 0, 187, 147
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "設定"
+FONT 9, "ＭＳ Ｐゴシック"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,35,126,36,14
+    PUSHBUTTON      "キャンセル",IDCANCEL,77,126,36,14
+    PUSHBUTTON      "ヘルプ",IDC_BTHELP,119,126,36,14
+    COMBOBOX        IDC_CMBPLAY,24,53,139,18,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "マルチメディアのプロパティ",IDC_BTMALTI,51,75,84,14
+    CONTROL         "シフトロック",IDC_CHKSHIFT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,20,103,49,10
+    CONTROL         "コンソールを表示する",IDC_CHKSHOWCON,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,86,103,79,10
+    GROUPBOX        "再生サウンドデバイス選択",IDC_STATIC,7,39,173,54
+    LTEXT           "Easy Wave Cutter Ver.20150617",IDC_STATIC,39,11,
+                    115,8
+    LTEXT           "Copyright (c) 1999-2015,Tomoya Tokairin",IDC_STATIC,33,
+                    24,122,8
+END
+
+IDD_SEARCH DIALOG DISCARDABLE  0, 0, 186, 47
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "無音部サーチ中"
+FONT 9, "ＭＳ Ｐゴシック"
+BEGIN
+    PUSHBUTTON      "中止",IDCANCEL,67,25,50,14
+    CONTROL         "Progress1",IDC_PROGBAR,"msctls_progress32",WS_BORDER,7,
+                    7,172,13
+END
+
+IDD_TRACK DIALOG DISCARDABLE  0, 0, 355, 333
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "トラック設定"
+FONT 9, "ＭＳ Ｐゴシック"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,254,55,40,17
+    PUSHBUTTON      "キャンセル",IDCANCEL,301,55,40,17
+    EDITTEXT        IDC_EDITBASE,7,22,61,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDITEXT,86,22,37,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "読込",IDC_BTSPLITLOAD,143,22,32,17
+    PUSHBUTTON      "保存",IDC_BTSPLITSAVE,183,22,32,17
+    PUSHBUTTON      "読込",IDC_BTCUTLOAD,257,22,32,17
+    PUSHBUTTON      "保存",IDC_BTCUTSAVE,297,22,32,17
+    EDITTEXT        IDC_EDITDIR,7,55,236,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "参照",IDC_BTREFF,67,40,34,13
+    EDITTEXT        IDC_EDITTRACK,40,89,35,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPINTRACK,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_NOTHOUSANDS,144,89,10,13
+    PUSHBUTTON      "試聴",IDC_BTPLAYSTOP,86,87,42,14
+    EDITTEXT        IDC_EDITTRACK2,40,107,35,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPINTRACK2,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_ARROWKEYS | 
+                    UDS_NOTHOUSANDS,145,109,10,13
+    PUSHBUTTON      "結合",IDC_BTCONNECT,86,105,42,14
+    PUSHBUTTON      "再読み込み",IDC_BTRELOAD,190,89,42,14
+    PUSHBUTTON      "設定ファイル",IDC_BTLOAD,240,89,42,14
+    PUSHBUTTON      "リセット",IDC_BTRESET,290,89,42,14
+    EDITTEXT        IDC_EDITSETTING,13,125,328,193,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | WS_VSCROLL | WS_HSCROLL | NOT 
+                    WS_TABSTOP
+    LTEXT           "．",IDC_STATIC,76,26,8,8
+    LTEXT           "ベース名",IDC_STATIC,26,9,27,8
+    LTEXT           "拡張子",IDC_STATIC,93,9,22,8
+    GROUPBOX        "分割マーク設定ファイル",IDC_STATIC,133,7,96,40
+    LTEXT           "保存先ディレクトリ",IDC_STATIC,7,43,54,8
+    LTEXT           "トラック",IDC_STATIC,15,91,22,8
+    GROUPBOX        "ユーザー定義トラック名",IDC_STATIC,7,76,341,222
+    GROUPBOX        "カット設定ファイル",IDC_STATIC,245,7,96,40
+    CONTROL         "設定ファイルの空白行は出力しない(NULL 出力)",
+                    IDC_CHKNULL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,190,
+                    109,155,10
+    LTEXT           "結合",IDC_STATIC,15,110,19,9
+END
+
+IDD_INFO DIALOG DISCARDABLE  0, 0, 221, 231
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "ファイル情報"
+FONT 9, "ＭＳ Ｐゴシック"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,85,7,50,14
+    EDITTEXT        IDC_EDITSETTING,7,29,207,195,ES_MULTILINE | 
+                    ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL | 
+                    NOT WS_TABSTOP
+END
+
+IDD_OVERWRITE DIALOG DISCARDABLE  0, 0, 311, 64
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+CAPTION "上書き確認"
+FONT 9, "ＭＳ Ｐゴシック"
+BEGIN
+    PUSHBUTTON      "はい",IDOK,7,43,50,14
+    DEFPUSHBUTTON   "いいえ",IDCANCEL,69,43,50,14
+    PUSHBUTTON      "全て上書き",IDC_ALLYES,131,43,50,14
+    PUSHBUTTON      "全ていいえ",IDC_ALLNO,193,43,50,14
+    EDITTEXT        IDC_EDITMSG,7,7,297,27,ES_AUTOHSCROLL | ES_READONLY | 
+                    NOT WS_BORDER
+    PUSHBUTTON      "中止",IDC_STOP,255,43,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON                ICON    DISCARDABLE     "icons\icon.ico"
+IDI_ICONREW2            ICON    DISCARDABLE     "icons\iconrew2.ico"
+IDI_ICONPLAYSTOP        ICON    DISCARDABLE     "icons\iconplaystop.ico"
+IDI_ICONMARK            ICON    DISCARDABLE     "icons\iconmark.ico"
+IDI_ICONFOR2            ICON    DISCARDABLE     "icons\iconfor2.ico"
+IDI_ICONFOR             ICON    DISCARDABLE     "icons\iconfor.ico"
+IDI_ICONREW             ICON    DISCARDABLE     "icons\iconrew.ico"
+IDI_ICONMARKNEXT        ICON    DISCARDABLE     "icons\marknext.ico"
+IDI_ICONMARKBACK        ICON    DISCARDABLE     "icons\markback.ico"
+IDI_ICONFOR3            ICON    DISCARDABLE     "icons\iconfor3.ico"
+IDI_ICONREW3            ICON    DISCARDABLE     "icons\iconrew3.ico"
+IDI_ICONMARKBACK2       ICON    DISCARDABLE     "icons\markback2.ico"
+IDI_ICONMARKBACK3       ICON    DISCARDABLE     "icons\markback3.ico"
+IDI_ICONMARKNEXT2       ICON    DISCARDABLE     "icons\marknext2.ico"
+IDI_ICONMARKNEXT3       ICON    DISCARDABLE     "icons\marknext3.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_EDITWEDIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 256
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 236
+    END
+
+    IDD_EDITFIND, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 168
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 232
+    END
+
+    IDD_COPYFILE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 98
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 42
+    END
+
+    IDD_MYMBOXDLG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 98
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 76
+    END
+
+    IDD_SETTINGDIAG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 180
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 140
+    END
+
+    IDD_SEARCH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 40
+    END
+
+    IDD_TRACK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 348
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 326
+    END
+
+    IDD_INFO, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 214
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 224
+    END
+
+    IDD_OVERWRITE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 304
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 57
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_ACCELERATOR ACCELERATORS DISCARDABLE 
+BEGIN
+    VK_F1,          IDC_BTTRACK,            VIRTKEY, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// 24
+//
+
+1                       24      DISCARDABLE     "ewc.exe.mafifest"
+#endif    // 日本語 resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
