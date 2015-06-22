@@ -501,11 +501,11 @@ L_START:
 			GetModuleFileName(NULL,str,CHR_BUF);
 			_splitpath(str,driveName,pathName,NULL, NULL);	
 			wsprintf(path,"%s%s",driveName,pathName);
-			wsprintf(str,"%s%s",path,"waveflt2.htm");
+			wsprintf(str,"%s%s",path,"waveflt.htm");
 			
 			// 呼び出し
 			if((WORD)ShellExecute(hWnd,NULL,str,NULL,path,SW_SHOWNORMAL) == ERROR_FILE_NOT_FOUND ){
-				MyMessageBox(hWnd,"ヘルプファイル(waveflt2.htm)が見つかりませんでした。","Error",MB_OK|MB_ICONERROR);
+				MyMessageBox(hWnd,"ヘルプファイル(waveflt.htm)が見つかりませんでした。","Error",MB_OK|MB_ICONERROR);
 			}
 			
 			return TRUE;

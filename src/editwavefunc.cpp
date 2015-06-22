@@ -70,11 +70,11 @@ LRESULT CALLBACK ProgDlgOverWrite(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 
 //-------------------------------------------------------------------
-// WAVEFLT2 起動スレッド
+// WAVEFLT 起動スレッド
 //
 // lpszOrgName のファイルを lpszNewFileName にコピーする
 
-DWORD WINAPI StartWaveFlt2(LPVOID lpVoid) 
+DWORD WINAPI StartWaveFlt(LPVOID lpVoid) 
 {
 	
 	LPEWCDATA lpEwcData = (LPEWCDATA)lpVoid;
@@ -159,16 +159,16 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 		}
 	}
 	
-	SetWindowText(hWnd,"WAVEFLT2 実行中");
+	SetWindowText(hWnd,"WAVEFLT 実行中");
 	
 	//----------------------------------
 	// コマンドラインセット
 	if(strcmp(lpszNewFileName,"waveout") == 0)
-		wsprintf(szCommandLine,"waveflt2.exe -fmap \"%s\" waveout",lpszOrgName);  // サウンド出力
+		wsprintf(szCommandLine,"waveflt.exe -fmap \"%s\" waveout",lpszOrgName);  // サウンド出力
 	else 
-		wsprintf(szCommandLine,"waveflt2.exe -fmap \"%s\" \"%s\"",lpszOrgName,lpszNewFileName); 
+		wsprintf(szCommandLine,"waveflt.exe -fmap \"%s\" \"%s\"",lpszOrgName,lpszNewFileName); 
 	
-	// waveflt2 の場合はヘッダオフセットの分引いとく
+	// waveflt の場合はヘッダオフセットの分引いとく
 	lpEwcData->n64NewDataOffset -= n64SrcDataOffset;
 	
 	//---------------
@@ -310,13 +310,13 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 	// 残りのオプションセット
 	strcat(szData,lpEwcData->editSaveData.szOption);
 
-	// WaveFLT2 起動
+	// WaveFLT 起動
 	// オプションは File Mapping で渡す
 	if(!ExecCommandFileMapping(&hFileMap,NULL,szCommandLine,szData,MAX_WAVFLTOPTBUF,
 		pProInfo,hInst,lpEwcData->bShowConsole,szStr))
 	{
 		SetForegroundWindow(hWnd);
-		MyMessageBox(hWnd, "WAVEFLT の起動に失敗しました\n\newc.exe と同じフォルダに waveflt2.exe があるか確認して下さい", 
+		MyMessageBox(hWnd, "WAVEFLT の起動に失敗しました\n\newc.exe と同じフォルダに waveflt.exe があるか確認して下さい", 
 			"Error", MB_OK|MB_ICONERROR);	
 		
 		dwExitCode = 1;
@@ -388,7 +388,7 @@ LRESULT CALLBACK ProgDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			lpEwcData->pProInfo = &proInfo;
 			
 			hThread = CreateThread(NULL,0,
-				(LPTHREAD_START_ROUTINE)StartWaveFlt2,
+				(LPTHREAD_START_ROUTINE)StartWaveFlt,
 				(LPVOID)lpEwcData,
 				0,(LPDWORD)&threadId);
 			

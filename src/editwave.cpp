@@ -329,7 +329,7 @@ BOOL StartEditWave(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp){
 			}
 
 			wsprintf(szStr,"%s入力ファイル : %s\n\n編集を開始しますか?",szStr2,lpEwcData->szLoadFile);
-			if(MyMessageBox(hWnd, szStr,"ewc: WAVEFLT2 起動", MB_YESNO|MB_ICONQUESTION)==IDNO) return FALSE;
+			if(MyMessageBox(hWnd, szStr,"ewc: WAVEFLT 起動", MB_YESNO|MB_ICONQUESTION)==IDNO) return FALSE;
 			
 		}
 		else strcpy(lpEwcData->szSaveFile,"waveout");
@@ -369,7 +369,7 @@ BOOL StartEditWave(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp){
 			lpEwcData->n64NewDataSize = lpEwcData->n64WaveDataSize;
 		}
 
-		// WAVEFLT2 起動
+		// WAVEFLT 起動
 		if(SaveCutData(hWnd,hInst,lpEwcData,lpEwcData->szLoadFile,lpEwcData->szSaveFile,lpEwcData->bSplit))
 		{
 			// 保存成功
