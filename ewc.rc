@@ -71,10 +71,10 @@ BEGIN
     PUSHBUTTON      "クリア",IDC_BTCLEAR,68,216,43,14
     EDITTEXT        IDC_EDITSETTING,67,30,189,180,ES_MULTILINE | 
                     ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL
-    LTEXT           "WAVEFLT2 追加オプション設定",IDC_STATIC,67,14,93,8
+    LTEXT           "WAVEFLT 追加オプション設定",IDC_STATIC,67,14,93,8
     GROUPBOX        "編集",IDC_STATIC,7,48,54,118,BS_CENTER
     GROUPBOX        "設定ファイル",IDC_STATIC,7,174,53,62,BS_CENTER
-    PUSHBUTTON      "WAVEFLT2 のヘルプ",IDC_BTHELP,166,9,74,14
+    PUSHBUTTON      "WAVEFLT のヘルプ",IDC_BTHELP,166,9,74,14
 END
 
 IDD_EDITFIND DIALOG DISCARDABLE  0, 0, 175, 239
@@ -161,7 +161,7 @@ BEGIN
     CONTROL         "コンソールを表示する",IDC_CHKSHOWCON,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,86,103,79,10
     GROUPBOX        "再生サウンドデバイス選択",IDC_STATIC,7,39,173,54
-    LTEXT           "Easy Wave Cutter Ver.20150617",IDC_STATIC,39,11,
+    LTEXT           "Easy Wave Cutter Ver.17.06.2015",IDC_STATIC,39,11,
                     115,8
     LTEXT           "Copyright (c) 1999-2015,Tomoya Tokairin",IDC_STATIC,33,
                     24,122,8
