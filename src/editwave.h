@@ -1,60 +1,60 @@
-// e-WC  editwave.cpp ‚ÌƒOƒ[ƒoƒ‹ŠÖ”
+ï»¿// e-WC  editwave.cpp ã®ã‚°ãƒ­ãƒ¼ãƒãƒ«é–¢æ•°
 
 #include "common.h"
 
-// ƒOƒ[ƒoƒ‹•Ï”
+// ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°
 
 HINSTANCE hInst;
 
-CHAR SzInfo[4192];  // ƒCƒ“ƒtƒHƒ[ƒVƒ‡ƒ“
+CHAR SzInfo[4192];  // ã‚¤ãƒ³ãƒ•ã‚©ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³
 
 
-DWORD DwWaveTime; // WAVE ‚Ì’·‚³(ƒ~ƒŠ•b)
+DWORD DwWaveTime; // WAVE ã®é•·ã•(ãƒŸãƒªç§’)
 
-LONGLONG N64OrgFileSize; // ƒtƒ@ƒCƒ‹‚ÌŒ³ƒTƒCƒY
-LONGLONG N64OrgDataSize; // ƒtƒ@ƒCƒ‹‚ÌŒ³ƒf[ƒ^ƒTƒCƒY
-LONGLONG N64OrgDataOffset; // ƒtƒ@ƒCƒ‹‚ÌŒ³ƒIƒtƒZƒbƒg
+LONGLONG N64OrgFileSize; // ãƒ•ã‚¡ã‚¤ãƒ«ã®å…ƒã‚µã‚¤ã‚º
+LONGLONG N64OrgDataSize; // ãƒ•ã‚¡ã‚¤ãƒ«ã®å…ƒãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
+LONGLONG N64OrgDataOffset; // ãƒ•ã‚¡ã‚¤ãƒ«ã®å…ƒã‚ªãƒ•ã‚»ãƒƒãƒˆ
 
-DWORD DwZoomX; // ƒY[ƒ€ƒTƒCƒYA‰¡
-DWORD DwZoomY; // c
+DWORD DwZoomX; // ã‚ºãƒ¼ãƒ ã‚µã‚¤ã‚ºã€æ¨ª
+DWORD DwZoomY; // ç¸¦
 
 
-// –³‰¹•”ƒT[ƒ`—p
-double DbNoSoundBound; // –³‰¹•”ƒT[ƒ`‚Ì‚µ‚«‚¢’l
-DWORD dwNSoundCount; // –³‰¹•”ƒT[ƒ`‚ÌƒJƒEƒ“ƒg”
-WORD wNSoundPos; // ƒT[ƒ`Œã‚ÌˆÊ’u
+// ç„¡éŸ³éƒ¨ã‚µãƒ¼ãƒç”¨
+double DbNoSoundBound; // ç„¡éŸ³éƒ¨ã‚µãƒ¼ãƒã®ã—ãã„å€¤
+DWORD dwNSoundCount; // ç„¡éŸ³éƒ¨ã‚µãƒ¼ãƒã®ã‚«ã‚¦ãƒ³ãƒˆæ•°
+WORD wNSoundPos; // ã‚µãƒ¼ãƒå¾Œã®ä½ç½®
 
-// ƒXƒNƒ[ƒ‹ƒo[—p
-HWND hScrWnd; // ƒXƒNƒ[ƒ‹ƒo[‚Ìƒnƒ“ƒhƒ‹
-LONG nScrMax; // ƒXƒNƒ[ƒ‹ƒo[‚Ìƒ}ƒbƒNƒX’l
-SCROLLINFO scrInfo; // ƒXƒNƒ[ƒ‹î•ñ\‘¢‘Ì
-LONGLONG N64MaxBlock; // n64WaveDataSize‚ð FRAMESIZE*waveFmt.nBlockAlign “™•ª‚µ‚½”
+// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ç”¨
+HWND hScrWnd; // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒãƒ³ãƒ‰ãƒ«
+LONG nScrMax; // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã®ãƒžãƒƒã‚¯ã‚¹å€¤
+SCROLLINFO scrInfo; // ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«æƒ…å ±æ§‹é€ ä½“
+LONGLONG N64MaxBlock; // n64WaveDataSizeã‚’ FRAMESIZE*waveFmt.nBlockAlign ç­‰åˆ†ã—ãŸæ•°
 
-// ƒ}[ƒN—p
-LONG nMarkedPos; // ƒ}[ƒN‚µ‚½ƒ|ƒWƒVƒ‡ƒ“
-LONGLONG N64MarkedPosByte; // ƒIƒtƒZƒbƒg‚©‚çƒ}[ƒN‚µ‚½“_‚Ü‚Å‚ÌƒoƒCƒg”(>=0 < n64WaveDataSize)
-double DbMarkedLevel[2]; // db, Žåƒ}[ƒN‚ÌƒŒƒxƒ‹
+// ãƒžãƒ¼ã‚¯ç”¨
+LONG nMarkedPos; // ãƒžãƒ¼ã‚¯ã—ãŸãƒã‚¸ã‚·ãƒ§ãƒ³
+LONGLONG N64MarkedPosByte; // ã‚ªãƒ•ã‚»ãƒƒãƒˆã‹ã‚‰ãƒžãƒ¼ã‚¯ã—ãŸç‚¹ã¾ã§ã®ãƒã‚¤ãƒˆæ•°(>=0 < n64WaveDataSize)
+double DbMarkedLevel[2]; // db, ä¸»ãƒžãƒ¼ã‚¯ã®ãƒ¬ãƒ™ãƒ«
 
-LONG nSubMarkedPos; // •›ƒ}[ƒN‚Ìƒ|ƒWƒVƒ‡ƒ“
-LONGLONG N64SubMarkedPosByte; // •›ƒ}[ƒN‚ÌƒoƒCƒg”
-double DbSubMarkedLevel[2]; // db, •›ƒ}[ƒN‚ÌƒŒƒxƒ‹
+LONG nSubMarkedPos; // å‰¯ãƒžãƒ¼ã‚¯ã®ãƒã‚¸ã‚·ãƒ§ãƒ³
+LONGLONG N64SubMarkedPosByte; // å‰¯ãƒžãƒ¼ã‚¯ã®ãƒã‚¤ãƒˆæ•°
+double DbSubMarkedLevel[2]; // db, å‰¯ãƒžãƒ¼ã‚¯ã®ãƒ¬ãƒ™ãƒ«
 	
 
-// ƒXƒe[ƒ^ƒXAUNDO —p
-WORD wCurStatus;	 // Œ»Ý‚Ìó‘Ô
-BOOL bUpdate; // XV‚µ‚½‚©
-UNDODATA undoData; // UNDO ‚Ìƒf[ƒ^
+// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã€UNDO ç”¨
+WORD wCurStatus;	 // ç¾åœ¨ã®çŠ¶æ…‹
+BOOL bUpdate; // æ›´æ–°ã—ãŸã‹
+UNDODATA undoData; // UNDO ã®ãƒ‡ãƒ¼ã‚¿
 
-// •ÒWAƒT[ƒ`—p
-DWORD DwSearchTime = 0; // ŽžŠÔƒT[ƒ`—p(sec)
+// ç·¨é›†ã€ã‚µãƒ¼ãƒç”¨
+DWORD DwSearchTime = 0; // æ™‚é–“ã‚µãƒ¼ãƒç”¨(sec)
 LPEWCDATA lpEwcData;
 
 
-// •`‰æ—p
+// æç”»ç”¨
 HDC hBufDC = NULL; 
 HBITMAP hBufBit;
 RECT RedrawRect;
-HICON hIcon[14]; // ƒ{ƒ^ƒ“‚ÌƒAƒCƒRƒ“
+HICON hIcon[14]; // ãƒœã‚¿ãƒ³ã®ã‚¢ã‚¤ã‚³ãƒ³
 HWND hPreEwcWnd;
 
 //EOF

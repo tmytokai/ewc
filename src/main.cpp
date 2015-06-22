@@ -1,11 +1,4 @@
-// WAVEFLT FRONT END  easy Wave Cutter ƒƒCƒ“
-// Copyright (c) 1999-2015 Tomoya Tokairin
-//
-// –{ƒvƒƒOƒ‰ƒ€‚Ì‚·‚×‚ÄA‚Ü‚½‚Íˆê•”‚ğ GPL ‚É]‚Á‚ÄÄ”Ğ•z‚Ü‚½‚Í•ÏX‚·‚é
-// ‚±‚Æ‚ª‚Å‚«‚Ü‚·BÚ×‚É‚Â‚¢‚Ä‚ÍGNU ˆê”ÊŒö—Lg—p‹–‘ø‘‚ğ‚¨“Ç‚İ‚­‚¾‚³‚¢B
-
-
-#include "common.h"
+ï»¿#include "common.h"
 
 
 int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPreInst,
@@ -18,14 +11,14 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPreInst,
 	
 	DWORD i;
 	
-	// •ÒWƒf[ƒ^—p•Ï”
+	// ç·¨é›†ãƒ‡ãƒ¼ã‚¿ç”¨å¤‰æ•°
 	EWCDATA ewcData;
 	
-	// ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“—p
+	// ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ç”¨
 	CHAR argv[MAX_ARGC][CHR_BUF];
 	int argc;
 
-	// ƒEƒBƒ“ƒhƒE“o˜^
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ç™»éŒ²
     if (!hPreInst) {
         wndClass.style = CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS;
         wndClass.lpfnWndProc = EditWaveProc;
@@ -41,16 +34,16 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPreInst,
     }	
 
 
-	// EWCDATA \‘¢‘Ì‰Šúİ’è
+	// EWCDATA æ§‹é€ ä½“åˆæœŸè¨­å®š
 	ZeroMemory(&ewcData,sizeof(EWCDATA));
 	
-	// ƒTƒEƒ“ƒhƒfƒoƒCƒX‚Ìî•ñæ“¾
+	// ã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒã‚¤ã‚¹ã®æƒ…å ±å–å¾—
 	ewcData.uDevNum = GetWaveOutDevCap(ewcData.waveOutCaps,MAXDEVICENUMBER);
 	
 
-	// İ’èƒtƒ@ƒCƒ‹“Ç‚İ‚İ
+	// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿
 
-	// İ’èƒtƒ@ƒCƒ‹ƒZƒbƒg
+	// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚»ãƒƒãƒˆ
 	CHAR szStr[MAX_PATH];
 	CHAR szDriveName[MAX_PATH],szPathName[MAX_PATH];
 	GetModuleFileName(NULL,szStr,MAX_PATH); 
@@ -58,18 +51,18 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPreInst,
 	wsprintf(ewcData.szIniDatFile,"%s%sewc.dat",szDriveName,szPathName);
 	ReadIniFile(&ewcData,ewcData.szIniDatFile);
 	
-	// ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“æ“¾
+	// ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³å–å¾—
 	argc = GetArgv(lpszCmdLine,argv,1);
 	
-	// ƒtƒ@ƒCƒ‹–¼ƒZƒbƒg
+	// ãƒ•ã‚¡ã‚¤ãƒ«åã‚»ãƒƒãƒˆ
 	if(argc > 1) if(ShortToLongName(argv[1])) wsprintf(ewcData.szIniFileName,argv[1]);
 	
-	// ƒfƒoƒCƒXƒZƒbƒg
+	// ãƒ‡ãƒã‚¤ã‚¹ã‚»ãƒƒãƒˆ
 	if(strcmp(argv[2],"-dev") == 0){
 		ewcData.uDeviceID = atoi(argv[3]);
 	}
 	
-	// ƒgƒ‰ƒbƒN–¼İ’è
+	// ãƒˆãƒ©ãƒƒã‚¯åè¨­å®š
 	ewcData.szTrackFile[0] = '\0';
 	strcpy(ewcData.szBaseName,"track");
 	strcpy(ewcData.szExtName,"wav");
@@ -77,7 +70,7 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPreInst,
 	for(i=1;i<MAX_SPLITNUM;i++) ewcData.szTrackName[i] = ewcData.szTrackName[0] + i*CHR_BUF;
 	for(i=0;i<MAX_SPLITNUM;i++) wsprintf(ewcData.szTrackName[i],"%s-%03d.%s",ewcData.szBaseName,i+1,ewcData.szExtName);
 
-	// ƒEƒBƒ“ƒhƒEì¬
+	// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ä½œæˆ
     hWnd = CreateWindow(
 		"E-WC",
         "ewc",
@@ -91,15 +84,15 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPreInst,
     ShowWindow(hWnd, nCmdShow);
     UpdateWindow(hWnd);	
 
-	// ƒAƒNƒZƒŒ[ƒ^[ƒe[ƒuƒ‹‚Ìƒ[ƒh
+	// ã‚¢ã‚¯ã‚»ãƒ¬ãƒ¼ã‚¿ãƒ¼ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒ­ãƒ¼ãƒ‰
 	hAccel = LoadAccelerators(hInst,MAKEINTRESOURCE(IDR_ACCELERATOR));
 
 	if(hAccel == NULL) 
-		MyMessageBox(NULL,"ƒAƒNƒZƒŒ[ƒ^[ƒe[ƒuƒ‹‚Ìƒnƒ“ƒhƒ‹\næ“¾‚É¸”s‚µ‚Ü‚µ‚½B"
+		MyMessageBox(NULL,"ã‚¢ã‚¯ã‚»ãƒ¬ãƒ¼ã‚¿ãƒ¼ãƒ†ãƒ¼ãƒ–ãƒ«ã®ãƒãƒ³ãƒ‰ãƒ«\nå–å¾—ã«å¤±æ•—ã—ã¾ã—ãŸã€‚"
 		,"error",MB_OK|MB_ICONERROR);
 	else 
-		while (GetMessage(&msg, NULL, 0, 0)) {	// ƒƒbƒZ[ƒWƒ‹[ƒv
-			if(!TranslateAccelerator(hWnd,hAccel,&msg))  // ƒAƒNƒZƒŒ[ƒ^[
+		while (GetMessage(&msg, NULL, 0, 0)) {	// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ«ãƒ¼ãƒ—
+			if(!TranslateAccelerator(hWnd,hAccel,&msg))  // ã‚¢ã‚¯ã‚»ãƒ¬ãƒ¼ã‚¿ãƒ¼
 			{
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
@@ -107,10 +100,10 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPreInst,
 		}
 
 
-	// İ’èƒtƒ@ƒCƒ‹•Û‘¶
+	// è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ä¿å­˜
 	SaveIniFile(&ewcData,ewcData.szIniDatFile);
 
-	// ƒƒ‚ƒŠŠJ•ú
+	// ãƒ¡ãƒ¢ãƒªé–‹æ”¾
 	free(ewcData.szTrackName[0]);
 
 	

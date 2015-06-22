@@ -1,38 +1,29 @@
-//-----------------------
-// WAVE �Đ��֐�   2002/11/24 ����
+﻿// WAVE 再生関数
 //
-// (c) 1998-2015 Tomoya Tokairin
+// PlayWave() で再生開始 
+// ファイルハンドルが NULL なら関数内でファイルを開くので
+// waveFmt,データまでのオフセット,データサイズ 等のパラメータは無視する
 //
-// �{�v���O�����̂��ׂāA�܂��͈ꕔ�� GPL �ɏ]���čĔЕz�܂��͕ύX����
-// ���Ƃ��ł��܂��B�ڍׂɂ��Ă�GNU ��ʌ��L�g�p�����������ǂ݂��������B
-//
-
-// ���b�N���AEWC ����
-
-// PlayWave() �ōĐ��J�n 
-// �t�@�C���n���h���� NULL �Ȃ�֐����Ńt�@�C�����J���̂�
-// waveFmt,�f�[�^�܂ł̃I�t�Z�b�g,�f�[�^�T�C�Y ���̃p�����[�^�͖�������
-//
-// �o�b�t�@�̐؂�ڂ��Ƃ� MM_WOM_DONE �� hWnd �ɑ���
-// WPARAM �� ���x���s�[�N�l �A LPARAM �͌��ݎ���(�~���b)
-// SeekPlayWave(�V�[�N�ʒu(�~���b))�ŃV�[�N
-// StopPlayWave() �Œ�~���� MM_WOM_CLOSE �� hWnd �ɑ���B
-// ����I�� LPARAM =0 �ُ� = 1
+// バッファの切れ目ごとに MM_WOM_DONE を hWnd に送る
+// WPARAM は レベルピーク値 、 LPARAM は現在時刻(ミリ秒)
+// SeekPlayWave(シーク位置(ミリ秒))でシーク
+// StopPlayWave() で停止して MM_WOM_CLOSE を hWnd に送る。
+// 正常終了 LPARAM =0 異常 = 1
 
 #include <windows.h>
 #include <mmsystem.h>
 
-#define USE_EWC  // ewc.exe �Ŏg���ꍇ
-#define PLAYWAVEHDR_BUFNUM 4  // WAVE �w�b�_�̃o�b�t�@��
+#define USE_EWC  // ewc.exe で使う場合
+#define PLAYWAVEHDR_BUFNUM 4  // WAVE ヘッダのバッファ数
 
-// �X�e�[�^�X
+// ステータス
 #define ID_THREADON   0
 #define ID_THREADSTOP 1
 #define ID_PREPARE 2
 #define ID_CLOSEWAVE 3
 #define ID_SEEKING 4
 
-// ���ʂ̊֐�(wavefunc.cpp ��)
+// 共通の関数(wavefunc.cpp 内)
 BOOL SetWaveHdr(HWND,LPWAVEHDR,LONG,DWORD);
 BOOL DelWaveHdr(HWND,LPWAVEHDR);
 BOOL GetWaveFormat(char* lpszFileName, // file name or 'stdin'
@@ -56,44 +47,44 @@ void SetWaveFmt(LPWAVEFORMATEX lpWaveFmt,WORD waveChn,
 				DWORD waveRate,	WORD waveBit, WORD wTag);
 
 
-// ���b�Z�[�W�{�b�N�X
+// メッセージボックス
 int MyMessageBox(HWND,LPSTR,LPSTR,UINT);
 
 
-// �X���b�h�ɓn���f�[�^�^
+// スレッドに渡すデータ型
 typedef struct{
-	HWND hWnd; // �e�̃n���h��
-	UINT uDeviceID; // �f�o�C�X ID
-	CHAR szWaveFileName[MAX_PATH]; // �t�@�C����
-	DWORD dwStartTime; // �Đ��J�n�ʒu(�~���b)
-	LONGLONG n64StartByte; // �Đ��ʒu(�o�C�g)
-	BOOL bStartByte; // n64StartByte �ňʒu���w�肷��
-	HANDLE hdFile; // �Đ��t�@�C���̃n���h��
-	WAVEFORMATEX waveFmt; // �E�F�[�u�t�H�[�}�b�g
-	LONGLONG n64WaveDataSize;// �t�@�C���̃T�C�Y
-	LONGLONG n64WaveOffset; // �f�[�^�����܂ł̃I�t�Z�b�g 
+	HWND hWnd; // 親のハンドル
+	UINT uDeviceID; // デバイス ID
+	CHAR szWaveFileName[MAX_PATH]; // ファイル名
+	DWORD dwStartTime; // 再生開始位置(ミリ秒)
+	LONGLONG n64StartByte; // 再生位置(バイト)
+	BOOL bStartByte; // n64StartByte で位置を指定する
+	HANDLE hdFile; // 再生ファイルのハンドル
+	WAVEFORMATEX waveFmt; // ウェーブフォーマット
+	LONGLONG n64WaveDataSize;// ファイルのサイズ
+	LONGLONG n64WaveOffset; // データ部分までのオフセット 
 }PLAYDATA,*LPPLAYDATA;
 
 
-// �v���V�[�W���ɓn���f�[�^�^
+// プロシージャに渡すデータ型
 typedef struct
 {
 	HWND hWnd;
-	LPWAVEFORMATEX lpWaveFmt; // wave �t�H�[�}�b�g
-	LPWAVEFORMATEX lpWaveFmtOut; // wave �t�H�[�}�b�g(�o�͂�)
-	DWORD dwTime; // �Đ�����
+	LPWAVEFORMATEX lpWaveFmt; // wave フォーマット
+	LPWAVEFORMATEX lpWaveFmtOut; // wave フォーマット(出力の)
+	DWORD dwTime; // 再生時間
 }PLAYPROCDATA,*LPPLAYPROCDATA;
 
 
-// �O���[�o���ϐ�
-HANDLE HdPlayThread = NULL; // �X���b�h�̃n���h��
-WORD PlayStatus; // ���݂̃X�e�[�^�X
-DWORD SeekPos;  // �V�[�N�ʒu(�~���b)
+// グローバル変数
+HANDLE HdPlayThread = NULL; // スレッドのハンドル
+WORD PlayStatus; // 現在のステータス
+DWORD SeekPos;  // シーク位置(ミリ秒)
 
 
 
 //-------------------------------------------------------------------
-// �R�[���o�b�N�֐�
+// コールバック関数
 VOID CALLBACK MyWaveOutProc(HWAVEOUT hWaveOut,UINT msg,DWORD inst,DWORD dwP1,DWORD dwP2)
 {
 	
@@ -102,14 +93,14 @@ VOID CALLBACK MyWaveOutProc(HWAVEOUT hWaveOut,UINT msg,DWORD inst,DWORD dwP1,DWO
 	LPWAVEFORMATEX lpWaveFmtOut = ((LPPLAYPROCDATA)inst)->lpWaveFmtOut;
 	
 	LPWAVEHDR lpWaveHdr; 
-	static double dPeak[PLAYWAVEHDR_BUFNUM][2];  // �e�� WPARAM �œn���f�[�^(�ő�s�[�N�l)
+	static double dPeak[PLAYWAVEHDR_BUFNUM][2];  // 親に WPARAM で渡すデータ(最大ピーク値)
 	static DWORD dwHdrNum = 0;
 	DWORD i,dwTime;
 	
 	switch (msg)
 	{
 		
-	case WOM_OPEN: // WAVE �f�o�C�X�I�[�v������
+	case WOM_OPEN: // WAVE デバイスオープン完了
 
 		for(i=0;i<PLAYWAVEHDR_BUFNUM;i++)
 		{
@@ -122,30 +113,30 @@ VOID CALLBACK MyWaveOutProc(HWAVEOUT hWaveOut,UINT msg,DWORD inst,DWORD dwP1,DWO
 		
 		//-------------------------------------------------------------------
 		
-	case WOM_DONE: // 1 �o�b�t�@���̍Đ��I��
+	case WOM_DONE: // 1 バッファ分の再生終了
 		
 		if(PlayStatus == ID_THREADON){
 			
-			// �w�b�_�̃A�h���X�擾
+			// ヘッダのアドレス取得
 			lpWaveHdr = (LPWAVEHDR)dwP1;
 
-			// �Đ����Ԏ擾
+			// 再生時間取得
 			dwTime = lpWaveHdr->dwUser;
 
 #ifndef USE_EWC			
-			// �e�ɓn���f�[�^�Z�b�g
+			// 親に渡すデータセット
 			WaveLevelMaxPeak(dPeak[dwHdrNum],
 				(LPBYTE)lpWaveHdr->lpData,lpWaveHdr->dwBufferLength,
 				*lpWaveFmtOut);
 #endif
 
-			// �e�� MM_WOM_DONE ���M 
+			// 親に MM_WOM_DONE 送信 
 			if(dwTime != -1)
 				SendMessage(hWnd,MM_WOM_DONE,(WPARAM)dPeak[dwHdrNum],(LPARAM)dwTime);
 			else
-				PlayStatus = ID_THREADSTOP;  // dwTime = -1 �Ȃ��~
+				PlayStatus = ID_THREADSTOP;  // dwTime = -1 なら停止
 				
-			// ���̃o�b�t�@���g�p����
+			// このバッファを使用化に
 			lpWaveHdr->dwUser = 0;
 			dwHdrNum = (dwHdrNum+1)&(PLAYWAVEHDR_BUFNUM-1);
 		}
@@ -154,7 +145,7 @@ VOID CALLBACK MyWaveOutProc(HWAVEOUT hWaveOut,UINT msg,DWORD inst,DWORD dwP1,DWO
 		
 		//-------------------------------------------------------------------
 		
-	case WOM_CLOSE: // WAVE �f�o�C�X�N���[�Y
+	case WOM_CLOSE: // WAVE デバイスクローズ
 		
 		PlayStatus = ID_CLOSEWAVE;
 		
@@ -168,28 +159,28 @@ VOID CALLBACK MyWaveOutProc(HWAVEOUT hWaveOut,UINT msg,DWORD inst,DWORD dwP1,DWO
 
 
 //-------------------------------------------------------------------
-// �V�[�N�֐�
+// シーク関数
 VOID SeekPlayWave(DWORD dwTime)
 {
 	if(HdPlayThread != NULL && PlayStatus == ID_THREADON) {
-		SeekPos = dwTime;  // �|�W�V�����Z�b�g
-		PlayStatus = ID_SEEKING; // �V�[�N�J�n
+		SeekPos = dwTime;  // ポジションセット
+		PlayStatus = ID_SEEKING; // シーク開始
 	}
 }
 
 
 
 //-------------------------------------------------------------------
-// ��~�֐�
+// 停止関数
 VOID StopPlayWave()
 {
 	LONG i;
 	
 	if(HdPlayThread != NULL && PlayStatus == ID_THREADON) {
 		
-		PlayStatus = ID_THREADSTOP;  // �X���b�h�̃��[�v��~
+		PlayStatus = ID_THREADSTOP;  // スレッドのループ停止
 		
-		// �N���[�Y����܂ő҂�
+		// クローズするまで待つ
 		i=0;
 		while(PlayStatus != ID_CLOSEWAVE && i<50){
 			Sleep(50);
@@ -201,69 +192,69 @@ VOID StopPlayWave()
 
 
 //-------------------------------------------------------------------
-// �Đ��X���b�h
+// 再生スレッド
 DWORD WINAPI PlayWaveThread(LPVOID lpPlayData)
 {
 	
-	// �ϐ��Z�b�g
+	// 変数セット
 	HWND hWnd = ((LPPLAYDATA)lpPlayData)->hWnd;
 	UINT uDeviceID = ((LPPLAYDATA)lpPlayData)->uDeviceID;
 	LPSTR lpszFileName = ((LPPLAYDATA)lpPlayData)->szWaveFileName;
-	DWORD dwStartTime =  ((LPPLAYDATA)lpPlayData)->dwStartTime; // �Đ��J�n�ʒu(�~���b)
-	HANDLE hdFile = ((LPPLAYDATA)lpPlayData)->hdFile; // �Đ��t�@�C���̃n���h��
-	WAVEFORMATEX waveFmt = ((LPPLAYDATA)lpPlayData)->waveFmt; // wave �t�H�[�}�b�g
-	LONGLONG n64WaveDataSize = ((LPPLAYDATA)lpPlayData)->n64WaveDataSize; // �f�[�^�����܂ł̃I�t�Z�b�g 
-	LONGLONG n64WaveOffset = ((LPPLAYDATA)lpPlayData)->n64WaveOffset;  // �t�@�C���̃T�C�Y
+	DWORD dwStartTime =  ((LPPLAYDATA)lpPlayData)->dwStartTime; // 再生開始位置(ミリ秒)
+	HANDLE hdFile = ((LPPLAYDATA)lpPlayData)->hdFile; // 再生ファイルのハンドル
+	WAVEFORMATEX waveFmt = ((LPPLAYDATA)lpPlayData)->waveFmt; // wave フォーマット
+	LONGLONG n64WaveDataSize = ((LPPLAYDATA)lpPlayData)->n64WaveDataSize; // データ部分までのオフセット 
+	LONGLONG n64WaveOffset = ((LPPLAYDATA)lpPlayData)->n64WaveOffset;  // ファイルのサイズ
 
 
-	HWAVEOUT hWaveOut;  // �Đ��f�o�C�X�̃n���h��
-	static WAVEHDR waveHdr[PLAYWAVEHDR_BUFNUM]; // wave �w�b�_�̃o�b�t�@
-	PLAYPROCDATA procData; // �v���V�[�W���ɓn���f�[�^
-	DWORD dwWaveBlockTime; // �o�b�t�@�̋L�^����
-	DWORD dwWaveBlockByte; //�o�b�t�@�̃o�C�g��
-	DWORD dwByte; // �ǂݍ��݃o�C�g��
-	LONGLONG n64CurDataSize;  // ���݂̉��t�ʒu
-	WORD wCurWaveHdr;  // ���ݎg�p���Ă��� wave �w�b�_�̔ԍ�
-	BOOL bCloseFile = FALSE; // �t�@�C�����N���[�Y���邩
-	LONG i; // �G�p
-	LARGE_INTEGER LI; // SetFilePointer �p 
+	HWAVEOUT hWaveOut;  // 再生デバイスのハンドル
+	static WAVEHDR waveHdr[PLAYWAVEHDR_BUFNUM]; // wave ヘッダのバッファ
+	PLAYPROCDATA procData; // プロシージャに渡すデータ
+	DWORD dwWaveBlockTime; // バッファの記録時間
+	DWORD dwWaveBlockByte; //バッファのバイト数
+	DWORD dwByte; // 読み込みバイト数
+	LONGLONG n64CurDataSize;  // 現在の演奏位置
+	WORD wCurWaveHdr;  // 現在使用している wave ヘッダの番号
+	BOOL bCloseFile = FALSE; // ファイルをクローズするか
+	LONG i; // 雑用
+	LARGE_INTEGER LI; // SetFilePointer 用 
 	char szStr[256];
 	
-	double* lpdBuffer[2] = {NULL,NULL};  // bit change �p
-	WAVEFORMATEX waveFmtOut; // bit change �p
+	double* lpdBuffer[2] = {NULL,NULL};  // bit change 用
+	WAVEFORMATEX waveFmtOut; // bit change 用
 
-	// hdFile �� NULL �Ȃ炱�̃X���b�h���Ńt�@�C���̊J���߂�����B
+	// hdFile が NULL ならこのスレッド内でファイルの開け閉めをする。
 	if(hdFile == NULL)
 	{
 		bCloseFile = TRUE;
 
-		// �t�@�C�����邩�e�X�g
+		// ファイルあるかテスト
 		hdFile = CreateFile(lpszFileName,GENERIC_READ, 
 			0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL); 
 		if(hdFile == INVALID_HANDLE_VALUE){
-			MyMessageBox(hWnd, "�t�@�C�����J���܂���B\n���̃v���Z�X���t�@�C�����J���Ă���\��������܂��B", 
+			MyMessageBox(hWnd, "ファイルを開けません。\n他のプロセスがファイルを開いている可能性があります。", 
 				"Error", MB_OK|MB_SETFOREGROUND|MB_ICONERROR);	
 			goto ERROR_LV0;	
 		}
 		CloseHandle(hdFile);
 		
-		// �t�H�[�}�b�g�Z�b�g
+		// フォーマットセット
 		if(GetWaveFormat(lpszFileName,&waveFmt,&n64WaveDataSize,&n64WaveOffset,szStr)==FALSE) goto ERROR_LV0;
 		
-		// ���߂ăt�@�C���I�[�v��
+		// 改めてファイルオープン
 		hdFile = CreateFile(lpszFileName,GENERIC_READ, 
 			0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_READONLY, NULL); 
 		if(hdFile == INVALID_HANDLE_VALUE){
-			MyMessageBox(hWnd, "�t�@�C�����J���܂���B", 
+			MyMessageBox(hWnd, "ファイルを開けません。", 
 				"Error", MB_OK|MB_SETFOREGROUND|MB_ICONERROR);	
 			goto ERROR_LV0;	
 		}
 	}
 	
-	// �o�b�t�@ 1 �u���b�N�̃T�C�Y�v�Z(�� 0.2 �b��)
+	// バッファ 1 ブロックのサイズ計算(約 0.2 秒分)
 	dwWaveBlockByte = (DWORD)(0.2*waveFmt.nSamplesPerSec)*waveFmt.nBlockAlign;
 
-	// 16 bit �ɕϊ�
+	// 16 bit に変換
 	waveFmtOut = waveFmt;
 	if(waveFmt.wBitsPerSample > 16)
 	{
@@ -272,29 +263,29 @@ DWORD WINAPI PlayWaveThread(LPVOID lpPlayData)
 			lpdBuffer[i] = (double*)malloc(sizeof(double)*dwWaveBlockByte/waveFmt.nBlockAlign);
 	}
 
-	// �o�b�t�@ 1 �u���b�N�̍Đ�����(�~���b)
+	// バッファ 1 ブロックの再生時間(ミリ秒)
 	dwWaveBlockTime =	(DWORD)((double)dwWaveBlockByte/(double)waveFmt.nAvgBytesPerSec*1000);
 	
-	// �o�b�t�@���������m��
+	// バッファメモリを確保
 	if(SetWaveHdr(hWnd,waveHdr,PLAYWAVEHDR_BUFNUM,dwWaveBlockByte) == FALSE) goto ERROR_LV1;
 	
-	// �v���V�[�W���ɓn���f�[�^���Z�b�g
+	// プロシージャに渡すデータをセット
 	procData.hWnd = hWnd;
 	procData.lpWaveFmt = &waveFmt;
 	procData.lpWaveFmtOut = &waveFmtOut;
 
-	// �f�o�C�X�I�[�v��
+	// デバイスオープン
 	PlayStatus = ID_PREPARE;
 	if(waveOutOpen(&hWaveOut, uDeviceID,
 		&waveFmtOut, (DWORD)MyWaveOutProc, (DWORD)&procData, CALLBACK_FUNCTION )!=MMSYSERR_NOERROR ){
 		
-		MyMessageBox(hWnd, "�Đ��f�o�C�X�̃I�[�v���Ɏ��s���܂����B\n���̃v���Z�X�� WAVE �f�o�C�X���g�p���Ă���\��������܂��B"
+		MyMessageBox(hWnd, "再生デバイスのオープンに失敗しました。\n他のプロセスが WAVE デバイスを使用している可能性があります。"
 			, "Error", MB_OK|MB_SETFOREGROUND|MB_ICONERROR);
 		
 		goto ERROR_LV2;
 	} 
 	
-	// �I�[�v������܂Œ�~
+	// オープンするまで停止
 	i=0;
 	while(PlayStatus != ID_THREADON && i<50)
 	{
@@ -302,20 +293,20 @@ DWORD WINAPI PlayWaveThread(LPVOID lpPlayData)
 		i++; 
 	}
 	
-	// �����|�W�V�����Z�b�g
+	// 初期ポジションセット
 	if(((LPPLAYDATA)lpPlayData)->bStartByte)
 		n64CurDataSize = ((LPPLAYDATA)lpPlayData)->n64StartByte;
 	else
 		n64CurDataSize = waveFmt.nBlockAlign*(((LONGLONG)dwStartTime*waveFmt.nSamplesPerSec)/1000);
 	if(n64CurDataSize >= n64WaveDataSize) PlayStatus = ID_THREADSTOP;  
 	
-	// �t�@�C���|�C���^�ړ�
+	// ファイルポインタ移動
 	LI.QuadPart = n64WaveOffset + n64CurDataSize;
 	SetFilePointer(hdFile,LI.LowPart, &LI.HighPart,FILE_BEGIN);
 	wCurWaveHdr = 0;  
 
 	
-	// �o�b�t�@�̏���
+	// バッファの準備
 	for(i=0;i<PLAYWAVEHDR_BUFNUM;i++)
 	{
 		waveOutPrepareHeader(hWaveOut,&waveHdr[i],sizeof(WAVEHDR));
@@ -323,47 +314,47 @@ DWORD WINAPI PlayWaveThread(LPVOID lpPlayData)
 	}
 	
 	// --------------------
-	// ���[�v�J�n
+	// ループ開始
 	while(PlayStatus == ID_THREADON || PlayStatus == ID_SEEKING){
 		
-		// �V�[�N
+		// シーク
 		if(PlayStatus == ID_SEEKING)
 		{ 
-			// �Đ���~
+			// 再生停止
 			waveOutReset(hWaveOut);
 			
-			// �t�@�C���|�C���^�ăZ�b�g
+			// ファイルポインタ再セット
 			n64CurDataSize = waveFmt.nBlockAlign
 				*(LONGLONG)((double)SeekPos*(double)waveFmt.nSamplesPerSec/1000);
 			
 			LI.QuadPart = n64WaveOffset + n64CurDataSize;
 			SetFilePointer(hdFile,LI.LowPart, &LI.HighPart,FILE_BEGIN);
 			
-			// �o�b�t�@�g�p����
+			// バッファ使用化に
 			for(i=0;i<PLAYWAVEHDR_BUFNUM;i++) waveHdr[i].dwUser = 0;
 			wCurWaveHdr = 0;
 			
-			// �X���b�h�ĊJ
+			// スレッド再開
 			PlayStatus = ID_THREADON;
 		}
 		else if(waveHdr[wCurWaveHdr].dwUser == 0)
-		{ // �o�b�t�@�g�p��
+		{ // バッファ使用化
 
-			// �f�[�^�ǂݍ���
+			// データ読み込み
 			LI.QuadPart = n64WaveOffset + n64CurDataSize;
 			SetFilePointer(hdFile,LI.LowPart, &LI.HighPart,FILE_BEGIN);
 			ReadFile(hdFile,waveHdr[wCurWaveHdr].lpData,dwWaveBlockByte, &dwByte, NULL);
 			
 			if(dwByte)
 			{
-				//�f�o�C�X�Ƀf�[�^�𑗂�
+				//デバイスにデータを送る
 				if(n64CurDataSize + dwByte > n64WaveDataSize) 
 					dwByte = (DWORD)(n64WaveDataSize - n64CurDataSize);
 				n64CurDataSize += dwByte;
 				if(n64CurDataSize != n64WaveDataSize)
-					waveHdr[wCurWaveHdr].dwUser  // �~���b
+					waveHdr[wCurWaveHdr].dwUser  // ミリ秒
 					= 1+(DWORD)((n64CurDataSize*1000)/waveFmt.nAvgBytesPerSec);
-				else waveHdr[wCurWaveHdr].dwUser = -1; // -1 �𑗂�ƒ�~
+				else waveHdr[wCurWaveHdr].dwUser = -1; // -1 を送ると停止
 				waveHdr[wCurWaveHdr].dwBufferLength = dwByte;
 				
 				if(waveFmt.wBitsPerSample > 16)
@@ -372,12 +363,12 @@ DWORD WINAPI PlayWaveThread(LPVOID lpPlayData)
 					waveHdr[wCurWaveHdr].dwBufferLength,waveFmt,waveFmtOut,lpdBuffer);
 				waveOutWrite(hWaveOut,&waveHdr[wCurWaveHdr],sizeof(WAVEHDR));
 
-				// ���̃o�b�t�@��
+				// 次のバッファへ
 				wCurWaveHdr = (wCurWaveHdr+1)&(PLAYWAVEHDR_BUFNUM-1);
 			}
 			else
 			{
-				// �S�Ẵw�b�_���Đ��ς݂Ȃ�I��
+				// 全てのヘッダが再生済みなら終了
 				for(i=0;i<PLAYWAVEHDR_BUFNUM;i++) if(waveHdr[i].dwUser) break;
 				if(i>=PLAYWAVEHDR_BUFNUM) PlayStatus = ID_THREADSTOP;  
 			}
@@ -385,65 +376,65 @@ DWORD WINAPI PlayWaveThread(LPVOID lpPlayData)
 		else Sleep(dwWaveBlockTime/16);
 
 	}
-	// ���[�v�I���
+	// ループ終わり
 	// --------------------
 
 	
-	// �N���[�Y����
+	// クローズ処理
 	
-	// �Đ���~
+	// 再生停止
 	waveOutReset(hWaveOut);
 	
-	// �o�b�t�@�̌�n��
+	// バッファの後始末
 	for(i=0;i<PLAYWAVEHDR_BUFNUM;i++)
 		waveOutUnprepareHeader(hWaveOut,&waveHdr[i],sizeof(WAVEHDR));
 	
-	// �f�o�C�X�N���[�Y
+	// デバイスクローズ
 	if(waveOutClose(hWaveOut)!=MMSYSERR_NOERROR) {
-		MyMessageBox(hWnd, "�Đ��f�o�C�X����邱�Ƃ��ł��܂���B", 
+		MyMessageBox(hWnd, "再生デバイスを閉じることができません。", 
 			"Error", MB_OK|MB_SETFOREGROUND|MB_ICONERROR);	
 		
 		goto ERROR_LV2;
 	}
 	
-	// �N���[�Y����܂Œ�~
+	// クローズするまで停止
 	i=0;
 	while(PlayStatus != ID_CLOSEWAVE && i<50){
 		Sleep(50);
 		i++;
 	}
 	
-	// �t�@�C���N���[�Y
+	// ファイルクローズ
 	if(bCloseFile) CloseHandle(hdFile);	 	
 	
-	// �o�b�t�@�������J��
+	// バッファメモリ開放
 	DelWaveHdr(hWnd,waveHdr);
 	for(i=0;i<waveFmt.nChannels;i++) if(lpdBuffer[i]) free(lpdBuffer[i]);
 	
-	// �e�� MM_WOM_CLOSE �𑗐M(����I��)
+	// 親に MM_WOM_CLOSE を送信(正常終了)
 	SendMessage(hWnd,MM_WOM_CLOSE,0,0);
 	
-	// �X���b�h��~
+	// スレッド停止
 	HdPlayThread = NULL;
 	
 	return 0;
 	
-	//---- �G���[���� ---
+	//---- エラー処理 ---
 	
 ERROR_LV2:
 	
-	// �o�b�t�@�������J��
+	// バッファメモリ開放
 	DelWaveHdr(hWnd,waveHdr);
 	for(i=0;i<waveFmt.nChannels;i++) if(lpdBuffer[i]) free(lpdBuffer[i]);
 	
 ERROR_LV1:
 	
-	// �t�@�C���N���[�Y
+	// ファイルクローズ
 	if(bCloseFile) CloseHandle(hdFile);
 	
 ERROR_LV0:
 	
-	// �e�� MM_WOM_CLOSE �𑗐M(LPARAM �� 1)
+	// 親に MM_WOM_CLOSE を送信(LPARAM は 1)
 	SendMessage(hWnd,MM_WOM_CLOSE,0,1);
 	HdPlayThread = NULL;
 	return 1;
@@ -452,23 +443,23 @@ ERROR_LV0:
 
 
 //-------------------------------------------------------------------
-// �Đ��J�n�֐�
+// 再生開始関数
 BOOL PlayWave(HWND hWnd,
 			  UINT uDeviceID,
 			  LPSTR lpszFileName,
 			  DWORD dwStartTime,
 			  HANDLE hdFile,WAVEFORMATEX waveFmt,
-			  LONGLONG n64WaveDataSize, // �t�@�C���̃T�C�Y
-			  LONGLONG n64WaveOffset  // �f�[�^�����܂ł̃I�t�Z�b�g 
+			  LONGLONG n64WaveDataSize, // ファイルのサイズ
+			  LONGLONG n64WaveOffset  // データ部分までのオフセット 
 			  )
 {
 	static PLAYDATA playData;
 	static DWORD dwThreadId;
 	
-	if(HdPlayThread != NULL) return FALSE; // �X���b�h�������Ă�����߂�
-	else {	// �Đ��J�n
+	if(HdPlayThread != NULL) return FALSE; // スレッドが動いていたら戻る
+	else {	// 再生開始
 		
-		// �\���̃f�[�^�Z�b�g
+		// 構造体データセット
 		playData.hWnd = hWnd;
 		playData.uDeviceID = uDeviceID;
 		if(lpszFileName!=NULL) wsprintf(playData.szWaveFileName,"%s",lpszFileName);
@@ -479,7 +470,7 @@ BOOL PlayWave(HWND hWnd,
 		playData.n64WaveDataSize = n64WaveDataSize;
 		playData.n64WaveOffset = n64WaveOffset;
 		
-		// �X���b�h�N��
+		// スレッド起動
 		HdPlayThread = CreateThread(NULL,0,
 			(LPTHREAD_START_ROUTINE)PlayWaveThread,
 			(LPVOID)&playData,
@@ -493,23 +484,23 @@ BOOL PlayWave(HWND hWnd,
 
 #ifdef USE_EWC
 //-----------------------------------------------------
-// �o�C�g�w��ōĐ�
+// バイト指定で再生
 BOOL PlayWaveByte(HWND hWnd,
 				  UINT uDeviceID,
 				  LPSTR lpszFileName,
 				  LONGLONG n64StartByte,
 				  HANDLE hdFile,
 				  WAVEFORMATEX waveFmt,
-				  LONGLONG n64WaveDataSize, // �t�@�C���̃T�C�Y
-				  LONGLONG n64WaveOffset  // �f�[�^�����܂ł̃I�t�Z�b�g 
+				  LONGLONG n64WaveDataSize, // ファイルのサイズ
+				  LONGLONG n64WaveOffset  // データ部分までのオフセット 
 ){
 	static PLAYDATA playData;
 	static DWORD dwThreadId;
 	
-	if(HdPlayThread != NULL) return FALSE; // �X���b�h�������Ă�����߂�
-	else {	// �Đ��J�n
+	if(HdPlayThread != NULL) return FALSE; // スレッドが動いていたら戻る
+	else {	// 再生開始
 		
-		// �\���̃f�[�^�Z�b�g
+		// 構造体データセット
 		playData.hWnd = hWnd;
 		playData.uDeviceID = uDeviceID;
 		if(lpszFileName!=NULL) wsprintf(playData.szWaveFileName,"%s",lpszFileName);
@@ -520,7 +511,7 @@ BOOL PlayWaveByte(HWND hWnd,
 		playData.n64WaveDataSize = n64WaveDataSize;
 		playData.n64WaveOffset = n64WaveOffset;
 		
-		// �X���b�h�N��
+		// スレッド起動
 		HdPlayThread = CreateThread(NULL,0,
 			(LPTHREAD_START_ROUTINE)PlayWaveThread,
 			(LPVOID)&playData,

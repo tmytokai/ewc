@@ -1,28 +1,26 @@
-// easy Wave Cutter
-// Copyright (c) 1999-2015 Tomoya Tokairin
-// •Û‘¶‚Æ‚©ƒIƒtƒZƒbƒgæ“¾‚Æ‚©ƒWƒƒƒ“ƒv‚Æ‚©‚ÌŠÖ”
+ï»¿// ä¿å­˜ã¨ã‹ã‚ªãƒ•ã‚»ãƒƒãƒˆå–å¾—ã¨ã‹ã‚¸ãƒ£ãƒ³ãƒ—ã¨ã‹ã®é–¢æ•°
 
 #include "common.h"
 #include <math.h>
 
 
 //-------------------------------------------------------------------
-// Wave ƒfƒoƒCƒXƒI[ƒvƒ“‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”
+// Wave ãƒ‡ãƒã‚¤ã‚¹ã‚ªãƒ¼ãƒ—ãƒ³æ™‚ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
 VOID CALLBACK MyOffsetWaveInProc(HWAVEOUT hWaveOut,UINT msg,DWORD inst,DWORD dwP1,DWORD dwP2)
 {
 	
 	switch (msg) {
 		
-	case WIM_OPEN: // WAVE ƒfƒoƒCƒXƒI[ƒvƒ“
+	case WIM_OPEN: // WAVE ãƒ‡ãƒã‚¤ã‚¹ã‚ªãƒ¼ãƒ—ãƒ³
 		*((LPWORD)inst) = ID_OPENWAVE;
 		break;
 		
-	case WIM_DATA: // ˜^‰¹I—¹
+	case WIM_DATA: // éŒ²éŸ³çµ‚äº†
 		
 		*((LPWORD)inst) = ID_RECORDWAVE;
 		break;
 		
-	case WIM_CLOSE: // WAVE ƒfƒoƒCƒXƒNƒ[ƒY
+	case WIM_CLOSE: // WAVE ãƒ‡ãƒã‚¤ã‚¹ã‚¯ãƒ­ãƒ¼ã‚º
 		
 		*((LPWORD)inst) = ID_CLOSEWAVE;
 		break;
@@ -37,13 +35,13 @@ VOID CALLBACK MyOffsetWaveInProc(HWAVEOUT hWaveOut,UINT msg,DWORD inst,DWORD dwP
 
 
 //-------------------------------------
-// ã‘‚«Šm”Fƒ_ƒCƒAƒƒO
+// ä¸Šæ›¸ãç¢ºèªãƒ€ã‚¤ã‚¢ãƒ­ã‚°
 LRESULT CALLBACK ProgDlgOverWrite(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	
     switch (msg) {
 		
-	case WM_INITDIALOG:  // ƒ_ƒCƒAƒƒO‰Šú‰»
+	case WM_INITDIALOG:  // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°åˆæœŸåŒ–
 		
 		SetDlgCenter(hWnd);
 		Edit_SetText(GetDlgItem(hWnd,IDC_EDITMSG),(LPCTSTR)lp);
@@ -72,65 +70,65 @@ LRESULT CALLBACK ProgDlgOverWrite(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 
 //-------------------------------------------------------------------
-// WAVEFLT2 ‹N“®ƒXƒŒƒbƒh
+// WAVEFLT2 èµ·å‹•ã‚¹ãƒ¬ãƒƒãƒ‰
 //
-// lpszOrgName ‚Ìƒtƒ@ƒCƒ‹‚ğ lpszNewFileName ‚ÉƒRƒs[‚·‚é
+// lpszOrgName ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ lpszNewFileName ã«ã‚³ãƒ”ãƒ¼ã™ã‚‹
 
 DWORD WINAPI StartWaveFlt2(LPVOID lpVoid) 
 {
 	
 	LPEWCDATA lpEwcData = (LPEWCDATA)lpVoid;
 	
-	HWND hWnd  	// eƒ_ƒCƒAƒƒO‚ÌƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
+	HWND hWnd  	// è¦ªãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
 		= lpEwcData->hWnd; 
-	WAVEFORMATEX waveFmt // Wave ƒtƒH[ƒ}ƒbƒgƒf[ƒ^
+	WAVEFORMATEX waveFmt // Wave ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆãƒ‡ãƒ¼ã‚¿
 		= lpEwcData->waveFmt; 
-	LPSTR lpszNewFileName 	// ƒRƒs[‚·‚éƒtƒ@ƒCƒ‹–¼
+	LPSTR lpszNewFileName 	// ã‚³ãƒ”ãƒ¼ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«å
 		= lpEwcData->lpszFileName; 
-	LPSTR lpszOrgName 	// Œ³ƒtƒ@ƒCƒ‹–¼
+	LPSTR lpszOrgName 	// å…ƒãƒ•ã‚¡ã‚¤ãƒ«å
 		= lpEwcData->lpszOrgName; 
-	LPWORD lpwStatus 	// ƒXƒe[ƒ^ƒX
+	LPWORD lpwStatus 	// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
 		= lpEwcData->lpwStatus; 
-	PROCESS_INFORMATION* pProInfo  // WaveFLT ‚ÌƒvƒƒZƒXî•ñ
+	PROCESS_INFORMATION* pProInfo  // WaveFLT ã®ãƒ—ãƒ­ã‚»ã‚¹æƒ…å ±
 		= lpEwcData->pProInfo; 
 
-	LONGLONG n64DataSize; 	//ƒRƒs[‚·‚éƒf[ƒ^ƒTƒCƒY
+	LONGLONG n64DataSize; 	//ã‚³ãƒ”ãƒ¼ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
 	
-	// Wave ƒf[ƒ^—p
-	LONGLONG n64SrcDataSize; // ƒRƒs[Œ³ƒtƒ@ƒCƒ‹‚Ìƒf[ƒ^ƒTƒCƒY
-	LONGLONG n64SrcDataOffset; // ƒRƒs[Œ³ƒtƒ@ƒCƒ‹‚Ìƒwƒbƒ_ƒIƒtƒZƒbƒg
+	// Wave ãƒ‡ãƒ¼ã‚¿ç”¨
+	LONGLONG n64SrcDataSize; // ã‚³ãƒ”ãƒ¼å…ƒãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
+	LONGLONG n64SrcDataOffset; // ã‚³ãƒ”ãƒ¼å…ƒãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ˜ãƒƒãƒ€ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 	
 	CHAR szStr[CHR_BUF];
 	DWORD dwExitCode;
 	
-	// ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‹N“®—p
+	// ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³èµ·å‹•ç”¨
 	CHAR szCommandLine[CHR_BUF];
 	CHAR szFoo[CHR_BUF],szFoo2[CHR_BUF];
 	CHAR szData[MAX_WAVFLTOPTBUF];
 	HINSTANCE hInst = (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE);
-	HANDLE hFileMap = NULL; // File Mapping Object —p
-	HANDLE hTrackFileMap = NULL; // File Mapping Object —p
+	HANDLE hFileMap = NULL; // File Mapping Object ç”¨
+	HANDLE hTrackFileMap = NULL; // File Mapping Object ç”¨
 	char* lpszTrackName = NULL;
-	DWORD dwOVWstat = 0; // ã‘‚«Šm”F (0: –â‚¢‡‚í‚¹, 1:‘S‚Äã‘‚«, 2:‘S‚Äã‘‚«‚µ‚È‚¢)
+	DWORD dwOVWstat = 0; // ä¸Šæ›¸ãç¢ºèª (0: å•ã„åˆã‚ã›, 1:å…¨ã¦ä¸Šæ›¸ã, 2:å…¨ã¦ä¸Šæ›¸ãã—ãªã„)
 
 	DWORD i;
 	LONGLONG n64Foo,n64Foo2,n64Prev;
 	LONG nRet;
 	
 	
-	// ƒRƒs[‚ğs‚¤ê‡‚ÉƒRƒs[‚Å‚«‚é‚©ƒ`ƒFƒbƒN
+	// ã‚³ãƒ”ãƒ¼ã‚’è¡Œã†å ´åˆã«ã‚³ãƒ”ãƒ¼ã§ãã‚‹ã‹ãƒã‚§ãƒƒã‚¯
 	if(lpszNewFileName != NULL)
 	{
 		n64DataSize = lpEwcData->n64NewDataSize;
 		
-		// ƒRƒs[o—ˆ‚é‚©ƒfƒBƒXƒN‚Ì‹óƒTƒCƒYƒ`ƒFƒbƒN
-		// stdout ‚Ì‚Íƒ`ƒFƒbƒN‚µ‚È‚¢
+		// ã‚³ãƒ”ãƒ¼å‡ºæ¥ã‚‹ã‹ãƒ‡ã‚£ã‚¹ã‚¯ã®ç©ºã‚µã‚¤ã‚ºãƒã‚§ãƒƒã‚¯
+		// stdout ã®æ™‚ã¯ãƒã‚§ãƒƒã‚¯ã—ãªã„
 		ULONGLONG u64DiskFreeSpace; 
 		GetFreeHddSpace64(&u64DiskFreeSpace,lpszNewFileName);
 		
 		if((LONGLONG)u64DiskFreeSpace < n64DataSize/+1024)
 		{
-			wsprintf(szStr,"ƒhƒ‰ƒCƒu‚Ì‹ó‚«—e—Ê %lu M •K—v‚È—e—Ê %lu M\n\nƒhƒ‰ƒCƒu‚Ì‹ó—e—Ê‚ª‘«‚è‚Ü‚¹‚ñBƒhƒ‰ƒCƒu‚ğ•ÏX‚µ‚Ä‰º‚³‚¢B"
+			wsprintf(szStr,"ãƒ‰ãƒ©ã‚¤ãƒ–ã®ç©ºãå®¹é‡ %lu M å¿…è¦ãªå®¹é‡ %lu M\n\nãƒ‰ãƒ©ã‚¤ãƒ–ã®ç©ºå®¹é‡ãŒè¶³ã‚Šã¾ã›ã‚“ã€‚ãƒ‰ãƒ©ã‚¤ãƒ–ã‚’å¤‰æ›´ã—ã¦ä¸‹ã•ã„ã€‚"
 				,(DWORD)(u64DiskFreeSpace/1024/1024),(DWORD)(n64DataSize/1024/1024));
 			MyMessageBox(hWnd,szStr,"Error", MB_OK|MB_ICONERROR);	
 			
@@ -138,53 +136,53 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 			ExitThread(1L);
 		}
 		
-		// ƒIƒŠƒWƒiƒ‹‚ÌƒtƒH[ƒ}ƒbƒgæ“¾
+		// ã‚ªãƒªã‚¸ãƒŠãƒ«ã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆå–å¾—
 		if(!GetWaveFormat(lpszOrgName,&waveFmt,&n64SrcDataSize,&n64SrcDataOffset,szStr))
 		{
 			MyMessageBox(hWnd,szStr,"Error", MB_OK|MB_ICONERROR);	
 
-			// ¸”sƒƒbƒZ[ƒW‚ğ‘—‚é
+			// å¤±æ•—ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’é€ã‚‹
 			SendMessage(hWnd,WM_MYENDCOPY,0,1L);
 			ExitThread(1L);
 		}
 		
-		// ƒRƒs[o—ˆ‚é‚©ƒf[ƒ^ƒTƒCƒY‚Ìƒ`ƒFƒbƒN
+		// ã‚³ãƒ”ãƒ¼å‡ºæ¥ã‚‹ã‹ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã®ãƒã‚§ãƒƒã‚¯
 		if(n64SrcDataSize < n64DataSize)
 		{
-			wsprintf(szStr,"ƒRƒs[o—ˆ‚Ü‚¹‚ñB\n\nƒRƒs[Œ³ƒf[ƒ^ƒTƒCƒY %lu M ƒRƒs[‚·‚éƒTƒCƒY %lu M\n\nƒRƒs[Œ³‚Ìƒtƒ@ƒCƒ‹ƒTƒCƒY‚©¬‚³‚·‚¬‚Ü‚·B"
+			wsprintf(szStr,"ã‚³ãƒ”ãƒ¼å‡ºæ¥ã¾ã›ã‚“ã€‚\n\nã‚³ãƒ”ãƒ¼å…ƒãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º %lu M ã‚³ãƒ”ãƒ¼ã™ã‚‹ã‚µã‚¤ã‚º %lu M\n\nã‚³ãƒ”ãƒ¼å…ƒã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚ºã‹å°ã•ã™ãã¾ã™ã€‚"
 				,(DWORD)(n64SrcDataSize/1024/1024),(DWORD)(n64DataSize/1024/1024));
 			MyMessageBox(hWnd,szStr,"Error", MB_OK|MB_ICONERROR);	
 			
-			// ¸”sƒƒbƒZ[ƒW‘—M
+			// å¤±æ•—ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡
 			SendMessage(hWnd,WM_MYENDCOPY,0,1L);
 			ExitThread(1L);
 		}
 	}
 	
-	SetWindowText(hWnd,"WAVEFLT2 Às’†");
+	SetWindowText(hWnd,"WAVEFLT2 å®Ÿè¡Œä¸­");
 	
 	//----------------------------------
-	// ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“ƒZƒbƒg
+	// ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã‚»ãƒƒãƒˆ
 	if(strcmp(lpszNewFileName,"waveout") == 0)
-		wsprintf(szCommandLine,"waveflt2.exe -fmap \"%s\" waveout",lpszOrgName);  // ƒTƒEƒ“ƒho—Í
+		wsprintf(szCommandLine,"waveflt2.exe -fmap \"%s\" waveout",lpszOrgName);  // ã‚µã‚¦ãƒ³ãƒ‰å‡ºåŠ›
 	else 
 		wsprintf(szCommandLine,"waveflt2.exe -fmap \"%s\" \"%s\"",lpszOrgName,lpszNewFileName); 
 	
-	// waveflt2 ‚Ìê‡‚Íƒwƒbƒ_ƒIƒtƒZƒbƒg‚Ì•ªˆø‚¢‚Æ‚­
+	// waveflt2 ã®å ´åˆã¯ãƒ˜ãƒƒãƒ€ã‚ªãƒ•ã‚»ãƒƒãƒˆã®åˆ†å¼•ã„ã¨ã
 	lpEwcData->n64NewDataOffset -= n64SrcDataOffset;
 	
 	//---------------
-	// filemapping ‚É ƒIƒvƒVƒ‡ƒ“ƒZƒbƒg
+	// filemapping ã« ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆ
 
-	// ƒRƒs[”ÍˆÍ
+	// ã‚³ãƒ”ãƒ¼ç¯„å›²
 	if(!lpEwcData->bCutCm)
 	{
 		sprintf(szData,"-cutb %I64d %I64d ",
 			lpEwcData->n64NewDataOffset,lpEwcData->n64NewDataSize); 
 	}
 
-	// •ªŠ„
-	// -outfile_fm ƒIƒvƒVƒ‡ƒ“g‚Á‚Äƒgƒ‰ƒbƒN–¼‚ğ“n‚·
+	// åˆ†å‰²
+	// -outfile_fm ã‚ªãƒ—ã‚·ãƒ§ãƒ³ä½¿ã£ã¦ãƒˆãƒ©ãƒƒã‚¯åã‚’æ¸¡ã™
 	if(lpEwcData->bSplit)
 	{
 		char szDrive[16],szPath[MAX_PATH],szFullPath[MAX_PATH];
@@ -193,14 +191,14 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 		lpszTrackName = (char*)malloc(sizeof(char)*(lpEwcData->dwSplitNum+1)*MAX_PATH+1024);
 		memset(lpszTrackName,0,sizeof(char)*(lpEwcData->dwSplitNum+1)*MAX_PATH);
 
-		// •Û‘¶æƒfƒBƒŒƒNƒgƒŠæ“¾
+		// ä¿å­˜å…ˆãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªå–å¾—
 		_splitpath(lpEwcData->lpszFileName,szDrive,szPath,NULL, NULL);	
 		wsprintf(szFullPath,"%s%s",szDrive,szPath);
 	
-		// (’) -splitbm ‚ÍƒTƒCƒY‚Åw’è‚·‚é‚Ì‚ÅƒIƒtƒZƒbƒg‚Æ‚©‚Íl‚¦‚È‚­‚Ä—Ç‚¢
+		// (æ³¨) -splitbm ã¯ã‚µã‚¤ã‚ºã§æŒ‡å®šã™ã‚‹ã®ã§ã‚ªãƒ•ã‚»ãƒƒãƒˆã¨ã‹ã¯è€ƒãˆãªãã¦è‰¯ã„
 		wsprintf(szData,"%s -splitbm %lu ",szData,lpEwcData->dwSplitNum+1);
 
-		// •ªŠ„ƒTƒCƒYƒZƒbƒg
+		// åˆ†å‰²ã‚µã‚¤ã‚ºã‚»ãƒƒãƒˆ
 		n64Prev = 0;
 		for(i=0;i<lpEwcData->dwSplitNum;i++)
 		{
@@ -210,30 +208,30 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 			strcat(szData,szFoo);
 			n64Prev = n64Foo;
 		}
-		sprintf(szFoo,"%I64d ",lpEwcData->n64NewDataSize); // c‚è‘S•”
+		sprintf(szFoo,"%I64d ",lpEwcData->n64NewDataSize); // æ®‹ã‚Šå…¨éƒ¨
 		strcat(szData,szFoo);
 
-		// ƒtƒ@ƒCƒ‹–¼ƒZƒbƒg
+		// ãƒ•ã‚¡ã‚¤ãƒ«åã‚»ãƒƒãƒˆ
 		for(i=0;i<=lpEwcData->dwSplitNum;i++)
 		{
-			// ƒtƒ@ƒCƒ‹–¼‚ª "null" ‚È‚ç‚»‚Ì‚Ü‚Ü
+			// ãƒ•ã‚¡ã‚¤ãƒ«åãŒ "null" ãªã‚‰ãã®ã¾ã¾
 			if(strcmp(lpEwcData->szTrackName[i],"null")==0){
 				strcpy(szFoo,"null");
 			}
 			else
 			{
-				// Šù‚Éƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+				// æ—¢ã«ãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ã¦ã„ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
 				wsprintf(szFoo,"%s%s",szFullPath,lpEwcData->szTrackName[i]);
 				hTmp = CreateFile(szFoo,GENERIC_READ,0,0,OPEN_EXISTING,FILE_ATTRIBUTE_READONLY,NULL); 
 				
-				// ‘¶İ‚µ‚½‚çƒtƒ@ƒCƒ‹–¼‚ğ"null"‚É‚·‚é
+				// å­˜åœ¨ã—ãŸã‚‰ãƒ•ã‚¡ã‚¤ãƒ«åã‚’"null"ã«ã™ã‚‹
 				if(hTmp != INVALID_HANDLE_VALUE){
 					CloseHandle(hTmp);
-					wsprintf(szFoo2,"ƒtƒ@ƒCƒ‹ %s ‚ÍŠù‚É‘¶İ‚µ‚Ü‚·B\n\nã‘‚«•Û‘¶‚µ‚Ü‚·‚©?",szFoo);
+					wsprintf(szFoo2,"ãƒ•ã‚¡ã‚¤ãƒ« %s ã¯æ—¢ã«å­˜åœ¨ã—ã¾ã™ã€‚\n\nä¸Šæ›¸ãä¿å­˜ã—ã¾ã™ã‹?",szFoo);
 					
 					switch(dwOVWstat){
 						
-					case 0: // ƒ_ƒCƒAƒƒO‚ğo‚µ‚Ä–â‚¢‡‚í‚¹
+					case 0: // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’å‡ºã—ã¦å•ã„åˆã‚ã›
 						
 						nRet = DialogBoxParam(hInst,MAKEINTRESOURCE(IDD_OVERWRITE)
 							,hWnd,(DLGPROC)ProgDlgOverWrite,(LPARAM)szFoo2);
@@ -250,14 +248,14 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 							dwOVWstat = 2;
 							break;
 						case IDC_STOP:
-							// ’†~
+							// ä¸­æ­¢
 							(*lpwStatus) = ID_COPYOFF;
 							goto L_ERROR;
 						}
 						
 						break;
 						
-						case 2: // ‘S‚Äã‘‚«‚µ‚È‚¢
+						case 2: // å…¨ã¦ä¸Šæ›¸ãã—ãªã„
 							strcpy(szFoo,"null");
 							break;
 					}
@@ -270,7 +268,7 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 
 		if(!WriteToFileMapping(&hTrackFileMap,lpszTrackName,sizeof(char)*(lpEwcData->dwSplitNum+1)*MAX_PATH,NULL))
 		{
-			MyMessageBox(hWnd, "ƒtƒ@ƒCƒ‹ƒ}ƒbƒsƒ“ƒO‚Ìì¬‚É¸”s‚µ‚Ü‚µ‚½","Error", MB_OK|MB_ICONERROR);	
+			MyMessageBox(hWnd, "ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒƒãƒ”ãƒ³ã‚°ã®ä½œæˆã«å¤±æ•—ã—ã¾ã—ãŸ","Error", MB_OK|MB_ICONERROR);	
 			dwExitCode = 1;
 			goto L_ERROR;
 		}
@@ -280,13 +278,13 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 	}
 	else 
 		if(lpEwcData->bCutCm)
-		{ // CM ƒJƒbƒg
+		{ // CM ã‚«ãƒƒãƒˆ
 
 		wsprintf(szData,"-cutmb %lu ",lpEwcData->dwSplitNum/2+1);
 
-		// (’) -cutmb ‚Í ƒIƒtƒZƒbƒg + ƒuƒƒbƒNƒTƒCƒY ‚Åw’è
+		// (æ³¨) -cutmb ã¯ ã‚ªãƒ•ã‚»ãƒƒãƒˆ + ãƒ–ãƒ­ãƒƒã‚¯ã‚µã‚¤ã‚º ã§æŒ‡å®š
 
-		// Å‰
+		// æœ€åˆ
 		n64Foo = lpEwcData->n64NewDataOffset;
 		n64Foo2 = lpEwcData->n64SplitMarkedPosByte[0];
 		sprintf(szFoo,"%I64d %I64d ",n64Foo,n64Foo2);
@@ -299,7 +297,7 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 			strcat(szData,szFoo);
 		}
 		
-		// c‚è
+		// æ®‹ã‚Š
 		if(lpEwcData->dwSplitNum%2==0)
 		{
 			n64Foo = lpEwcData->n64NewDataOffset + lpEwcData->n64SplitMarkedPosByte[i];
@@ -309,23 +307,23 @@ DWORD WINAPI StartWaveFlt2(LPVOID lpVoid)
 		}
 	}
 
-	// c‚è‚ÌƒIƒvƒVƒ‡ƒ“ƒZƒbƒg
+	// æ®‹ã‚Šã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã‚»ãƒƒãƒˆ
 	strcat(szData,lpEwcData->editSaveData.szOption);
 
-	// WaveFLT2 ‹N“®
-	// ƒIƒvƒVƒ‡ƒ“‚Í File Mapping ‚Å“n‚·
+	// WaveFLT2 èµ·å‹•
+	// ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã¯ File Mapping ã§æ¸¡ã™
 	if(!ExecCommandFileMapping(&hFileMap,NULL,szCommandLine,szData,MAX_WAVFLTOPTBUF,
 		pProInfo,hInst,lpEwcData->bShowConsole,szStr))
 	{
 		SetForegroundWindow(hWnd);
-		MyMessageBox(hWnd, "WAVEFLT ‚Ì‹N“®‚É¸”s‚µ‚Ü‚µ‚½\n\newc.exe ‚Æ“¯‚¶ƒtƒHƒ‹ƒ_‚É waveflt2.exe ‚ª‚ ‚é‚©Šm”F‚µ‚Ä‰º‚³‚¢", 
+		MyMessageBox(hWnd, "WAVEFLT ã®èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸ\n\newc.exe ã¨åŒã˜ãƒ•ã‚©ãƒ«ãƒ€ã« waveflt2.exe ãŒã‚ã‚‹ã‹ç¢ºèªã—ã¦ä¸‹ã•ã„", 
 			"Error", MB_OK|MB_ICONERROR);	
 		
 		dwExitCode = 1;
 		goto L_ERROR;
 	}
 	
-	// WaveFLT ‚ªI‚é‚Ü‚Å’â~
+	// WaveFLT ãŒçµ‚ã‚‹ã¾ã§åœæ­¢
 	WaitForSingleObject(pProInfo->hProcess,INFINITE);
 	GetExitCodeProcess(pProInfo->hProcess,&dwExitCode);
 	
@@ -333,23 +331,23 @@ L_ERROR:
 
 	pProInfo->hProcess = NULL;
 
-	// File Mapping Object íœ
+	// File Mapping Object å‰Šé™¤
 	if(hFileMap) CloseHandle(hFileMap);
 	if(hTrackFileMap) CloseHandle(hTrackFileMap);
 
 	if(lpszTrackName) free(lpszTrackName);
 
 
-	// I—¹ƒƒbƒZ[ƒW‘—M
+	// çµ‚äº†ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡
 
-	// ƒLƒƒƒ“ƒZƒ‹‚µ‚½ê‡
+	// ã‚­ãƒ£ãƒ³ã‚»ãƒ«ã—ãŸå ´åˆ
 	if((*lpwStatus) == ID_COPYOFF) SendMessage(hWnd,WM_MYENDCOPY,0,2L);
 	else{
 		
-		if(dwExitCode == 0) SendMessage(hWnd,WM_MYENDCOPY,0,0L); // ¬Œ÷
+		if(dwExitCode == 0) SendMessage(hWnd,WM_MYENDCOPY,0,0L); // æˆåŠŸ
 		else {
 			SetForegroundWindow(hWnd);
-			SendMessage(hWnd,WM_MYENDCOPY,0,1L); // ¸”s
+			SendMessage(hWnd,WM_MYENDCOPY,0,1L); // å¤±æ•—
 		}
 	}
 				
@@ -360,28 +358,28 @@ L_ERROR:
 
 
 //-------------------------------------
-// WAVEFLT ‹N“®ƒ_ƒCƒAƒƒO‚ÌƒvƒƒV[ƒWƒƒ
-// ƒXƒŒƒbƒh‚ğ‹N“®‚·‚é‚¾‚¯
+// WAVEFLT èµ·å‹•ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
+// ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’èµ·å‹•ã™ã‚‹ã ã‘
 LRESULT CALLBACK ProgDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	
-	static HANDLE hThread = NULL;  // ƒXƒŒƒbƒh‚Ìƒnƒ“ƒhƒ‹
-	static DWORD threadId; // ƒXƒŒƒbƒh ID
+	static HANDLE hThread = NULL;  // ã‚¹ãƒ¬ãƒƒãƒ‰ã®ãƒãƒ³ãƒ‰ãƒ«
+	static DWORD threadId; // ã‚¹ãƒ¬ãƒƒãƒ‰ ID
 	static WORD wStatus;
 	static LPEWCDATA lpEwcData;  
-	static PROCESS_INFORMATION proInfo; // WaveFLT ‚ÌƒvƒƒZƒXî•ñ
+	static PROCESS_INFORMATION proInfo; // WaveFLT ã®ãƒ—ãƒ­ã‚»ã‚¹æƒ…å ±
 	UINT uRet;
 	
     switch (msg) {
 		
-	case WM_INITDIALOG:  // ƒ_ƒCƒAƒƒO‰Šú‰»
+	case WM_INITDIALOG:  // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°åˆæœŸåŒ–
 		
 		if(hThread == NULL){
 			
-			// ƒ_ƒCƒAƒƒO‚ğ’†S‚ÉˆÚ“®
+			// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’ä¸­å¿ƒã«ç§»å‹•
 			SetDlgCenter(hWnd);
 			
-			// •Û‘¶ƒXƒŒƒbƒh‹N“®
+			// ä¿å­˜ã‚¹ãƒ¬ãƒƒãƒ‰èµ·å‹•
 			proInfo.hProcess = NULL;
 			wStatus = ID_COPYON;
 			lpEwcData = (LPEWCDATA)lp;
@@ -395,38 +393,38 @@ LRESULT CALLBACK ProgDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 				0,(LPDWORD)&threadId);
 			
 			if(hThread == NULL){	   
-				MyMessageBox(hWnd, "ƒXƒŒƒbƒh‚Ì‹N“®‚É¸”s‚µ‚Ü‚µ‚½B", 
+				MyMessageBox(hWnd, "ã‚¹ãƒ¬ãƒƒãƒ‰ã®èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸã€‚", 
 					"Error", MB_OK|MB_ICONERROR);
 				EndDialog(hWnd, IDCANCEL); 
 			}
 		}
 		else {
-			MyMessageBox(hWnd, "Šù‚ÉƒXƒŒƒbƒh‚ª“®‚¢‚Ä‚¢‚Ü‚·B", 
+			MyMessageBox(hWnd, "æ—¢ã«ã‚¹ãƒ¬ãƒƒãƒ‰ãŒå‹•ã„ã¦ã„ã¾ã™ã€‚", 
 				"Error", MB_OK|MB_ICONERROR);
 			EndDialog(hWnd, IDCANCEL); 
 		}
 		
 		break;
 		
-	case WM_MYENDCOPY: // ƒRƒs[Š®—¹
+	case WM_MYENDCOPY: // ã‚³ãƒ”ãƒ¼å®Œäº†
 		
 		hThread = NULL;
 		
-		// ƒtƒHƒ[ƒh‚É‚Á‚Ä‚­‚é
+		// ãƒ•ã‚©ãƒ¯ãƒ¼ãƒ‰ã«æŒã£ã¦ãã‚‹
 		SetForegroundWindow(hWnd);
 		Sleep(100);
 		
 		if((DWORD)lp == 1) {
-			MyMessageBox(hWnd,"¸”s‚µ‚Ü‚µ‚½\n\nŒ´ˆö‚ğ‰ğŒˆ‚µ‚Ä‚à‚¤ˆê“xƒRƒs[‚ğs‚Á‚Ä‰º‚³‚¢", "ewc", MB_OK|MB_ICONERROR|MB_SETFOREGROUND);
-			uRet = IDCANCEL; // ˆÙíI—¹
+			MyMessageBox(hWnd,"å¤±æ•—ã—ã¾ã—ãŸ\n\nåŸå› ã‚’è§£æ±ºã—ã¦ã‚‚ã†ä¸€åº¦ã‚³ãƒ”ãƒ¼ã‚’è¡Œã£ã¦ä¸‹ã•ã„", "ewc", MB_OK|MB_ICONERROR|MB_SETFOREGROUND);
+			uRet = IDCANCEL; // ç•°å¸¸çµ‚äº†
 		}
-		else if((DWORD)lp == 2){ // ƒLƒƒƒ“ƒZƒ‹
-			uRet = IDCANCEL; // ˆÙíI—¹
+		else if((DWORD)lp == 2){ // ã‚­ãƒ£ãƒ³ã‚»ãƒ«
+			uRet = IDCANCEL; // ç•°å¸¸çµ‚äº†
 		}
 		else
 		{
-			MyMessageBox(hWnd,"³í‚ÉI—¹‚µ‚Ü‚µ‚½B", "ewc", MB_OK|MB_ICONINFORMATION|MB_SETFOREGROUND);
-			uRet = IDOK; // ³íI—¹
+			MyMessageBox(hWnd,"æ­£å¸¸ã«çµ‚äº†ã—ã¾ã—ãŸã€‚", "ewc", MB_OK|MB_ICONINFORMATION|MB_SETFOREGROUND);
+			uRet = IDOK; // æ­£å¸¸çµ‚äº†
 		}
 		
 		Sleep(500);
@@ -442,13 +440,13 @@ LRESULT CALLBACK ProgDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		
 		switch (LOWORD(wp)) {
 			
-		case IDCANCEL: // ’â~
+		case IDCANCEL: // åœæ­¢
 			
 			wStatus = ID_COPYOFF;
 			
 			if(proInfo.hProcess != NULL){
 				
-				// Ctrl+Break ‘—M
+				// Ctrl+Break é€ä¿¡
 				DWORD dwMode;
 				GetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),&dwMode);
 				SetConsoleMode(GetStdHandle(STD_INPUT_HANDLE),dwMode|ENABLE_PROCESSED_INPUT);
@@ -456,18 +454,18 @@ LRESULT CALLBACK ProgDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 				Sleep(100);
 				GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT,proInfo.dwProcessId);
 				
-				// ‚Ü‚¾WAVEFLT‚ª“®‚¢‚Ä‚¢‚½‚ç
+				// ã¾ã WAVEFLTãŒå‹•ã„ã¦ã„ãŸã‚‰
 				if(WaitForSingleObject(proInfo.hProcess,10000) == WAIT_TIMEOUT){ 
 					
-					// WAVEFLT ‚ğ‹­§’â~
+					// WAVEFLT ã‚’å¼·åˆ¶åœæ­¢
 					TerminateProcess(proInfo.hProcess,1);
 					
-					// ‚»‚ê‚Å‚à‚Ü‚¾WAVEFLT‚ª“®‚¢‚Ä‚¢‚½‚ç
+					// ãã‚Œã§ã‚‚ã¾ã WAVEFLTãŒå‹•ã„ã¦ã„ãŸã‚‰
 					if(WaitForSingleObject(proInfo.hProcess,10000) == WAIT_TIMEOUT){ 
 						Sleep(1000);
 						if(proInfo.hProcess != NULL){ 
-							MyMessageBox(hWnd,"ƒXƒŒƒbƒh‚Ì’â~‚É¸”s‚µ‚Ü‚µ‚½\n\nEasy Wave Cutter ‚ğÄ‹N“®‚µ‚Ä‚­‚¾‚³‚¢", "ewc", MB_OK|MB_ICONERROR);
-							uRet = IDCANCEL; // ˆÙíI—¹
+							MyMessageBox(hWnd,"ã‚¹ãƒ¬ãƒƒãƒ‰ã®åœæ­¢ã«å¤±æ•—ã—ã¾ã—ãŸ\n\nEasy Wave Cutter ã‚’å†èµ·å‹•ã—ã¦ãã ã•ã„", "ewc", MB_OK|MB_ICONERROR);
+							uRet = IDCANCEL; // ç•°å¸¸çµ‚äº†
 							EndDialog(hWnd, uRet); 
 						}
 					}
@@ -489,37 +487,37 @@ LRESULT CALLBACK ProgDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 
 //-------------------------------------------
-// ƒf[ƒ^ƒZ[ƒu
+// ãƒ‡ãƒ¼ã‚¿ã‚»ãƒ¼ãƒ–
 BOOL SaveCutData(HWND hWnd,
 				 HINSTANCE hInst,
 				 LPEWCDATA lpEwcData,
-				 LPSTR lpszOrgFileName,  // ƒRƒs[Œ³ƒtƒ@ƒCƒ‹–¼
-				 LPSTR lpszNewFileName,  // ƒRƒs[æƒtƒ@ƒCƒ‹–¼
-				 // lpszNewFileName ‚ª waveout ‚Ì‚ÍƒfƒoƒCƒX‚Éo—Í
-				 BOOL bSplit  // •ªŠ„˜^‰¹‚©‚Ç‚¤‚©
+				 LPSTR lpszOrgFileName,  // ã‚³ãƒ”ãƒ¼å…ƒãƒ•ã‚¡ã‚¤ãƒ«å
+				 LPSTR lpszNewFileName,  // ã‚³ãƒ”ãƒ¼å…ˆãƒ•ã‚¡ã‚¤ãƒ«å
+				 // lpszNewFileName ãŒ waveout ã®æ™‚ã¯ãƒ‡ãƒã‚¤ã‚¹ã«å‡ºåŠ›
+				 BOOL bSplit  // åˆ†å‰²éŒ²éŸ³ã‹ã©ã†ã‹
 				 ){
 	
 				
-	BOOL bMoveFile; // ã‘‚«‚ÅŒ³ƒtƒ@ƒCƒ‹‚Ì–¼‘O‚ğ•ÏX‚µ‚½‚©‚Ç‚¤‚©
+	BOOL bMoveFile; // ä¸Šæ›¸ãã§å…ƒãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰ã‚’å¤‰æ›´ã—ãŸã‹ã©ã†ã‹
 	CHAR fPath[CHR_BUF],fDrive[CHR_BUF],fName[CHR_BUF],fExt[CHR_BUF];
-	CHAR szReadFile[MAX_PATH];  // ÀÛ‚Éƒ[ƒh‚·‚éƒtƒ@ƒCƒ‹
+	CHAR szReadFile[MAX_PATH];  // å®Ÿéš›ã«ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«
 	
 	bMoveFile = FALSE;
 	strcpy(szReadFile,lpszOrgFileName);
 	
-	// ã‘‚«‚¾‚Á‚½‚ç
+	// ä¸Šæ›¸ãã ã£ãŸã‚‰
 	if(_strnicmp(lpszOrgFileName,lpszNewFileName,MAX_PATH)==0){
 		
 		if(!bSplit){
 			
-			if(MyMessageBox(hWnd, "Œ»İ•ÒW’†‚Ìƒtƒ@ƒCƒ‹‚Éã‘‚«•Û‘¶‚µ‚Ä‚æ‚ë‚µ‚¢‚Å‚·‚©H\n\n™’ˆÓ™  Œ»İ•ÒW’†‚Ìƒtƒ@ƒCƒ‹‚Í *.old ‚ÆƒŠƒl[ƒ€‚³‚ê‚Ü‚·B"
+			if(MyMessageBox(hWnd, "ç¾åœ¨ç·¨é›†ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¸Šæ›¸ãä¿å­˜ã—ã¦ã‚ˆã‚ã—ã„ã§ã™ã‹ï¼Ÿ\n\nâ˜†æ³¨æ„â˜†  ç¾åœ¨ç·¨é›†ä¸­ã®ãƒ•ã‚¡ã‚¤ãƒ«ã¯ *.old ã¨ãƒªãƒãƒ¼ãƒ ã•ã‚Œã¾ã™ã€‚"
 				,"ewc",MB_YESNO|MB_ICONEXCLAMATION|MB_DEFBUTTON2)==IDYES){
 				
-				// ã‘‚«‚Ìê‡‚ÍÌ‚Ìƒtƒ@ƒCƒ‹‚ğ *.old ‚ÉƒŠƒl[ƒ€‚·‚é
+				// ä¸Šæ›¸ãã®å ´åˆã¯æ˜”ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ *.old ã«ãƒªãƒãƒ¼ãƒ ã™ã‚‹
 				_splitpath(lpszOrgFileName,fDrive,fPath,fName,fExt);
 				wsprintf(szReadFile,"%s%s%s.old",fDrive,fPath,fName);  
 				
-				// ƒtƒ@ƒCƒ‹–¼•ÏX
+				// ãƒ•ã‚¡ã‚¤ãƒ«åå¤‰æ›´
 				MoveFile(lpszOrgFileName,szReadFile);
 				bMoveFile = TRUE;
 			}
@@ -527,9 +525,9 @@ BOOL SaveCutData(HWND hWnd,
 		}
 		else
 		{
-			// •ªŠ„‚Ìê‡‚Ío—Í‘¤‚Ì–¼‘O‚ğ•Ï‚¦‚é
-			// -outfile_fm ƒIƒvƒVƒ‡ƒ“g‚Á‚Äƒgƒ‰ƒbƒN–¼‚ğ“n‚µ‚Ä‚é‚Ì‚Å
-			// “K“–‚È–¼‘O‚Å‚æ‚¢
+			// åˆ†å‰²ã®å ´åˆã¯å‡ºåŠ›å´ã®åå‰ã‚’å¤‰ãˆã‚‹
+			// -outfile_fm ã‚ªãƒ—ã‚·ãƒ§ãƒ³ä½¿ã£ã¦ãƒˆãƒ©ãƒƒã‚¯åã‚’æ¸¡ã—ã¦ã‚‹ã®ã§
+			// é©å½“ãªåå‰ã§ã‚ˆã„
 			_splitpath(lpszNewFileName,fDrive,fPath,fName,fExt);
 			wsprintf(lpszNewFileName,"%s%s%s2%s",fDrive,fPath,fName,fExt);  
 		}
@@ -538,17 +536,17 @@ BOOL SaveCutData(HWND hWnd,
 	lpEwcData->lpszOrgName = szReadFile;
 	lpEwcData->lpszFileName = lpszNewFileName;
 	
-	// ƒ_ƒCƒAƒƒOƒ{ƒbƒNƒX•\¦‚Æ•Û‘¶ŠJn
+	// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãƒœãƒƒã‚¯ã‚¹è¡¨ç¤ºã¨ä¿å­˜é–‹å§‹
 	if(DialogBoxParam(hInst,MAKEINTRESOURCE(IDD_COPYFILE)
 		,hWnd,(DLGPROC)ProgDlgProc,
 		(LPARAM)lpEwcData) == IDCANCEL){
 		
-		// •Û‘¶¸”s
+		// ä¿å­˜å¤±æ•—
 		
-		// ƒtƒ@ƒCƒ‹íœ
+		// ãƒ•ã‚¡ã‚¤ãƒ«å‰Šé™¤
 		DeleteFile(lpszNewFileName);
 		
-		// ƒŠƒl[ƒ€‚µ‚Ä‚½‚çŒ³‚É–ß‚·
+		// ãƒªãƒãƒ¼ãƒ ã—ã¦ãŸã‚‰å…ƒã«æˆ»ã™
 		if(bMoveFile) MoveFile(szReadFile,lpszOrgFileName);
 		
 		return FALSE;
@@ -562,7 +560,7 @@ BOOL SaveCutData(HWND hWnd,
 
 
 //-------------------------------------
-// ƒWƒƒƒ“ƒvw’èƒ_ƒCƒAƒƒO‚ÌƒvƒƒV[ƒWƒƒ
+// ã‚¸ãƒ£ãƒ³ãƒ—æŒ‡å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
 LRESULT CALLBACK EditFindDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	static LPJUMPDATA lpJumpData;
@@ -577,7 +575,7 @@ LRESULT CALLBACK EditFindDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 	
     switch (msg) {
 		
-	case WM_INITDIALOG:  // ƒ_ƒCƒAƒƒO‰Šú‰»
+	case WM_INITDIALOG:  // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°åˆæœŸåŒ–
 		
 		lpJumpData = (LPJUMPDATA)lp;
 		lpdNoSoundBound = lpJumpData->lpdNoSoundBound;
@@ -586,10 +584,10 @@ LRESULT CALLBACK EditFindDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		lpwNSoundPos = lpJumpData->lpwNSoundPos;
 		lpEwcData = lpJumpData->lpEwcData;
 		
-		// ƒ_ƒCƒAƒƒO‚ğ’†S‚ÉˆÚ“®
+		// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’ä¸­å¿ƒã«ç§»å‹•
 		SetDlgCenter(hWnd);
 		
-		// ŠÔƒZƒbƒg
+		// æ™‚é–“ã‚»ãƒƒãƒˆ
 		dwTime = *lpdwSearchTime;
 		dwTimeHour = dwTime/60/60;
 		dwTimerMin = (dwTime/60)%60;
@@ -601,25 +599,25 @@ LRESULT CALLBACK EditFindDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		SendMessage(GetDlgItem(hWnd,IDC_SPINSEC),UDM_SETRANGE,(WPARAM)0,(LPARAM)MAKELONG((short)59,0));
 		SendMessage(GetDlgItem(hWnd,IDC_SPINSEC),UDM_SETPOS,(WPARAM)0L,(LPARAM)MAKELONG((short)dwTimerSec,0));
 
-		// ƒgƒ‰ƒbƒNİ’è
+		// ãƒˆãƒ©ãƒƒã‚¯è¨­å®š
 		SendMessage(GetDlgItem(hWnd,IDC_SPINTRACK),UDM_SETRANGE,(WPARAM)0,(LPARAM)MAKELONG((short)lpEwcData->dwSplitNum+1,1));
 		SendMessage(GetDlgItem(hWnd,IDC_SPINTRACK),UDM_SETPOS,(WPARAM)0L,(LPARAM)MAKELONG((short)lpEwcData->dwCurTrack,0));
 
-		// ƒXƒ‰ƒCƒ_[‚Ìİ’è
+		// ã‚¹ãƒ©ã‚¤ãƒ€ãƒ¼ã®è¨­å®š
 		
-		// ƒŒƒxƒ‹
+		// ãƒ¬ãƒ™ãƒ«
 		SendMessage(GetDlgItem(hWnd,IDC_SLIDERBOUND),TBM_SETRANGE,(WPARAM)TRUE,(LPARAM)MAKELONG(0,(LONG)(-1*MINSEARCHBOUND)*5));
 		SendMessage(GetDlgItem(hWnd,IDC_SLIDERBOUND),TBM_SETPOS,(WPARAM)TRUE,(LPARAM)(LONG)((-1*MINSEARCHBOUND + *lpdNoSoundBound)*5));
 		wsprintf(szStr,"%s dB",myfcvt(*lpdNoSoundBound,1));
 		Edit_SetText(GetDlgItem(hWnd,IDC_EDITBOUND),(LPCTSTR)szStr);
 		
-		// •b”
+		// ç§’æ•°
 		SendMessage(GetDlgItem(hWnd,IDC_SLIDERCOUNT),TBM_SETRANGE,(WPARAM)TRUE,(LPARAM)MAKELONG(0,S_POINT_PER_SEC*10));
 		SendMessage(GetDlgItem(hWnd,IDC_SLIDERCOUNT),TBM_SETPOS,(WPARAM)TRUE,(LPARAM)*lpdwNSoundCount);
-		wsprintf(szStr,"%s •b",myfcvt(*lpdwNSoundCount/(double)S_POINT_PER_SEC,2));
+		wsprintf(szStr,"%s ç§’",myfcvt(*lpdwNSoundCount/(double)S_POINT_PER_SEC,2));
 		Edit_SetText(GetDlgItem(hWnd,IDC_EDITCOUNT),(LPCTSTR)szStr);
 		
-		//ƒ`ƒFƒbƒNƒ{ƒbƒNƒXAƒ‰ƒWƒIƒ{ƒ^ƒ“‚Ìİ’è
+		//ãƒã‚§ãƒƒã‚¯ãƒœãƒƒã‚¯ã‚¹ã€ãƒ©ã‚¸ã‚ªãƒœã‚¿ãƒ³ã®è¨­å®š
 		if(*lpwNSoundPos == NSOUND_TOP) Button_SetCheck(GetDlgItem(hWnd,IDC_RADIOTOP), BST_CHECKED);
         else if(*lpwNSoundPos == NSOUND_MID) Button_SetCheck(GetDlgItem(hWnd,IDC_RADIOMID), BST_CHECKED);
 		else Button_SetCheck(GetDlgItem(hWnd,IDC_RADIOEND), BST_CHECKED);
@@ -628,15 +626,15 @@ LRESULT CALLBACK EditFindDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		
 		break;
 		
-	case WM_HSCROLL: // ƒXƒ‰ƒCƒ_‚ğ“®‚©‚µ‚½
+	case WM_HSCROLL: // ã‚¹ãƒ©ã‚¤ãƒ€ã‚’å‹•ã‹ã—ãŸ
 		
-		// •b”w’è
+		// ç§’æ•°æŒ‡å®š
 		if(GetDlgItem(hWnd,IDC_SLIDERCOUNT) == (HWND)lp){
 			dwFoo = (DWORD)SendMessage(GetDlgItem(hWnd,IDC_SLIDERCOUNT),TBM_GETPOS,(WPARAM)0,(LPARAM)0);
-			wsprintf(szStr,"%s •b",myfcvt(dwFoo/(double)S_POINT_PER_SEC,2));
+			wsprintf(szStr,"%s ç§’",myfcvt(dwFoo/(double)S_POINT_PER_SEC,2));
 			Edit_SetText(GetDlgItem(hWnd,IDC_EDITCOUNT),(LPCTSTR)szStr);
 		}
-		else{ // –³‰¹ƒŒƒxƒ‹
+		else{ // ç„¡éŸ³ãƒ¬ãƒ™ãƒ«
 			dFoo = MINSEARCHBOUND +(LONG)SendMessage(GetDlgItem(hWnd,IDC_SLIDERBOUND),TBM_GETPOS,(WPARAM)0,(LPARAM)0)/5.;
 			wsprintf(szStr,"%s dB",myfcvt(dFoo,1));
 			Edit_SetText(GetDlgItem(hWnd,IDC_EDITBOUND),(LPCTSTR)szStr);
@@ -650,9 +648,9 @@ LRESULT CALLBACK EditFindDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		switch (LOWORD(wp)) 
 		{
 			
-		case IDC_BTJUMP:  // w’è‚µ‚½ŠÔ‚ÖƒWƒƒƒ“ƒv
+		case IDC_BTJUMP:  // æŒ‡å®šã—ãŸæ™‚é–“ã¸ã‚¸ãƒ£ãƒ³ãƒ—
 			
-			// ŠÔƒZƒbƒg
+			// æ™‚é–“ã‚»ãƒƒãƒˆ
 			dwTimeHour = min(999,SendMessage(GetDlgItem(hWnd,IDC_SPINHOUR),UDM_GETPOS,(WPARAM)0L,(LPARAM)0L));
 			dwTimerMin = min(59,SendMessage(GetDlgItem(hWnd,IDC_SPINMIN),UDM_GETPOS,(WPARAM)0L,(LPARAM)0L));
 			dwTimerSec = min(59,SendMessage(GetDlgItem(hWnd,IDC_SPINSEC),UDM_GETPOS,(WPARAM)0L,(LPARAM)0L));
@@ -664,19 +662,19 @@ LRESULT CALLBACK EditFindDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			
 		case IDC_BTMOVETRACK:
 
-			// ƒgƒ‰ƒbƒNİ’è
+			// ãƒˆãƒ©ãƒƒã‚¯è¨­å®š
 			lpEwcData->dwCurTrack = SendMessage(GetDlgItem(hWnd,IDC_SPINTRACK),UDM_GETPOS,(WPARAM)0L,(LPARAM)0L);
 			EndDialog(hWnd,IDC_BTMOVETRACK);
 			break;
 			
-		case IDC_BTSEARCH:  // –³‰¹•”ƒT[ƒ`
+		case IDC_BTSEARCH:  // ç„¡éŸ³éƒ¨ã‚µãƒ¼ãƒ
 		case IDC_BTSERCHSPLIT:  
 			
-			//ƒXƒ‰ƒCƒ_
+			//ã‚¹ãƒ©ã‚¤ãƒ€
 			*lpdNoSoundBound = MINSEARCHBOUND+(double)SendMessage(GetDlgItem(hWnd,IDC_SLIDERBOUND),TBM_GETPOS,(WPARAM)0,(LPARAM)0)/5;
 			*lpdwNSoundCount = (DWORD)SendMessage(GetDlgItem(hWnd,IDC_SLIDERCOUNT),TBM_GETPOS,(WPARAM)0,(LPARAM)0);
 			
-			// ƒ‰ƒWƒIƒ{ƒbƒNƒX
+			// ãƒ©ã‚¸ã‚ªãƒœãƒƒã‚¯ã‚¹
 			if(IsDlgButtonChecked(hWnd,IDC_RADIOTOP) == BST_CHECKED) *lpwNSoundPos = NSOUND_TOP;
 			else if(IsDlgButtonChecked(hWnd,IDC_RADIOMID) == BST_CHECKED) *lpwNSoundPos = NSOUND_MID;
 			else *lpwNSoundPos = NSOUND_END;
@@ -687,7 +685,7 @@ LRESULT CALLBACK EditFindDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			EndDialog(hWnd, LOWORD(wp)); 
 			break;
 
-		case IDC_BTOPTVAL: // Å“K’lŒŸõ
+		case IDC_BTOPTVAL: // æœ€é©å€¤æ¤œç´¢
 			
 			dwFoo = (DWORD)SendMessage(GetDlgItem(hWnd,IDC_SLIDERCOUNT),TBM_GETPOS,(WPARAM)0,(LPARAM)0);
 			dFoo = (double)dwFoo/S_POINT_PER_SEC;
@@ -706,7 +704,7 @@ LRESULT CALLBACK EditFindDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		break;
 
 			
-		case IDCANCEL: // ’â~
+		case IDCANCEL: // åœæ­¢
 			EndDialog(hWnd, IDCANCEL); 
 		}
 		

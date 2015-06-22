@@ -1,13 +1,11 @@
-// easy Wave Cutter
-// Copyright (c) 1999-2015 Tomoya Tokairin
-// •`‰æŠÖŒW
+ï»¿// æç”»é–¢ä¿‚
 
 #include "common.h"
 
 
 
 //-------------------------------------------------------------------
-// ˜g‚Ì•`‰æ
+// æ ã®æç”»
 VOID DrawMyFrame(HDC hBufDC,
 				 LONG frameX,
 				 LONG frameY,
@@ -18,7 +16,7 @@ VOID DrawMyFrame(HDC hBufDC,
 	HPEN hOldPen;
 	HBRUSH hBrush,hOldBrush;
 	
-	// ˜g•`‰æ	
+	// æ æç”»	
 	hOldPen = (HPEN)SelectObject(hBufDC,GetStockObject(BLACK_PEN));
 	hBrush = CreateSolidBrush(windowColor);
 	hOldBrush = (HBRUSH)SelectObject(hBufDC,hBrush);
@@ -27,7 +25,7 @@ VOID DrawMyFrame(HDC hBufDC,
 	SelectObject(hBufDC,hOldBrush);
 	DeleteObject(hBrush);
 	
-	// ‰A‰e
+	// é™°å½±
 	hOldPen = (HPEN)SelectObject(hBufDC,GetStockObject(WHITE_PEN));
 	MoveToEx(hBufDC,frameX+frameWidth,frameY,NULL);
 	LineTo(hBufDC,frameX+frameWidth,frameY+frameHeight);
@@ -39,52 +37,52 @@ VOID DrawMyFrame(HDC hBufDC,
 
 
 //-------------------------------------------------------------------
-// •¶š‚Ì•`‰æ
+// æ–‡å­—ã®æç”»
 VOID DrawMyString(HDC hBufDC,LPSTR lpszStr, LONG x,LONG y,LONG width,LONG height,LONG size,COLORREF crf){
 	
 	HFONT hFont,hOldFont;
 	TEXTMETRIC textMet; 
 	RECT rt;
 	
-	// ƒtƒHƒ“ƒgì¬
+	// ãƒ•ã‚©ãƒ³ãƒˆä½œæˆ
 	hFont=CreateFont(size,0,0,0,FW_BOLD,FALSE,FALSE,FALSE,DEFAULT_CHARSET
 		,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,"Courier New");
 	hOldFont = (HFONT)SelectObject(hBufDC,hFont);	
 	GetTextMetrics(hBufDC,&textMet);
 	
-	// •¶š•`‰æ
+	// æ–‡å­—æç”»
 	SetBkMode(hBufDC,TRANSPARENT);			 
     SetTextColor(hBufDC,crf) ;
 	rt.top = y;rt.left = x; rt.right = x+width;rt.bottom = y+height;
 	DrawText(hBufDC,lpszStr,strlen(lpszStr),&rt,DT_LEFT);
 	
-	// ƒtƒHƒ“ƒgíœ
+	// ãƒ•ã‚©ãƒ³ãƒˆå‰Šé™¤
 	SelectObject(hBufDC,hOldFont);			  
 	DeleteObject(hFont);
 }
 
 
 //-------------------------------------------------------------------
-// •¶š‚Ì•`‰æ(“ú–{Œê”Å)
+// æ–‡å­—ã®æç”»(æ—¥æœ¬èªç‰ˆ)
 VOID DrawMyStringJP(HDC hBufDC,LPSTR lpszStr, LONG x,LONG y,LONG width,LONG height,LONG size,COLORREF crf){
 	
 	HFONT hFont,hOldFont;
 	TEXTMETRIC textMet; 
 	RECT rt;
 	
-	// ƒtƒHƒ“ƒgì¬
+	// ãƒ•ã‚©ãƒ³ãƒˆä½œæˆ
 	hFont=CreateFont(size,0,0,0,FW_NORMAL,FALSE,FALSE,FALSE,DEFAULT_CHARSET
-		,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,"‚l‚r ‚oƒSƒVƒbƒN");
+		,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,"ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 	hOldFont = (HFONT)SelectObject(hBufDC,hFont);	
 	GetTextMetrics(hBufDC,&textMet);
 	
-	// •¶š•`‰æ
+	// æ–‡å­—æç”»
 	SetBkMode(hBufDC,TRANSPARENT);			 
     SetTextColor(hBufDC,crf) ;
 	rt.top = y;rt.left = x; rt.right = x+width;rt.bottom = y+height;
 	DrawText(hBufDC,lpszStr,strlen(lpszStr),&rt,DT_LEFT);
 	
-	// ƒtƒHƒ“ƒgíœ
+	// ãƒ•ã‚©ãƒ³ãƒˆå‰Šé™¤
 	SelectObject(hBufDC,hOldFont);			  
 	DeleteObject(hFont);
 }
@@ -92,7 +90,7 @@ VOID DrawMyStringJP(HDC hBufDC,LPSTR lpszStr, LONG x,LONG y,LONG width,LONG heig
 
 
 //-------------------------------------------------------------------
-// ƒ{ƒ^ƒ“‚Ì•`‰æ
+// ãƒœã‚¿ãƒ³ã®æç”»
 VOID DrawMyButton(HWND hWnd,UINT uCtlID,HDC hCtlDC,RECT rt,UINT uStatus,HICON* lphIcon,
 				  HDC hBufDC2){
 	
@@ -105,14 +103,14 @@ VOID DrawMyButton(HWND hWnd,UINT uCtlID,HDC hCtlDC,RECT rt,UINT uStatus,HICON* l
 	pos = (uStatus == MYID_PUSHBUTTON);
 	
 	
-	// ˜g•`‰æ
+	// æ æç”»
 	hOldPen = (HPEN)SelectObject(hCtlDC,GetStockObject(BLACK_PEN));
 	hOldBrush = (HBRUSH)SelectObject(hCtlDC,GetStockObject(NULL_BRUSH));
 	Rectangle(hCtlDC, rt.left,rt.top,rt.right,rt.bottom);     
 	SelectObject(hCtlDC, hOldPen); 
 	SelectObject(hCtlDC, hOldBrush); 
 	
-	// –{‘Ì•`‰æ
+	// æœ¬ä½“æç”»
 	hOldPen = (HPEN)SelectObject(hCtlDC,GetStockObject(BLACK_PEN));
 	hOldBrush = (HBRUSH)SelectObject(hCtlDC,GetStockObject(GRAY_BRUSH));
 	Rectangle(hCtlDC, rt.left+pos,rt.top+pos,
@@ -120,14 +118,14 @@ VOID DrawMyButton(HWND hWnd,UINT uCtlID,HDC hCtlDC,RECT rt,UINT uStatus,HICON* l
 	SelectObject(hCtlDC, hOldPen); 
 	SelectObject(hCtlDC, hOldBrush); 
 	
-	// –¾‚é‚¢•”•ª
+	// æ˜ã‚‹ã„éƒ¨åˆ†
 	hOldPen = (HPEN)SelectObject(hCtlDC,GetStockObject(NULL_PEN));
 	hOldBrush = (HBRUSH)SelectObject(hCtlDC,GetStockObject(LTGRAY_BRUSH));
 	Rectangle(hCtlDC, rt.left+2+pos,rt.top+2+pos,rt.right-2+pos,rt.top+5+pos);
 	SelectObject(hCtlDC, hOldPen); 
 	SelectObject(hCtlDC, hOldBrush); 
 	
-	// ƒAƒCƒRƒ““\‚è•t‚¯
+	// ã‚¢ã‚¤ã‚³ãƒ³è²¼ã‚Šä»˜ã‘
 	LONG id;
 	id = (uCtlID == IDC_BTREW)
 		+(uCtlID == IDC_BTPLAYSTOP)*2
@@ -150,83 +148,83 @@ VOID DrawMyButton(HWND hWnd,UINT uCtlID,HDC hCtlDC,RECT rt,UINT uStatus,HICON* l
 
 
 //-------------------------------------------------------------------
-// ”gŒ`•`‰æŠÖ”
+// æ³¢å½¢æç”»é–¢æ•°
 VOID HakeiPaint(HWND hWnd,
 				HDC hBufDC,
 				RECT rt,
 				WAVEFORMATEX waveFmt,
 				LONGLONG n64WaveDataOffset,
 				LONGLONG n64WaveDataSize,
-				HANDLE hdWaveFile, // ƒtƒ@ƒCƒ‹‚ª•Â‚¶‚Ä‚é‚È‚ç NULL
-				LONGLONG n64CurByte, // byte, ƒf[ƒ^‚Ü‚Å‚ÌƒoƒCƒg”
-				LONG markedLineX, // ƒ}[ƒNƒ‰ƒCƒ“‚Ì x 
-				LONG markedSubLineX, // •›ƒ}[ƒNƒ‰ƒCƒ“‚Ì x 
-				LONG mardedSplitLineX[MAX_SPLITNUM], // ƒXƒvƒŠƒbƒgƒ}[ƒNƒ‰ƒCƒ“‚Ì x
+				HANDLE hdWaveFile, // ãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‰ã˜ã¦ã‚‹ãªã‚‰ NULL
+				LONGLONG n64CurByte, // byte, ãƒ‡ãƒ¼ã‚¿ã¾ã§ã®ãƒã‚¤ãƒˆæ•°
+				LONG markedLineX, // ãƒãƒ¼ã‚¯ãƒ©ã‚¤ãƒ³ã® x 
+				LONG markedSubLineX, // å‰¯ãƒãƒ¼ã‚¯ãƒ©ã‚¤ãƒ³ã® x 
+				LONG mardedSplitLineX[MAX_SPLITNUM], // ã‚¹ãƒ—ãƒªãƒƒãƒˆãƒãƒ¼ã‚¯ãƒ©ã‚¤ãƒ³ã® x
 				DWORD dwSplitNum,
-				DWORD dwZoomX, // ƒY[ƒ€”{—¦(‰¡)
-				DWORD dwZoomY // ƒY[ƒ€”{—¦(c)
+				DWORD dwZoomX, // ã‚ºãƒ¼ãƒ å€ç‡(æ¨ª)
+				DWORD dwZoomY // ã‚ºãƒ¼ãƒ å€ç‡(ç¸¦)
 				)
 {
-	// •`‰æ—pŠeí•Ï”
+	// æç”»ç”¨å„ç¨®å¤‰æ•°
 	HPEN hPen,hOldPen;	  
 	
-	//@WAVE ‚Ìî•ñ
+	//ã€€WAVE ã®æƒ…å ±
 	SHORT waveChn,waveBit; 
 	LONG waveRate;
 	double dWaveLevel[2];
 	double dMaxLevel;
-	BYTE waveBuf[BUFSIZE]; // ƒf[ƒ^“Ç‚İ‚İ—pƒoƒbƒtƒ@
-	DWORD readByte,dwByte; // “Ç‚İ‚İ—p
+	BYTE waveBuf[BUFSIZE]; // ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿ç”¨ãƒãƒƒãƒ•ã‚¡
+	DWORD readByte,dwByte; // èª­ã¿è¾¼ã¿ç”¨
 	
-	// G—p•Ï”
+	// é›‘ç”¨å¤‰æ•°
 	DWORD i,i2;
 	LONG ix,iy[2],prevY[2];
-	LARGE_INTEGER LI; // SetFilePointer —p 
+	LARGE_INTEGER LI; // SetFilePointer ç”¨ 
 	
-	// •Ï”İ’è	  
-	waveChn=2; // ƒ`ƒƒƒ“ƒlƒ‹”(ƒ_ƒ~[)
+	// å¤‰æ•°è¨­å®š	  
+	waveChn=2; // ãƒãƒ£ãƒ³ãƒãƒ«æ•°(ãƒ€ãƒŸãƒ¼)
 	
 	if(hdWaveFile != NULL){
-		waveChn = (SHORT)waveFmt.nChannels;	 // ƒ`ƒƒƒ“ƒlƒ‹
-		waveRate = (LONG)waveFmt.nSamplesPerSec; // ƒŒ[ƒg
-		waveBit = (SHORT)waveFmt.wBitsPerSample; // ƒrƒbƒg”
+		waveChn = (SHORT)waveFmt.nChannels;	 // ãƒãƒ£ãƒ³ãƒãƒ«
+		waveRate = (LONG)waveFmt.nSamplesPerSec; // ãƒ¬ãƒ¼ãƒˆ
+		waveBit = (SHORT)waveFmt.wBitsPerSample; // ãƒ“ãƒƒãƒˆæ•°
 	}
 	
-	// ˜g‚Ì•`‰æˆÊ’uŒvZ
+	// æ ã®æç”»ä½ç½®è¨ˆç®—
 	DWORD clientHeight = rt.bottom-rt.top;
-	DWORD leftTopX = rt.left + EDITUPDATERECTLEFT; // ˜g‚Ì¶ã@‚Ì@x ,yÀ•W
+	DWORD leftTopX = rt.left + EDITUPDATERECTLEFT; // æ ã®å·¦ä¸Šã€€ã®ã€€x ,yåº§æ¨™
 	DWORD leftTopY = rt.top+EDITSTATUSMARGIN1+EDITSTATUSSIZE+EDITSTATUSMARGIN2;
 	
-	// ¶‘¤
+	// å·¦å´
 	DrawMyFrame(hBufDC,leftTopX,leftTopY,FRAMESIZE+2,FRAMESIZE/4+2,RGB(0,0,0));
-	// ‰E‘¤
+	// å³å´
 	if(waveChn==2) DrawMyFrame(hBufDC,leftTopX,leftTopY+FRAMESIZE/4+2+8,FRAMESIZE+2,FRAMESIZE/4+2,RGB(0,0,0));
 	
-	if(hdWaveFile == NULL){	  // ƒtƒ@ƒCƒ‹‚ğ•Â‚¶‚Ä‚¢‚éó‘Ô
+	if(hdWaveFile == NULL){	  // ãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‰ã˜ã¦ã„ã‚‹çŠ¶æ…‹
 		return;
 	}
-	else{ // ƒtƒ@ƒCƒ‹‚ªŠJ‚¢‚Ä‚¢‚éó‘Ô
+	else{ // ãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‹ã„ã¦ã„ã‚‹çŠ¶æ…‹
 		
-		// “Ç‚İ‚İˆÊ’uŒvZ
+		// èª­ã¿è¾¼ã¿ä½ç½®è¨ˆç®—
 		LI.QuadPart = n64WaveDataOffset+n64CurByte;
 		SetFilePointer(hdWaveFile,LI.LowPart, &LI.HighPart,FILE_BEGIN);
 		
-		// ƒf[ƒ^“Ç‚İ‚İƒTƒCƒYŒvZ
+		// ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿ã‚µã‚¤ã‚ºè¨ˆç®—
 		readByte = (n64CurByte + FRAMESIZE*waveFmt.nBlockAlign*dwZoomX ) > n64WaveDataSize
 			? (DWORD)(n64WaveDataSize - n64CurByte) : FRAMESIZE*waveFmt.nBlockAlign*dwZoomX;
 		
-		// ƒf[ƒ^“Ç‚İ‚İ
+		// ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿
 		ReadFile(hdWaveFile,waveBuf,readByte,&dwByte, NULL);
 		
 		for(i=0;i<(DWORD)waveChn;i++){ 
 			
-			// ’†‰›ü•`‰æ
+			// ä¸­å¤®ç·šæç”»
 			hOldPen = (HPEN)SelectObject(hBufDC,GetStockObject(WHITE_PEN));
 			MoveToEx(hBufDC,leftTopX+1,leftTopY+FRAMESIZE/4/2+(2+8+FRAMESIZE/4)*i,NULL); 
 			LineTo(hBufDC,leftTopX+1+FRAMESIZE,leftTopY+FRAMESIZE/4/2+(2+8+FRAMESIZE/4)*i); 
-			SelectObject(hBufDC,hOldPen); // ƒXƒgƒbƒNƒyƒ“‚È‚Ì‚ÅƒfƒŠ[ƒg•s—v
+			SelectObject(hBufDC,hOldPen); // ã‚¹ãƒˆãƒƒã‚¯ãƒšãƒ³ãªã®ã§ãƒ‡ãƒªãƒ¼ãƒˆä¸è¦
 			
-			// ƒ}[ƒNƒ‰ƒCƒ“‚ğˆø‚­
+			// ãƒãƒ¼ã‚¯ãƒ©ã‚¤ãƒ³ã‚’å¼•ã
 			if(markedLineX >= 0 && markedLineX < FRAMESIZE){
 				hPen = CreatePen(PS_SOLID,1,RGB(255,255,0));
 				hOldPen = (HPEN)SelectObject(hBufDC,hPen);
@@ -239,7 +237,7 @@ VOID HakeiPaint(HWND hWnd,
 				
 			}
 			
-			// •›ƒ}[ƒNƒ‰ƒCƒ“
+			// å‰¯ãƒãƒ¼ã‚¯ãƒ©ã‚¤ãƒ³
 			if(markedSubLineX >= 0 && markedSubLineX < FRAMESIZE){
 				hPen = CreatePen(PS_SOLID,1,RGB(0,255,0));
 				hOldPen = (HPEN)SelectObject(hBufDC,hPen);
@@ -251,7 +249,7 @@ VOID HakeiPaint(HWND hWnd,
 				DeleteObject(hPen);	
 			}
 
-			// ƒXƒvƒŠƒbƒgƒ}[ƒNƒ‰ƒCƒ“
+			// ã‚¹ãƒ—ãƒªãƒƒãƒˆãƒãƒ¼ã‚¯ãƒ©ã‚¤ãƒ³
 			for(i2=0;i2<dwSplitNum;i2++){
 				if(mardedSplitLineX[i2] > 0 && mardedSplitLineX[i2] < FRAMESIZE){
 					hPen = CreatePen(PS_SOLID,1,RGB(255,0,255));
@@ -267,7 +265,7 @@ VOID HakeiPaint(HWND hWnd,
 			
 		}
 		
-		// ƒOƒ‰ƒt•`‰æ	
+		// ã‚°ãƒ©ãƒ•æç”»	
 		hPen = CreatePen(PS_SOLID,1,RGB(255,255,0)); 
 		hOldPen = (HPEN)SelectObject(hBufDC,hPen);
 		
@@ -280,12 +278,12 @@ VOID HakeiPaint(HWND hWnd,
 		
 		for(ix=1;ix<(LONG)readByte/waveFmt.nBlockAlign;ix+=dwZoomX){
 
-			// o—Í’lŒvZ
+			// å‡ºåŠ›å€¤è¨ˆç®—
 			WaveLevel(dWaveLevel,waveBuf+ix*waveFmt.nBlockAlign,waveFmt);
 			
 			for(i=0;i<(DWORD)waveChn;i++){ 
 				
-				// ”g‚Ì‚‚³ŒvZ
+				// æ³¢ã®é«˜ã•è¨ˆç®—
 				iy[i] =	(LONG)(dWaveLevel[i]/dMaxLevel*FRAMESIZE/4/2*dwZoomY);
 				iy[i] = max(-FRAMESIZE/4/2+1, min( FRAMESIZE/4/2-1, iy[i]));
 				
@@ -304,8 +302,8 @@ VOID HakeiPaint(HWND hWnd,
 
 
 //-------------------------------------------------------------------
-// ƒ}ƒEƒX‚ÅƒNƒŠƒbƒN‚µ‚½“_‚Ü‚Å‚Ìuƒf[ƒ^ƒIƒtƒZƒbƒg‚©‚ç‚ÌvƒoƒCƒg”‚ğŒvZ
-// ƒIƒtƒZƒbƒg‚ÍŠÜ‚Ü‚ê‚È‚¢‚Ì‚É’ˆÓ !!
+// ãƒã‚¦ã‚¹ã§ã‚¯ãƒªãƒƒã‚¯ã—ãŸç‚¹ã¾ã§ã®ã€Œãƒ‡ãƒ¼ã‚¿ã‚ªãƒ•ã‚»ãƒƒãƒˆã‹ã‚‰ã®ã€ãƒã‚¤ãƒˆæ•°ã‚’è¨ˆç®—
+// ã‚ªãƒ•ã‚»ãƒƒãƒˆã¯å«ã¾ã‚Œãªã„ã®ã«æ³¨æ„ !!
 BOOL CalcMarkedPosByte(LONGLONG* lpn64MarkedPosByte,
 					   WAVEFORMATEX waveFmt,
 					   LONGLONG n64WaveDataSize,
@@ -314,10 +312,10 @@ BOOL CalcMarkedPosByte(LONGLONG* lpn64MarkedPosByte,
 					   RECT rt,
 					   LONG clickX){
 	
-	LONG leftTopX = rt.left + (rt.right-rt.left-(FRAMESIZE+2))/2; //˜g‚Ì‰E‚Ì x À•W
-	LONG clickFrameX = clickX - (leftTopX+1); // ƒNƒŠƒbƒN‚µ‚½“_‚Ì˜g‚Ì’†‚Ì x À•W
+	LONG leftTopX = rt.left + (rt.right-rt.left-(FRAMESIZE+2))/2; //æ ã®å³ã® x åº§æ¨™
+	LONG clickFrameX = clickX - (leftTopX+1); // ã‚¯ãƒªãƒƒã‚¯ã—ãŸç‚¹ã®æ ã®ä¸­ã® x åº§æ¨™
 	
-	if(clickFrameX < 0 || clickFrameX >= FRAMESIZE) return FALSE; // ˜g‚ÌŠO‚ğƒNƒŠƒbƒN‚µ‚½B
+	if(clickFrameX < 0 || clickFrameX >= FRAMESIZE) return FALSE; // æ ã®å¤–ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ãŸã€‚
 	
 	LONGLONG n64EndByte = n64CurByte+clickFrameX*waveFmt.nBlockAlign*dwZoomX;
 	
@@ -329,8 +327,8 @@ BOOL CalcMarkedPosByte(LONGLONG* lpn64MarkedPosByte,
 
 
 //-------------------------------------------------------------------
-// ƒ}[ƒNƒ‰ƒCƒ“‚Ì x À•WŒvZ
-// ”ÍˆÍŠO‚Ì‚Í -1 ‚ğ•Ô‚·
+// ãƒãƒ¼ã‚¯ãƒ©ã‚¤ãƒ³ã® x åº§æ¨™è¨ˆç®—
+// ç¯„å›²å¤–ã®æ™‚ã¯ -1 ã‚’è¿”ã™
 LONG CalcMarkedLineX(WAVEFORMATEX waveFmt,
 					 LONGLONG n64StartByte,
 					 DWORD dwZoomX,
@@ -339,7 +337,7 @@ LONG CalcMarkedLineX(WAVEFORMATEX waveFmt,
 	
 	LONGLONG n64EndByte = n64StartByte+(FRAMESIZE-1)*waveFmt.nBlockAlign*dwZoomX;
 	
-	if(n64MarkedPosByte < n64StartByte || n64MarkedPosByte > n64EndByte) return -1; // ”ÍˆÍŠO
+	if(n64MarkedPosByte < n64StartByte || n64MarkedPosByte > n64EndByte) return -1; // ç¯„å›²å¤–
 	
 	return((LONG)((n64MarkedPosByte-n64StartByte) / (waveFmt.nBlockAlign*dwZoomX)));
 }
@@ -347,9 +345,9 @@ LONG CalcMarkedLineX(WAVEFORMATEX waveFmt,
 
 
 //-------------------------------------------------------------------
-// ƒGƒfƒBƒ^‚Ì‰Šú‰æ–Ê•`‰æ & ƒ{ƒ^ƒ“ì¬
+// ã‚¨ãƒ‡ã‚£ã‚¿ã®åˆæœŸç”»é¢æç”» & ãƒœã‚¿ãƒ³ä½œæˆ
 VOID InitEditScreenDraw(HWND hWnd,HINSTANCE hInst,
-						HDC hBufDC  // == NULL ‚È‚çƒ{ƒ^ƒ“‚ÆƒXƒNƒ[ƒ‹ƒo[‚ğì‚é
+						HDC hBufDC  // == NULL ãªã‚‰ãƒœã‚¿ãƒ³ã¨ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ã‚’ä½œã‚‹
 						){
 	
 	RECT rt;
@@ -409,10 +407,10 @@ VOID InitEditScreenDraw(HWND hWnd,HINSTANCE hInst,
 		nBtPos[i][1] = i%2 ? (FONT_SIZE-2)*2+BUTTON_HEIGHT : (FONT_SIZE-2);
 	}
 	
-	// ƒRƒ“ƒgƒ[ƒ‹ì¬
+	// ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ«ä½œæˆ
 	if(!hBufDC){
 		
-		// ƒ{ƒ^ƒ“ì¬
+		// ãƒœã‚¿ãƒ³ä½œæˆ
 		DWORD dwStyle = WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON|BS_OWNERDRAW;
 
 		for(id=0;id<BUTTON_NUM;id++){
@@ -421,7 +419,7 @@ VOID InitEditScreenDraw(HWND hWnd,HINSTANCE hInst,
 				BUTTON_WIDTH,BUTTON_HEIGHT,hWnd,(HMENU)btId[id],hInst,NULL);
 		}
 		
-		// Ä¶‚Æ‚©‚Ìƒ{ƒ^ƒ“‚Ìì¬
+		// å†ç”Ÿã¨ã‹ã®ãƒœã‚¿ãƒ³ã®ä½œæˆ
 		LONG margin = (EDITUPDATERECTTOP - PLAYBT_HEIGHT*2 - SB_HEIGHT)/2;
 		LONG left = nBtPos[BUTTON_NUM-1][0] + BUTTON_WIDTH + BUTTON_MARGIN;
 		for(id=0;id<14;id++){
@@ -434,7 +432,7 @@ VOID InitEditScreenDraw(HWND hWnd,HINSTANCE hInst,
 			
 		}
 			
-		// ƒXƒNƒ[ƒ‹ƒo[ì¬
+		// ã‚¹ã‚¯ãƒ­ãƒ¼ãƒ«ãƒãƒ¼ä½œæˆ
 		CreateWindow("SCROLLBAR","",WS_CHILD|WS_VISIBLE,
 			EDITUPDATERECTLEFT,
 			EDITUPDATERECTTOP - SB_HEIGHT -2,
@@ -445,19 +443,19 @@ VOID InitEditScreenDraw(HWND hWnd,HINSTANCE hInst,
 	}
 	
 	
-	// ”wŒiFƒZƒbƒg
+	// èƒŒæ™¯è‰²ã‚»ãƒƒãƒˆ
 	hOldPen = (HPEN)SelectObject(hBufDC,GetStockObject(NULL_PEN));
 	hOldBrush = (HBRUSH)SelectObject(hBufDC,GetStockObject(GRAY_BRUSH));
 	Rectangle(hBufDC,-1,-1,width+2,height+2);
 	SelectObject(hBufDC,hOldPen);
 	SelectObject(hBufDC,hOldBrush);
 	
-	// ƒ{ƒ^ƒ“–¼•`‰æ
+	// ãƒœã‚¿ãƒ³åæç”»
 	GetWindowRect(hWnd,&rt);
 	parentX = rt.left+GetSystemMetrics(SM_CXBORDER);
 	parentY = rt.bottom - height-GetSystemMetrics(SM_CXBORDER);
 	
-	// ƒtƒHƒ“ƒgƒTƒCƒYæ“¾
+	// ãƒ•ã‚©ãƒ³ãƒˆã‚µã‚¤ã‚ºå–å¾—
 	hFont=CreateFont(FONT_SIZE,0,0,0,FW_LIGHT,FALSE,FALSE,FALSE,DEFAULT_CHARSET
 		,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,
 		DEFAULT_PITCH,"Courier New");
@@ -466,7 +464,7 @@ VOID InitEditScreenDraw(HWND hWnd,HINSTANCE hInst,
 	strHeight = textMet.tmAscent;
 	SetBkMode(hBufDC,TRANSPARENT);		
 	
-	// ƒ{ƒ^ƒ“”z’u & –¼‘O•`‰æ
+	// ãƒœã‚¿ãƒ³é…ç½® & åå‰æç”»
 	for(id=0;id<BUTTON_NUM;id++){
 		for(i=0;i<2;i++){
 			GetWindowRect(GetDlgItem(hWnd,btId[id]),&btRt);
@@ -488,7 +486,7 @@ VOID InitEditScreenDraw(HWND hWnd,HINSTANCE hInst,
 
 
 //-------------------------------------------------------------------
-// ƒXƒe[ƒ^ƒX•\¦
+// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è¡¨ç¤º
 VOID SetEditStatus(HWND hWnd,HDC hBufDC,
 				   WAVEFORMATEX waveFmt,
 				   LONGLONG n64DataSize,
@@ -512,11 +510,11 @@ VOID SetEditStatus(HWND hWnd,HDC hBufDC,
 	char szDBL[64],szDBR[64];
 	LONGLONG n64Foo,n64Foo2;
 	
-	// ƒf[ƒ^ƒTƒCƒY
+	// ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
 	dwFoo = (DWORD)(n64DataSize/1024/1024);
 	wsprintf(szSize,"%d M",dwFoo);
 	
-	// c‚èŠÔ
+	// æ®‹ã‚Šæ™‚é–“
 	LONG foo = (LONG)dwFileTime - (LONG)dwCurTime;
 	dwRemTime = foo >=0 ? (DWORD)foo : 0;
 	dwCurTime /= 1000;
@@ -544,7 +542,7 @@ VOID SetEditStatus(HWND hWnd,HDC hBufDC,
 		(dwFileTime)%60
 		);	
 	
-	// ŠÔî•ñ•\¦
+	// æ™‚é–“æƒ…å ±è¡¨ç¤º
 	GetClientRect(hWnd,&rt);
 	DrawMyFrame(hBufDC,
 		rt.left+EDITUPDATERECTLEFT,
@@ -560,7 +558,7 @@ VOID SetEditStatus(HWND hWnd,HDC hBufDC,
 		(FRAMESIZE-6)-EDITSTATUSLEFTMARGIN,(EDITSTATUSSIZE-6)/EDITSTATUSLINE,14,RGB(255,255,0));
 	
 	
-	// ƒ}[ƒNî•ñ•\¦
+	// ãƒãƒ¼ã‚¯æƒ…å ±è¡¨ç¤º
 	dwMarkTime = (DWORD)(n64MarkPosByte/waveFmt.nAvgBytesPerSec);
 	foo = (LONG)dwFileTime - (LONG)dwMarkTime;
 	dwRemTime = foo >=0 ? (DWORD)foo : 0;
@@ -595,7 +593,7 @@ VOID SetEditStatus(HWND hWnd,HDC hBufDC,
 		(FRAMESIZE-6)-EDITSTATUSLEFTMARGIN,(EDITSTATUSSIZE-6)/EDITSTATUSLINE,14,RGB(255,255,0));
 		
 	
-	// ƒ}[ƒN 2
+	// ãƒãƒ¼ã‚¯ 2
 	dwMarkTime = (DWORD)(n64SubMarkPosByte/waveFmt.nAvgBytesPerSec);
 	foo = (LONG)dwFileTime - (LONG)dwMarkTime;
 	dwRemTime = foo >=0 ? (DWORD)foo : 0;
@@ -630,7 +628,7 @@ VOID SetEditStatus(HWND hWnd,HDC hBufDC,
 		(FRAMESIZE-6)-EDITSTATUSLEFTMARGIN,(EDITSTATUSSIZE-6)/EDITSTATUSLINE,14,RGB(255,255,0));
 	
 
-	// ƒgƒ‰ƒbƒN
+	// ãƒˆãƒ©ãƒƒã‚¯
 	n64Foo = (dwTrack-1 == 0) ? 0 : n64SplitMarkedPosByte[dwTrack-2];
 	dwMarkTime = (DWORD)(n64Foo/waveFmt.nAvgBytesPerSec);
 	n64Foo2 = (dwTrack-1 == dwSplitNum) ? n64DataSize : n64SplitMarkedPosByte[dwTrack-1];
@@ -675,7 +673,7 @@ VOID SetEditStatus(HWND hWnd,HDC hBufDC,
 
 
 //-------------------------------------------------------------------
-// ƒ}[ƒN‚ÌOŠp•`‰æ
+// ãƒãƒ¼ã‚¯ã®ä¸‰è§’æç”»
 VOID DrawMarkTriangle(HDC hDC,LONG nPos,LONG nPos2,LONG nPos3[MAX_SPLITNUM],
 					  DWORD dwSplitNum,LONG nMax){
 	
@@ -693,12 +691,12 @@ VOID DrawMarkTriangle(HDC hDC,LONG nPos,LONG nPos2,LONG nPos3[MAX_SPLITNUM],
 		else x[2+i] = 0;
 	}
 	
-	// ”wŒi“h‚è‚Â‚Ô‚µ
+	// èƒŒæ™¯å¡—ã‚Šã¤ã¶ã—
 	hOldPen = (HPEN)SelectObject(hDC,GetStockObject(NULL_PEN));
 	hOldBrush = (HBRUSH)SelectObject(hDC,GetStockObject(GRAY_BRUSH));
 	Rectangle(hDC,0,EDITUPDATERECTTOP,FRAMESIZE+10,EDITUPDATERECTTOP+7);
 	
-	// OŠp•`‰æ
+	// ä¸‰è§’æç”»
 	SelectObject(hDC,GetStockObject(BLACK_PEN));
 	
 	for(i=0;i<2+dwSplitNum;i++){
@@ -738,7 +736,7 @@ VOID DrawMarkTriangle(HDC hDC,LONG nPos,LONG nPos2,LONG nPos3[MAX_SPLITNUM],
 		}
 	}
 	
-	// ƒyƒ“‚Æ‚©‚ğ–ß‚·
+	// ãƒšãƒ³ã¨ã‹ã‚’æˆ»ã™
 	SelectObject(hDC,hOldPen);
 	SelectObject(hDC,hOldBrush);
 }

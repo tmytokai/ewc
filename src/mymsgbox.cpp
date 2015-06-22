@@ -1,15 +1,4 @@
-//----------------------------------------------------------------------
-// Ž©ìƒƒbƒZ[ƒWƒ{ƒbƒNƒX   2000/1/19 “ú”Å
-//
-// (c) 1998-2015 Tomoya Tokairin
-//
-// –{ƒvƒƒOƒ‰ƒ€‚Ì‚·‚×‚ÄA‚Ü‚½‚Íˆê•”‚ð GPL ‚É]‚Á‚ÄÄ”Ð•z‚Ü‚½‚Í•ÏX‚·‚é
-// ‚±‚Æ‚ª‚Å‚«‚Ü‚·BÚ×‚É‚Â‚¢‚Ä‚ÍGNU ˆê”ÊŒö—LŽg—p‹–‘ø‘‚ð‚¨“Ç‚Ý‚­‚¾‚³‚¢B
-//
-
-// ŒÄ‚Ño‚µ‚½ƒEƒBƒ“ƒhƒE‚Ì’†‰›‚É”z’u‚³‚ê‚é
-// ‚à‚Á‚Æ—Ç‚¢•û–@‚ª‚ ‚é—l‚È‹C‚ª‚µ‚½‚¯‚Ç
-// ’²‚×‚é‚Ì‚ª–Ê“|‚¾‚Á‚½‚Ì‚ÅŽ©ì‚µ‚½(^^;
+ï»¿// è‡ªä½œãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹
 
 #include <windows.h>
 #include <windowsx.h>
@@ -17,19 +6,19 @@
 
 #define CHR_BUF 256
 
-#define MSGBOXBTWIDTH	60  // ƒ{ƒ^ƒ“•
-#define MSGBOXBTHEIGHT	24  // ƒ{ƒ^ƒ“‚‚³
-#define MSGBOXMERGIN	10  // ƒ}[ƒWƒ“
-#define MSGBOXICONWIDTH	45  // ƒAƒCƒRƒ“•
-#define MSGBOXICONHEIGHT 40  // ƒAƒCƒRƒ“‚‚³
-#define MSGBOXTEXTSIZE	12  // ƒeƒLƒXƒgƒTƒCƒY
+#define MSGBOXBTWIDTH	60  // ãƒœã‚¿ãƒ³å¹…
+#define MSGBOXBTHEIGHT	24  // ãƒœã‚¿ãƒ³é«˜ã•
+#define MSGBOXMERGIN	10  // ãƒžãƒ¼ã‚¸ãƒ³
+#define MSGBOXICONWIDTH	45  // ã‚¢ã‚¤ã‚³ãƒ³å¹…
+#define MSGBOXICONHEIGHT 40  // ã‚¢ã‚¤ã‚³ãƒ³é«˜ã•
+#define MSGBOXTEXTSIZE	12  // ãƒ†ã‚­ã‚¹ãƒˆã‚µã‚¤ã‚º
 
-// ƒ{ƒ^ƒ“‚Ìó‘Ô
-#define MYID_RELEASEBUTTON              0  // ƒŠƒŠ[ƒX
-#define MYID_PUSHBUTTON                 1  // ‰Ÿ‚µ‚Ä‚é
+// ãƒœã‚¿ãƒ³ã®çŠ¶æ…‹
+#define MYID_RELEASEBUTTON              0  // ãƒªãƒªãƒ¼ã‚¹
+#define MYID_PUSHBUTTON                 1  // æŠ¼ã—ã¦ã‚‹
 
 
-// ƒvƒƒV[ƒWƒƒ‚É“n‚·ƒf[ƒ^Œ^
+// ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£ã«æ¸¡ã™ãƒ‡ãƒ¼ã‚¿åž‹
 typedef struct
 {
 	LPSTR lpText;
@@ -39,13 +28,13 @@ typedef struct
 }MSGBOXDATA,*LPMSGBOXDATA;
 
 
-// ‚±‚Ìƒtƒ@ƒCƒ‹“à‚ÌŠÖ”
+// ã“ã®ãƒ•ã‚¡ã‚¤ãƒ«å†…ã®é–¢æ•°
 int MyMessageBox(HWND,LPSTR,LPSTR,UINT);
 LRESULT CALLBACK MyMessageBoxProc(HWND,UINT,WPARAM,LPARAM);
 VOID DrawMsgButton(HWND,UINT,HDC,RECT,UINT,UINT);
 
 
-// ‘¼‚Ìƒtƒ@ƒCƒ‹‚ÌŠÖ”
+// ä»–ã®ãƒ•ã‚¡ã‚¤ãƒ«ã®é–¢æ•°
 VOID SetDlgCenter(HWND);
 VOID DrawMyStringJP(HDC,LPSTR,LONG,LONG,LONG,LONG,LONG,COLORREF);
 WORD GetTextSize(HWND,LPSTR,LPSIZE,LONG);
@@ -54,7 +43,7 @@ VOID DrawMyFrame(HDC,LONG,LONG,LONG,LONG,COLORREF);
 
 
 //--------------------------------------------------------------------
-// Ž©ìƒƒbƒZ[ƒWƒ{ƒbƒNƒXŒÄ‚Ño‚µŠÖ”
+// è‡ªä½œãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹å‘¼ã³å‡ºã—é–¢æ•°
 int MyMessageBox(HWND hWnd,LPSTR lpText,LPSTR lpCaption,UINT uType){
 	
 	MSGBOXDATA msgBoxData;
@@ -64,31 +53,31 @@ int MyMessageBox(HWND hWnd,LPSTR lpText,LPSTR lpCaption,UINT uType){
 	msgBoxData.lpText = lpText;
 	msgBoxData.lpCaption = lpCaption;
 	msgBoxData.uType = uType;
-	msgBoxData.bOwnerDraw = FALSE;  // ƒ{ƒ^ƒ“‚ÍƒI[ƒi[ƒhƒ[‚µ‚È‚¢
+	msgBoxData.bOwnerDraw = FALSE;  // ãƒœã‚¿ãƒ³ã¯ã‚ªãƒ¼ãƒŠãƒ¼ãƒ‰ãƒ­ãƒ¼ã—ãªã„
 	
-	// ƒ_ƒCƒAƒƒOŒÄ‚Ño‚µ
+	// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°å‘¼ã³å‡ºã—
 	return(DialogBoxParam(hInst,MAKEINTRESOURCE(IDD_MYMBOXDLG),hWnd,
 		(DLGPROC)MyMessageBoxProc,(LPARAM)&msgBoxData));
 }
 
 
 //---------------------------------------------------------------------
-// ƒƒbƒZ[ƒWƒ{ƒbƒNƒX‚ÌƒvƒƒV[ƒWƒƒ
+// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹ã®ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
 LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	
 	static LPMSGBOXDATA lpMsgBoxData;
 	static HICON hIcon;
-	static BOOL bDrawIcon; // ƒAƒCƒRƒ“‚ð“\‚é‚©‚Ç‚¤‚©
-	static RECT textRt;  // ƒeƒLƒXƒg•`‰æ—Ìˆæ
-	static SIZE sizeText; //  ƒeƒLƒXƒg•`‰æ—Ìˆæ‚ÌƒTƒCƒY
-	static LONG width,height; // ƒEƒBƒ“ƒhƒE•A‚‚³
+	static BOOL bDrawIcon; // ã‚¢ã‚¤ã‚³ãƒ³ã‚’è²¼ã‚‹ã‹ã©ã†ã‹
+	static RECT textRt;  // ãƒ†ã‚­ã‚¹ãƒˆæç”»é ˜åŸŸ
+	static SIZE sizeText; //  ãƒ†ã‚­ã‚¹ãƒˆæç”»é ˜åŸŸã®ã‚µã‚¤ã‚º
+	static LONG width,height; // ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦å¹…ã€é«˜ã•
 	static HWND hWndBt[3];
 	static int nResult[3];
-	static HFONT hFont; // ƒ{ƒ^ƒ“—pƒtƒHƒ“ƒg
-	static LONG nButtonNum; // ƒ{ƒ^ƒ“”
-	static BOOL bOwnerDraw; // ƒ{ƒ^ƒ“‚ðƒI[ƒi[ƒhƒ[‚·‚é‚©
-	static UINT uCurFocus; // Œ»Ý‚ÌƒtƒH[ƒJƒXƒ{ƒ^ƒ“ID
+	static HFONT hFont; // ãƒœã‚¿ãƒ³ç”¨ãƒ•ã‚©ãƒ³ãƒˆ
+	static LONG nButtonNum; // ãƒœã‚¿ãƒ³æ•°
+	static BOOL bOwnerDraw; // ãƒœã‚¿ãƒ³ã‚’ã‚ªãƒ¼ãƒŠãƒ¼ãƒ‰ãƒ­ãƒ¼ã™ã‚‹ã‹
+	static UINT uCurFocus; // ç¾åœ¨ã®ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ãƒœã‚¿ãƒ³ID
 	
 	CHAR szBtStr[3][CHR_BUF];
 	LONG x1,x2,x3,y;
@@ -102,12 +91,12 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 	
 	switch (msg) {
 		
-	case WM_INITDIALOG:  // ƒ_ƒCƒAƒƒO‰Šú‰»
+	case WM_INITDIALOG:  // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°åˆæœŸåŒ–
 		
 		lpMsgBoxData = (LPMSGBOXDATA)lp;
 		hInst = (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE);
 		
-		// ƒAƒCƒRƒ“ƒ[ƒh
+		// ã‚¢ã‚¤ã‚³ãƒ³ãƒ­ãƒ¼ãƒ‰
 		uIconType = lpMsgBoxData->uType & MB_ICONMASK;
 		
 		if(uIconType > 0) bDrawIcon = TRUE;
@@ -132,19 +121,19 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		}
 		
 		
-		// ƒeƒLƒXƒg—Ìˆæ‚Ì•‚Æ‚‚³Žæ“¾
+		// ãƒ†ã‚­ã‚¹ãƒˆé ˜åŸŸã®å¹…ã¨é«˜ã•å–å¾—
 		GetTextSize(hWnd,lpMsgBoxData->lpText,&sizeText,MSGBOXTEXTSIZE);
 		
-		// ƒeƒLƒXƒg•`‰æ—ÌˆæƒZƒbƒg
+		// ãƒ†ã‚­ã‚¹ãƒˆæç”»é ˜åŸŸã‚»ãƒƒãƒˆ
 		textRt.top = MSGBOXMERGIN + (sizeText.cy > MSGBOXICONHEIGHT? 0 : (MSGBOXICONHEIGHT-sizeText.cy)/2);
 		textRt.left = MSGBOXICONWIDTH*bDrawIcon+MSGBOXMERGIN;
 		textRt.right = textRt.left + sizeText.cx;
 		textRt.bottom = textRt.top + sizeText.cy;
 		
-		// ƒ^ƒCƒgƒ‹ƒZƒbƒg
+		// ã‚¿ã‚¤ãƒˆãƒ«ã‚»ãƒƒãƒˆ
 		SetWindowText(hWnd,lpMsgBoxData->lpCaption);
 		
-		// ƒ{ƒ^ƒ“–¼Ý’è
+		// ãƒœã‚¿ãƒ³åè¨­å®š
 		for(i=0;i<3;i++) nResult[i] = 0;
 		switch(lpMsgBoxData->uType & MB_TYPEMASK){
 			
@@ -160,7 +149,7 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			wsprintf(szBtStr[0],"OK");
 			
 			nResult[1] = IDCANCEL;
-			wsprintf(szBtStr[1],"ƒLƒƒƒ“ƒZƒ‹");
+			wsprintf(szBtStr[1],"ã‚­ãƒ£ãƒ³ã‚»ãƒ«");
 			
 			nButtonNum = 2;
 			break;
@@ -168,13 +157,13 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		case MB_YESNOCANCEL:
 			
 			nResult[0] = IDYES;
-			wsprintf(szBtStr[0],"‚Í‚¢(&Y)");
+			wsprintf(szBtStr[0],"ã¯ã„(&Y)");
 			
 			nResult[1] = IDNO;
-			wsprintf(szBtStr[1],"‚¢‚¢‚¦(&N)");
+			wsprintf(szBtStr[1],"ã„ã„ãˆ(&N)");
 			
 			nResult[2] = IDCANCEL;
-			wsprintf(szBtStr[2],"ƒLƒƒƒ“ƒZƒ‹");
+			wsprintf(szBtStr[2],"ã‚­ãƒ£ãƒ³ã‚»ãƒ«");
 			
 			nButtonNum = 3;
 			break;
@@ -182,15 +171,15 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		case MB_YESNO:
 			
 			nResult[0] = IDYES;
-			wsprintf(szBtStr[0],"‚Í‚¢(&Y)");
+			wsprintf(szBtStr[0],"ã¯ã„(&Y)");
 			
 			nResult[1] = IDNO;
-			wsprintf(szBtStr[1],"‚¢‚¢‚¦(&N)");
+			wsprintf(szBtStr[1],"ã„ã„ãˆ(&N)");
 			
 			nButtonNum = 2;
 		}
 		
-		// ƒEƒBƒ“ƒhƒEƒŠƒTƒCƒY
+		// ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒªã‚µã‚¤ã‚º
 		nButtonSize =MSGBOXBTWIDTH*nButtonNum+MSGBOXMERGIN*(nButtonNum-1);
 		
 		width = max(nButtonSize+MSGBOXMERGIN*2,sizeText.cx+MSGBOXMERGIN*2+MSGBOXICONWIDTH*bDrawIcon);
@@ -202,16 +191,16 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			,SWP_NOMOVE|SWP_NOREPOSITION);
 		
 		
-		// ƒ{ƒ^ƒ“ì¬
+		// ãƒœã‚¿ãƒ³ä½œæˆ
 		x1 = (width - nButtonSize)/2;
 		x2 = x1 + MSGBOXBTWIDTH+MSGBOXMERGIN;
 		x3 = x2 + MSGBOXBTWIDTH+MSGBOXMERGIN;
 		y = height-MSGBOXBTHEIGHT - MSGBOXMERGIN;
 		
 		uMskType = lpMsgBoxData->uType & MB_DEFMASK;
-		bOwnerDraw = lpMsgBoxData->bOwnerDraw; // ƒI[ƒi[ƒhƒ[‚©
+		bOwnerDraw = lpMsgBoxData->bOwnerDraw; // ã‚ªãƒ¼ãƒŠãƒ¼ãƒ‰ãƒ­ãƒ¼ã‹
 		
-		// ƒ{ƒ^ƒ“ 1
+		// ãƒœã‚¿ãƒ³ 1
 		if((nButtonNum >=2 && uMskType == MB_DEFBUTTON2) ||
 			(nButtonNum == 3 && uMskType == MB_DEFBUTTON3))
 			dwStyle = WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON|WS_TABSTOP;
@@ -219,7 +208,7 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		if(bOwnerDraw) dwStyle |= BS_OWNERDRAW;
 		CreateWindow("BUTTON","bt1",dwStyle,x1,y,MSGBOXBTWIDTH,MSGBOXBTHEIGHT,hWnd,(HMENU)IDC_BT1,hInst,NULL);
 		
-		// ƒ{ƒ^ƒ“ 2
+		// ãƒœã‚¿ãƒ³ 2
 		if(nButtonNum >= 2){
 			if(uMskType == MB_DEFBUTTON2)
 				dwStyle = WS_CHILD|WS_VISIBLE|BS_DEFPUSHBUTTON|WS_TABSTOP;
@@ -229,7 +218,7 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		}
 		
 		
-		// ƒ{ƒ^ƒ“ 3
+		// ãƒœã‚¿ãƒ³ 3
 		if(nButtonNum == 3){
 			if(uMskType == MB_DEFBUTTON3)
 				dwStyle = WS_CHILD|WS_VISIBLE|BS_DEFPUSHBUTTON|WS_TABSTOP;
@@ -239,23 +228,23 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		}
 		
 		
-		// ƒ{ƒ^ƒ“—pƒtƒHƒ“ƒgì¬
+		// ãƒœã‚¿ãƒ³ç”¨ãƒ•ã‚©ãƒ³ãƒˆä½œæˆ
 		if(!bOwnerDraw) hFont=CreateFont(10,0,0,0,FW_NORMAL,FALSE,FALSE,FALSE,DEFAULT_CHARSET
-			,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,"‚l‚r ‚oƒSƒVƒbƒN");
+			,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,"ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 		
-		// ƒ{ƒ^ƒ“‚ÉƒtƒHƒ“ƒg‚Æ•¶ŽšƒZƒbƒg
+		// ãƒœã‚¿ãƒ³ã«ãƒ•ã‚©ãƒ³ãƒˆã¨æ–‡å­—ã‚»ãƒƒãƒˆ
 		hWndBt[0] = GetDlgItem(hWnd,IDC_BT1);
 		hWndBt[1] = GetDlgItem(hWnd,IDC_BT2);
 		hWndBt[2] = GetDlgItem(hWnd,IDC_BT3);
 		
 		for(i=0;i<3;i++)
 		{
-			// ƒtƒHƒ“ƒgƒZƒbƒg
+			// ãƒ•ã‚©ãƒ³ãƒˆã‚»ãƒƒãƒˆ
 			if(!bOwnerDraw) SendMessage(hWndBt[i],WM_SETFONT,(WPARAM)hFont,(LPARAM)MAKELPARAM(TRUE,0));
 			SetWindowText(hWndBt[i],szBtStr[i]);
 		}
 		
-		// ƒtƒH[ƒJƒXˆÚ“®
+		// ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ç§»å‹•
 		switch(uMskType){
 			
 		case MB_DEFBUTTON2:
@@ -273,7 +262,7 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			SetFocus(hWndBt[0]);
 		}
 		
-		// ’†SˆÚ“®
+		// ä¸­å¿ƒç§»å‹•
 		SetDlgCenter(hWnd);
 
 		// forgrand
@@ -282,7 +271,7 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		break;
 		
 		
-		case WM_CTLCOLORDLG: // ”wŒiF‚ð•Ï‚¦‚½‚¢ê‡
+		case WM_CTLCOLORDLG: // èƒŒæ™¯è‰²ã‚’å¤‰ãˆãŸã„å ´åˆ
 			
 			if(bOwnerDraw){
 				SetBkMode((HDC)wp,TRANSPARENT);			 
@@ -293,7 +282,7 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			break;
 			
 			
-		case WM_DRAWITEM: // ƒ{ƒ^ƒ“‚ÌƒI[ƒi[•`‰æ‚ð‚·‚éê‡
+		case WM_DRAWITEM: // ãƒœã‚¿ãƒ³ã®ã‚ªãƒ¼ãƒŠãƒ¼æç”»ã‚’ã™ã‚‹å ´åˆ
 			
 			if(bOwnerDraw){
 				
@@ -304,17 +293,17 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 				lpDrawItem = (LPDRAWITEMSTRUCT)lp;
 				uButtonStat = MYID_RELEASEBUTTON;
 				
-				if(lpDrawItem->CtlType == ODT_BUTTON){ // ƒ{ƒ^ƒ“‚È‚ç‚Î
+				if(lpDrawItem->CtlType == ODT_BUTTON){ // ãƒœã‚¿ãƒ³ãªã‚‰ã°
 					
-					if(lpDrawItem->itemAction & ODA_SELECT){ // ‘I‘ð
+					if(lpDrawItem->itemAction & ODA_SELECT){ // é¸æŠž
 						if(lpDrawItem->itemState & ODS_FOCUS) uButtonStat = MYID_PUSHBUTTON;
 					}
-					else if(lpDrawItem->itemAction & ODA_FOCUS){ // ƒtƒH[ƒJƒX
-						// Ž©‘O‚ÅƒtƒH[ƒJƒX‚ÌŠÇ—‚ð‚·‚é
+					else if(lpDrawItem->itemAction & ODA_FOCUS){ // ãƒ•ã‚©ãƒ¼ã‚«ã‚¹
+						// è‡ªå‰ã§ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ã®ç®¡ç†ã‚’ã™ã‚‹
 						if(lpDrawItem->itemState & ODS_FOCUS) uCurFocus = uCtlID;
 					}
 					
-					// ƒ{ƒ^ƒ“•`‰æ
+					// ãƒœã‚¿ãƒ³æç”»
 					DrawMsgButton(hWnd,uCtlID,lpDrawItem->hDC,lpDrawItem->rcItem,uCurFocus,uButtonStat);
 					
 				}
@@ -322,12 +311,12 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			
 			break;
 			
-		case WM_PAINT: // •`‰æ
+		case WM_PAINT: // æç”»
 			
 			hDC = GetDC(hWnd);
 			
 			if(bOwnerDraw){
-				// ˜g•`‰æ
+				// æž æç”»
 				DrawMyFrame(hDC,MSGBOXMERGIN-2,MSGBOXMERGIN-2,
 					width - (MSGBOXMERGIN-2)*2,height-MSGBOXBTHEIGHT - MSGBOXMERGIN-(MSGBOXMERGIN-2)*2
 					,RGB(0,0,0));
@@ -335,11 +324,11 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			}
 			else rgbStr = RGB(0,0,0);
 			
-			// ƒAƒCƒRƒ“
+			// ã‚¢ã‚¤ã‚³ãƒ³
 			if(bDrawIcon)
 				DrawIcon(hDC,MSGBOXMERGIN+1,MSGBOXMERGIN+1,hIcon);
 			
-			// ƒeƒLƒXƒg
+			// ãƒ†ã‚­ã‚¹ãƒˆ
 			DrawMyStringJP(hDC,lpMsgBoxData->lpText,
 				textRt.left,textRt.top,textRt.right-textRt.left,
 				textRt.bottom-textRt.top,MSGBOXTEXTSIZE,rgbStr);
@@ -350,17 +339,17 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			break;
 			
 			
-		case WM_SETTEXT: // ƒ_ƒCƒAƒƒO‚Ìƒ^ƒCƒgƒ‹•ÏX
+		case WM_SETTEXT: // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚¿ã‚¤ãƒˆãƒ«å¤‰æ›´
 			
-			// DefWindowProc ‚Éˆ—‚µ‚Ä‚à‚ç‚¤(‚È‚ñ‚©ŒÓŽUL‚¢‚â‚è•û (^^; )
+			// DefWindowProc ã«å‡¦ç†ã—ã¦ã‚‚ã‚‰ã†(ãªã‚“ã‹èƒ¡æ•£è‡­ã„ã‚„ã‚Šæ–¹ (^^; )
 			return(DefWindowProc(hWnd, msg, wp, lp)); 
 			
 			break;
 			
 		case WM_COMMAND:
 			
-			// ƒI[ƒi[ƒhƒ[‚ÌŽž‚ÍƒRƒ“ƒgƒ[ƒ‹ ID ‚ð‚à‚ç‚¦‚È‚¢‚Ì‚Å
-			// Ž©‘O‚ÅƒtƒH[ƒJƒXŠÇ—‚ð‚·‚é
+			// ã‚ªãƒ¼ãƒŠãƒ¼ãƒ‰ãƒ­ãƒ¼ã®æ™‚ã¯ã‚³ãƒ³ãƒˆãƒ­ãƒ¼ãƒ« ID ã‚’ã‚‚ã‚‰ãˆãªã„ã®ã§
+			// è‡ªå‰ã§ãƒ•ã‚©ãƒ¼ã‚«ã‚¹ç®¡ç†ã‚’ã™ã‚‹
 			if(bOwnerDraw && HIWORD(wp)== BN_CLICKED) wp = uCurFocus;
 			
 			switch (LOWORD(wp)) {
@@ -397,7 +386,7 @@ LRESULT CALLBACK MyMessageBoxProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 
 //-------------------------------------------------------------------
-// ƒeƒLƒXƒg—Ìˆæ‚Ì•‚Æ‚‚³‚ðŽæ“¾‚·‚éŠÖ”
+// ãƒ†ã‚­ã‚¹ãƒˆé ˜åŸŸã®å¹…ã¨é«˜ã•ã‚’å–å¾—ã™ã‚‹é–¢æ•°
 WORD GetTextSize(HWND hWnd,LPSTR lpszStr,LPSIZE lpTextSize,LONG size){
 	
 	HDC hDC;
@@ -413,53 +402,53 @@ WORD GetTextSize(HWND hWnd,LPSTR lpszStr,LPSIZE lpTextSize,LONG size){
 	
 	hDC = GetDC(hWnd);
 	
-	// ƒtƒHƒ“ƒgì¬
+	// ãƒ•ã‚©ãƒ³ãƒˆä½œæˆ
 	hFont=CreateFont(size,0,0,0,FW_NORMAL,FALSE,FALSE,FALSE,DEFAULT_CHARSET
-		,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,"‚l‚r ‚oƒSƒVƒbƒN");
+		,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,"ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 	hOldFont = (HFONT)SelectObject(hDC,hFont);	
 	GetTextMetrics(hDC,&textMet);
 	
 	
-	// ƒeƒLƒXƒg—Ìˆæ‚Ì•‚Æ‚‚³Žæ“¾
-	wRowNum = 0; // s”
-	nMaxCX = 0; // Å‘å•
-	nMaxCY = 0; // ˆês‚ÌÅ‘å‚‚³
+	// ãƒ†ã‚­ã‚¹ãƒˆé ˜åŸŸã®å¹…ã¨é«˜ã•å–å¾—
+	wRowNum = 0; // è¡Œæ•°
+	nMaxCX = 0; // æœ€å¤§å¹…
+	nMaxCY = 0; // ä¸€è¡Œã®æœ€å¤§é«˜ã•
 	
 	i = 0; 
 	while(i < wTextLeng){
-		wRowNum++; // s”ƒvƒ‰ƒX
+		wRowNum++; // è¡Œæ•°ãƒ—ãƒ©ã‚¹
 		
-		// Œ»Ý‚Ìs‚Ì•¶Žš”Žæ“¾
+		// ç¾åœ¨ã®è¡Œã®æ–‡å­—æ•°å–å¾—
 		i2 = i; wLeng = 0;
 		while(lpszStr[i2+wLeng] != '\n' && i2+wLeng < wTextLeng) wLeng++;
 		
-		// Œ»Ý‚Ìs‚Ì•‚Æ‚‚³ŒvŽZ
+		// ç¾åœ¨ã®è¡Œã®å¹…ã¨é«˜ã•è¨ˆç®—
 		GetTextExtentPoint32(hDC,lpszStr+i2,wLeng,&sizeText);
 		
 		nMaxCX = max(nMaxCX,sizeText.cx);
 		nMaxCY = max(nMaxCY,sizeText.cy);
 		
-		// ŽŸ‚Ìs‚Ö
+		// æ¬¡ã®è¡Œã¸
 		i = i+wLeng+1;
 	}
 	
 	lpTextSize->cx = nMaxCX;
 	lpTextSize->cy = nMaxCY * wRowNum;
 	
-	// ƒtƒHƒ“ƒgíœ
+	// ãƒ•ã‚©ãƒ³ãƒˆå‰Šé™¤
 	SelectObject(hDC,hOldFont);			  
 	DeleteObject(hFont);
 	
 	ReleaseDC(hWnd,hDC); 
 	
-	return wRowNum; // s”‚ð•Ô‚·
+	return wRowNum; // è¡Œæ•°ã‚’è¿”ã™
 }
 
 
 
 //-------------------------------------------------------------------
-// ƒ{ƒ^ƒ“‚Ì•`‰æ
-// ƒ{ƒ^ƒ“–¼‚ðƒ{ƒ^ƒ“‚Ì’†‚É•`‰æ‚·‚éƒo[ƒWƒ‡ƒ“
+// ãƒœã‚¿ãƒ³ã®æç”»
+// ãƒœã‚¿ãƒ³åã‚’ãƒœã‚¿ãƒ³ã®ä¸­ã«æç”»ã™ã‚‹ãƒãƒ¼ã‚¸ãƒ§ãƒ³
 VOID DrawMsgButton(HWND hWnd,UINT uCtlID,HDC hCtlDC,
 				   RECT rt,UINT uFocus,UINT uStatus){
 	
@@ -474,21 +463,21 @@ VOID DrawMsgButton(HWND hWnd,UINT uCtlID,HDC hCtlDC,
 	pos = (uStatus == MYID_PUSHBUTTON);
 	GetWindowText(GetDlgItem(hWnd,uCtlID),szStr,CHR_BUF);
 
-	// ˜g•`‰æ
+	// æž æç”»
 	hOldPen = (HPEN)SelectObject(hCtlDC,GetStockObject(BLACK_PEN));
 	hOldBrush = (HBRUSH)SelectObject(hCtlDC,GetStockObject(NULL_BRUSH));
 	Rectangle(hCtlDC, rt.left,rt.top,rt.right,rt.bottom);     
 	SelectObject(hCtlDC, hOldPen); 
 	SelectObject(hCtlDC, hOldBrush); 
 	
-	// –{‘Ì•`‰æ
+	// æœ¬ä½“æç”»
 	hOldPen = (HPEN)SelectObject(hCtlDC,GetStockObject(BLACK_PEN));
 	hOldBrush = (HBRUSH)SelectObject(hCtlDC,GetStockObject(GRAY_BRUSH));
 	Rectangle(hCtlDC, rt.left+pos,rt.top+pos,rt.right-1+pos,rt.bottom-1+pos);     
 	SelectObject(hCtlDC, hOldPen); 
 	SelectObject(hCtlDC, hOldBrush); 
 
-	// –¾‚é‚¢•”•ª
+	// æ˜Žã‚‹ã„éƒ¨åˆ†
 	if(uCtlID == uFocus) hBrush = CreateSolidBrush(RGB(0,255,255));
 	else hBrush = CreateSolidBrush(RGB(255,255,255));
 	hOldPen = (HPEN)SelectObject(hCtlDC,GetStockObject(NULL_PEN));
@@ -499,12 +488,12 @@ VOID DrawMsgButton(HWND hWnd,UINT uCtlID,HDC hCtlDC,
 	DeleteObject(hBrush);
 
 
-	// •¶Žš•`‰æ
+	// æ–‡å­—æç”»
 	TEXTMETRIC textMet; 
 	LONG nStrHeight;
 
 	hFont=CreateFont(10,0,0,0,FW_NORMAL,FALSE,FALSE,FALSE,DEFAULT_CHARSET
-			,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,"‚l‚r ‚oƒSƒVƒbƒN");
+			,OUT_DEFAULT_PRECIS,CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,DEFAULT_PITCH,"ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 	hOldFont = (HFONT)SelectObject(hCtlDC,hFont);	
 	GetTextMetrics(hCtlDC,&textMet);
 	nStrHeight = textMet.tmAscent;
@@ -512,14 +501,14 @@ VOID DrawMsgButton(HWND hWnd,UINT uCtlID,HDC hCtlDC,
 	rt.left += (pos+1);
 	rt.right += (pos+1);
 	
-	// •¶Žš•`‰æ
+	// æ–‡å­—æç”»
 	SetBkMode(hCtlDC,TRANSPARENT);			 
     SetTextColor(hCtlDC,RGB(0,0,0)) ;
 	DrawText(hCtlDC,szStr,strlen(szStr),&rt,DT_CENTER);
 	rt.top -= 1;rt.left -= 1;rt.right -= 1;
     SetTextColor(hCtlDC,RGB(255,255,255)) ;
 	DrawText(hCtlDC,szStr,strlen(szStr),&rt,DT_CENTER);
-	// ƒtƒHƒ“ƒgíœ
+	// ãƒ•ã‚©ãƒ³ãƒˆå‰Šé™¤
 	SelectObject(hCtlDC,hOldFont);			  
 	DeleteObject(hFont);
 }

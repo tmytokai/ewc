@@ -1,7 +1,4 @@
-// easy Wave Cutter
-// Copyright (c) 1999-2015 Tomoya Tokairin
-// WAVE ŠÖŒW(‹¤’Ê)
-//
+ï»¿// WAVE é–¢ä¿‚(å…±é€š)
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -18,7 +15,7 @@
 #define WAVE_FORMAT_IEEE_FLOAT 0x0003
 #endif
 
-// ƒƒbƒZ[ƒWƒ{ƒbƒNƒX
+// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒœãƒƒã‚¯ã‚¹
 int MyMessageBox(HWND,LPSTR,LPSTR,UINT);
 
 
@@ -40,26 +37,26 @@ void SetWaveFmt(LPWAVEFORMATEX lpWaveFmt,WORD waveChn,
 
 
 //-------------------------------------------------------------------
-// wave ƒwƒbƒ_‚Ìƒoƒbƒtƒ@‚ğƒZƒbƒg‚·‚éŠÖ”
+// wave ãƒ˜ãƒƒãƒ€ã®ãƒãƒƒãƒ•ã‚¡ã‚’ã‚»ãƒƒãƒˆã™ã‚‹é–¢æ•°
 BOOL SetWaveHdr(HWND hWnd,LPWAVEHDR lpWaveHdr, LONG nHdrNumber,DWORD dwWaveBlockByte)
 {
 	LONG i;
 	LPBYTE lpWaveData;
 	
-	// ƒoƒbƒtƒ@ƒƒ‚ƒŠ‚ğŠm•Û
+	// ãƒãƒƒãƒ•ã‚¡ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿
 	lpWaveData =(LPBYTE)GlobalAlloc(GPTR,sizeof(BYTE)*dwWaveBlockByte*nHdrNumber);
 	
 	if(lpWaveData == NULL){
-		MyMessageBox(hWnd, "ƒƒ‚ƒŠ‚ÌŠm•Û‚É¸”s‚µ‚Ü‚µ‚½B",
+		MyMessageBox(hWnd, "ãƒ¡ãƒ¢ãƒªã®ç¢ºä¿ã«å¤±æ•—ã—ã¾ã—ãŸã€‚",
 			"Error", MB_OK|MB_SETFOREGROUND|MB_ICONERROR);
 		return FALSE;
 	}
 	
-	// wave ƒwƒbƒ_[İ’è
+	// wave ãƒ˜ãƒƒãƒ€ãƒ¼è¨­å®š
 	for(i=0;i<nHdrNumber;i++){
 		memset(&lpWaveHdr[i], 0, sizeof(WAVEHDR));
-		lpWaveHdr[i].lpData  = (LPSTR)lpWaveData+dwWaveBlockByte*i;	// ƒf[ƒ^Ši”[—ÌˆæŠm•Û
-		lpWaveHdr[i].dwBufferLength = dwWaveBlockByte; // ƒf[ƒ^ƒTƒCƒY
+		lpWaveHdr[i].lpData  = (LPSTR)lpWaveData+dwWaveBlockByte*i;	// ãƒ‡ãƒ¼ã‚¿æ ¼ç´é ˜åŸŸç¢ºä¿
+		lpWaveHdr[i].dwBufferLength = dwWaveBlockByte; // ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
 	}
 	
 	return TRUE;
@@ -68,13 +65,13 @@ BOOL SetWaveHdr(HWND hWnd,LPWAVEHDR lpWaveHdr, LONG nHdrNumber,DWORD dwWaveBlock
 
 
 //-------------------------------------------------------------------
-// wave ƒwƒbƒ_‚Ìƒoƒbƒtƒ@íœŠÖ”
+// wave ãƒ˜ãƒƒãƒ€ã®ãƒãƒƒãƒ•ã‚¡å‰Šé™¤é–¢æ•°
 BOOL DelWaveHdr(HWND hWnd,LPWAVEHDR lpWaveHdr)
 {
 	
 	if(lpWaveHdr[0].lpData != NULL){
 		if(GlobalFree(lpWaveHdr[0].lpData)!=NULL){
-			MyMessageBox(hWnd, "ƒƒ‚ƒŠ‚ÌŠJ•ú‚É¸”s‚µ‚Ü‚µ‚½B",
+			MyMessageBox(hWnd, "ãƒ¡ãƒ¢ãƒªã®é–‹æ”¾ã«å¤±æ•—ã—ã¾ã—ãŸã€‚",
 				"Error", MB_OK|MB_SETFOREGROUND|MB_ICONERROR);
 			return FALSE;
 		}
@@ -139,7 +136,7 @@ void WaveLevel(double dLevel[2],  // output of left and right
 
 
 //---------------------------------------------------------
-// ‰¹—Ê‚Ì•½‹Ï‚ğ‚Æ‚éŠÖ”
+// éŸ³é‡ã®å¹³å‡ã‚’ã¨ã‚‹é–¢æ•°
 void WaveLevelAverage(double dLevel[2],  // output of left and right
 			   BYTE* lpWaveData,  // input
 			   WAVEFORMATEX waveFmt,
@@ -706,10 +703,10 @@ L_ERR:
 
 
 //-----------------------------------------------
-// Ä¶ƒTƒEƒ“ƒhƒfƒoƒCƒXî•ñæ“¾
-// –ß‚è’l‚ÍƒfƒoƒCƒX‚Ì”
-// î•ñ‚Ìæ“¾‚É¸”s‚µ‚½ƒfƒoƒCƒX‚Ì wChannels ‚Í 0 ‚ÉƒZƒbƒg‚³‚ê‚é
-// ‚Ü‚½AlpWaveOutCaps[uMaxNum-1] ‚É‚Í WAVE_MAPPER ‚Ìî•ñ‚ª“ü‚é
+// å†ç”Ÿã‚µã‚¦ãƒ³ãƒ‰ãƒ‡ãƒã‚¤ã‚¹æƒ…å ±å–å¾—
+// æˆ»ã‚Šå€¤ã¯ãƒ‡ãƒã‚¤ã‚¹ã®æ•°
+// æƒ…å ±ã®å–å¾—ã«å¤±æ•—ã—ãŸãƒ‡ãƒã‚¤ã‚¹ã® wChannels ã¯ 0 ã«ã‚»ãƒƒãƒˆã•ã‚Œã‚‹
+// ã¾ãŸã€lpWaveOutCaps[uMaxNum-1] ã«ã¯ WAVE_MAPPER ã®æƒ…å ±ãŒå…¥ã‚‹
 UINT GetWaveOutDevCap(LPWAVEOUTCAPS lpWaveOutCaps,UINT uMaxNum){
 	
 	UINT uDevNum,i;

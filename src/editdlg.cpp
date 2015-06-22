@@ -1,6 +1,4 @@
-// easy Wave Cutter
-// Copyright (c) 1999-2015 Tomoya Tokairin
-// İ’èƒ_ƒCƒAƒƒOŠÖŒW
+ï»¿// è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°é–¢ä¿‚
 
 #include "common.h"
 
@@ -8,7 +6,7 @@
 
 
 //------------------------------------------
-// ƒgƒ‰ƒbƒNî•ñ‚ğƒZƒbƒg
+// ãƒˆãƒ©ãƒƒã‚¯æƒ…å ±ã‚’ã‚»ãƒƒãƒˆ
 BOOL SetTrackInfo(HWND hWnd,
 				  LPEWCDATA lpEwcData,
 				  LPSTR lpszInfo){
@@ -20,7 +18,7 @@ BOOL SetTrackInfo(HWND hWnd,
 
 	for(i=1;i<=lpEwcData->dwSplitNum+1;i++){
 		
-		// •b”æ“¾
+		// ç§’æ•°å–å¾—
 		dwFoo = (DWORD)(
 			((i-1 == 0) ? 0 : lpEwcData->n64SplitMarkedPosByte[i-2])
 			/lpEwcData->waveFmt.nAvgBytesPerSec);
@@ -53,7 +51,7 @@ BOOL SetTrackInfo(HWND hWnd,
 
 
 //-------------------------------------
-// ƒgƒ‰ƒbƒNİ’èƒ_ƒCƒAƒƒO
+// ãƒˆãƒ©ãƒƒã‚¯è¨­å®šãƒ€ã‚¤ã‚¢ãƒ­ã‚°
 LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	static LPEWCDATA lpEwcData;
@@ -69,11 +67,11 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
     switch (msg) {
 		
-	case WM_INITDIALOG:  // ƒ_ƒCƒAƒƒO‰Šú‰»
+	case WM_INITDIALOG:  // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°åˆæœŸåŒ–
 
 		lpEwcData = (LPEWCDATA)lp;
 		
-		// ƒ_ƒCƒAƒƒO‚ğ’†S‚ÉˆÚ“®
+		// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’ä¸­å¿ƒã«ç§»å‹•
 		SetDlgCenter(hWnd);
 
 		lpszInfo = (char*)malloc(sizeof(char)*8192 + 1024);
@@ -83,16 +81,16 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 		Edit_SetText(GetDlgItem(hWnd,IDC_EDITDIR),(LPCTSTR)lpEwcData->szSaveDir);
 	
-		// ƒgƒ‰ƒbƒNİ’è
+		// ãƒˆãƒ©ãƒƒã‚¯è¨­å®š
 		dwCurTrack = lpEwcData->dwCurTrack;
 		SendMessage(GetDlgItem(hWnd,IDC_SPINTRACK),UDM_SETRANGE,(WPARAM)0,(LPARAM)MAKELONG((short)1,(short)lpEwcData->dwSplitNum+1));
 		SendMessage(GetDlgItem(hWnd,IDC_SPINTRACK),UDM_SETPOS,(WPARAM)0L,(LPARAM)MAKELONG((short)dwCurTrack,0));
 
-		// ƒgƒ‰ƒbƒNŒ‹‡İ’è
+		// ãƒˆãƒ©ãƒƒã‚¯çµåˆè¨­å®š
 		SendMessage(GetDlgItem(hWnd,IDC_SPINTRACK2),UDM_SETRANGE,(WPARAM)0,(LPARAM)MAKELONG((short)1,(short)lpEwcData->dwSplitNum+1));
 		SendMessage(GetDlgItem(hWnd,IDC_SPINTRACK2),UDM_SETPOS,(WPARAM)0L,(LPARAM)MAKELONG((short)dwCurTrack,0));
 
-		// ƒgƒ‰ƒbƒNˆê——
+		// ãƒˆãƒ©ãƒƒã‚¯ä¸€è¦§
 		lpszInfo[0] = '\0';
 		SetTrackInfo(hWnd,lpEwcData,lpszInfo);
 		Edit_SetText(GetDlgItem(hWnd,IDC_EDITSETTING),(LPCTSTR)lpszInfo);
@@ -106,7 +104,7 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 	case WM_VSCROLL:
 
 		if((HWND)lp == GetDlgItem(hWnd,IDC_SPINTRACK))
-			goto L_BTRELOAD; // è‚ğ”²‚¢‚Ä‹Ö’f‚ÌŠ‡ŒÊ‰z‚¦ goto 
+			goto L_BTRELOAD; // æ‰‹ã‚’æŠœã„ã¦ç¦æ–­ã®æ‹¬å¼§è¶Šãˆ goto 
 
 		break;
 
@@ -117,27 +115,27 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 		switch (LOWORD(wp)) {
 
-		case IDC_BTLOAD: // İ’è–¼ƒ[ƒh
+		case IDC_BTLOAD: // è¨­å®šåãƒ­ãƒ¼ãƒ‰
 			
 			strcpy(lpszInfo,lpEwcData->szTrackFile);
 			if(SelectLoadFile(hWnd,lpszInfo,
 				"Text Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0",
 				"txt",
-				"ƒgƒ‰ƒbƒN–¼İ’èƒtƒ@ƒCƒ‹“Ç‚İ‚İ")){
+				"ãƒˆãƒ©ãƒƒã‚¯åè¨­å®šãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿")){
 				strcpy(lpEwcData->szTrackFile,lpszInfo);
 			}	
 			else return TRUE;
 
 			goto L_BTRELOAD;
 			
-		case IDC_BTCONNECT:  // ƒgƒ‰ƒbƒNŒ‹‡
+		case IDC_BTCONNECT:  // ãƒˆãƒ©ãƒƒã‚¯çµåˆ
 			
 			dwCurTrack = SendMessage(GetDlgItem(hWnd,IDC_SPINTRACK),UDM_GETPOS,(WPARAM)0,(LPARAM)0);
 			dwToTrack = SendMessage(GetDlgItem(hWnd,IDC_SPINTRACK2),UDM_GETPOS,(WPARAM)0,(LPARAM)0);
 
 			if(dwCurTrack-1 < lpEwcData->dwSplitNum){
 				dwToTrack = max(dwToTrack,dwCurTrack+1);
-				wsprintf(lpszInfo,"ƒgƒ‰ƒbƒN %d ‚©‚ç %d ‚Ü‚ÅŒ‹‡‚µ‚Ü‚·‚©?",dwCurTrack,dwToTrack);
+				wsprintf(lpszInfo,"ãƒˆãƒ©ãƒƒã‚¯ %d ã‹ã‚‰ %d ã¾ã§çµåˆã—ã¾ã™ã‹?",dwCurTrack,dwToTrack);
 				if(MyMessageBox(hWnd, lpszInfo,"ewc", MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2)==IDNO) return TRUE;
 
 				for(i=0;i<dwToTrack-dwCurTrack;i++){
@@ -155,21 +153,21 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			goto L_BTRELOAD;
 
 
-		case IDC_BTRESET: // ƒŠƒZƒbƒg
+		case IDC_BTRESET: // ãƒªã‚»ãƒƒãƒˆ
 
-			if(MyMessageBox(hWnd, "ƒŠƒZƒbƒg‚µ‚Ü‚·‚©H", 
+			if(MyMessageBox(hWnd, "ãƒªã‚»ãƒƒãƒˆã—ã¾ã™ã‹ï¼Ÿ", 
 					"ewc", MB_YESNO|MB_ICONQUESTION|MB_DEFBUTTON2)==IDNO) return TRUE;
 			lpEwcData->szTrackFile[0] = '\0';
 
 			goto L_BTRELOAD;
 			
 		
-		case IDC_BTSPLITLOAD: // •ªŠ„ƒ}[ƒNİ’è“Ç‚İ‚İ
+		case IDC_BTSPLITLOAD: // åˆ†å‰²ãƒãƒ¼ã‚¯è¨­å®šèª­ã¿è¾¼ã¿
 			
 			if(SelectLoadFile(hWnd,szSplitFile,
 				"*.spt\0*.spt\0All Files(*.*)\0*.*\0\0",
 				"spt",
-				"•ªŠ„ƒ}[ƒNİ’è“Ç‚İ‚İ")){	
+				"åˆ†å‰²ãƒãƒ¼ã‚¯è¨­å®šèª­ã¿è¾¼ã¿")){	
 
 				f = fopen(szSplitFile,"rb");
 				if(f)
@@ -190,19 +188,19 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 				}
 				else
-					MyMessageBox(hWnd,"İ’èƒtƒ@ƒCƒ‹‚ğŠJ‚¯‚Ü‚¹‚ñB","Error",MB_OK|MB_ICONERROR);
+					MyMessageBox(hWnd,"è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ã€‚","Error",MB_OK|MB_ICONERROR);
 				
 			}
 			
 			break;
 			
-		case IDC_BTSPLITSAVE:  // •ªŠ„İ’è•Û‘¶
+		case IDC_BTSPLITSAVE:  // åˆ†å‰²è¨­å®šä¿å­˜
 			 
 			if(lpEwcData->dwSplitNum){
 				if(SelectSaveFile(hWnd,szSplitFile,
 					"*.spt\0*.spt\0All Files(*.*)\0*.*\0\0",
 					"spt",
-					"•ªŠ„ƒ}[ƒNİ’è•Û‘¶")){
+					"åˆ†å‰²ãƒãƒ¼ã‚¯è¨­å®šä¿å­˜")){
 					
 					f = fopen(szSplitFile,"wb");
 					if(f)
@@ -220,7 +218,7 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 					}
 					else
-						MyMessageBox(hWnd,"İ’èƒtƒ@ƒCƒ‹‚ğŠJ‚¯‚Ü‚¹‚ñB","Error",MB_OK|MB_ICONERROR);
+						MyMessageBox(hWnd,"è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ã€‚","Error",MB_OK|MB_ICONERROR);
 					
 				}
 			}
@@ -228,12 +226,12 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			break;
 	
 
-		case IDC_BTCUTLOAD: // ƒJƒbƒgİ’è“Ç‚İ‚İ
+		case IDC_BTCUTLOAD: // ã‚«ãƒƒãƒˆè¨­å®šèª­ã¿è¾¼ã¿
 			
 			if(SelectLoadFile(hWnd,szSplitFile,
 				"*.ct\0*.ct\0All Files(*.*)\0*.*\0\0",
 				"ct",
-				"ƒJƒbƒgİ’è“Ç‚İ‚İ")){	
+				"ã‚«ãƒƒãƒˆè¨­å®šèª­ã¿è¾¼ã¿")){	
 
 				f = fopen(szSplitFile,"rb");
 				if(f)
@@ -247,18 +245,18 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 				}
 				else
-					MyMessageBox(hWnd,"İ’èƒtƒ@ƒCƒ‹‚ğŠJ‚¯‚Ü‚¹‚ñB","Error",MB_OK|MB_ICONERROR);
+					MyMessageBox(hWnd,"è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ã€‚","Error",MB_OK|MB_ICONERROR);
 				
 			}
 			
 			break;
 			
-		case IDC_BTCUTSAVE:  // ƒJƒbƒgİ’è•Û‘¶
+		case IDC_BTCUTSAVE:  // ã‚«ãƒƒãƒˆè¨­å®šä¿å­˜
 			
 			if(SelectSaveFile(hWnd,szSplitFile,
 				"*.ct\0*.ct\0All Files(*.*)\0*.*\0\0",
 				"ct",
-				"ƒJƒbƒgİ’è•Û‘¶")){
+				"ã‚«ãƒƒãƒˆè¨­å®šä¿å­˜")){
 				
 				f = fopen(szSplitFile,"wb");
 				if(f)
@@ -272,7 +270,7 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 					
 				}
 				else
-					MyMessageBox(hWnd,"İ’èƒtƒ@ƒCƒ‹‚ğŠJ‚¯‚Ü‚¹‚ñB","Error",MB_OK|MB_ICONERROR);
+					MyMessageBox(hWnd,"è¨­å®šãƒ•ã‚¡ã‚¤ãƒ«ã‚’é–‹ã‘ã¾ã›ã‚“ã€‚","Error",MB_OK|MB_ICONERROR);
 				
 			}
 
@@ -281,7 +279,7 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 L_BTRELOAD:
 			
-		case IDC_BTRELOAD: // ƒgƒ‰ƒbƒNİ’è–¼Ä“Ç‚İ‚İ
+		case IDC_BTRELOAD: // ãƒˆãƒ©ãƒƒã‚¯è¨­å®šåå†èª­ã¿è¾¼ã¿
 
 			Edit_GetText(GetDlgItem(hWnd,IDC_EDITBASE),(LPSTR)lpEwcData->szBaseName,CHR_BUF);
 			Edit_GetText(GetDlgItem(hWnd,IDC_EDITEXT),(LPSTR)lpEwcData->szExtName,CHR_BUF);
@@ -303,7 +301,7 @@ L_BTRELOAD:
 			
 			return FALSE;
 			
-		case IDC_BTPLAYSTOP:  // Ä¶
+		case IDC_BTPLAYSTOP:  // å†ç”Ÿ
 			
 			Edit_GetText(GetDlgItem(hWnd,IDC_EDITSETTING),(LPSTR)lpszInfo,4096);
 			Edit_SetText(GetDlgItem(hWnd,IDC_EDITSETTING),(LPCTSTR)lpszInfo);
@@ -313,7 +311,7 @@ L_BTRELOAD:
 				n64StartByte = lpEwcData->n64SplitMarkedPosByte[dwCurTrack-2];
 			else n64StartByte = 0;
 
-			 // Ä¶ƒTƒCƒYİ’è max 10 •b
+			 // å†ç”Ÿã‚µã‚¤ã‚ºè¨­å®š max 10 ç§’
 			if(dwCurTrack == 1) 
 				n64Foo 
 				= min(
@@ -328,7 +326,7 @@ L_BTRELOAD:
 				);
 			else n64Foo = lpEwcData->n64WaveDataSize;
 
-			// Ä¶ŠJn
+			// å†ç”Ÿé–‹å§‹
 			PlayWaveByte(hWnd,
 				lpEwcData->uDeviceID,
 				lpEwcData->szLoadFile,
@@ -343,10 +341,10 @@ L_BTRELOAD:
 
 
 
-		case IDC_BTREFF: //@QÆ
+		case IDC_BTREFF: //ã€€å‚ç…§
 
 			Edit_GetText(GetDlgItem(hWnd,IDC_EDITDIR),(LPSTR)szStr,MAX_PATH);
-			SelectDir(hWnd,szStr,"•Û‘¶æ");
+			SelectDir(hWnd,szStr,"ä¿å­˜å…ˆ");
 			Edit_SetText(GetDlgItem(hWnd,IDC_EDITDIR),(LPCTSTR)szStr);
 
 			break;
@@ -383,16 +381,16 @@ L_BTRELOAD:
 
 
 //-------------------------------------
-// •ÒWƒƒjƒ…[‘I‘ğƒvƒƒV[ƒWƒƒ
+// ç·¨é›†ãƒ¡ãƒ‹ãƒ¥ãƒ¼é¸æŠãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
 LRESULT CALLBACK EditMenuDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	
 	
-	// •ÒWƒf[ƒ^
+	// ç·¨é›†ãƒ‡ãƒ¼ã‚¿
 	static LPEWCDATA lpEwcData; 
 	static LPEDITSAVEDATA lpEditSaveData; 
 	
-	// •Û‘¶—p
+	// ä¿å­˜ç”¨
 	static EDITSAVEDATA editSaveData; 
 	CHAR szData[MAX_WAVFLTOPTBUF];
 	HANDLE hdFile;
@@ -400,7 +398,7 @@ LRESULT CALLBACK EditMenuDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 	
     switch (msg) {
 		
-	case WM_INITDIALOG:  // ƒ_ƒCƒAƒƒO‰Šú‰»
+	case WM_INITDIALOG:  // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°åˆæœŸåŒ–
 		
 		lpEwcData = (LPEWCDATA)lp;
 		lpEditSaveData = &(lpEwcData->editSaveData);
@@ -411,7 +409,7 @@ LRESULT CALLBACK EditMenuDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		lpEwcData->bCutCm = FALSE;
 		lpEwcData->bCutTrack = FALSE; 
 
-		// ƒ_ƒCƒAƒƒO‚ğ’†S‚ÉˆÚ“®
+		// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’ä¸­å¿ƒã«ç§»å‹•
 		SetDlgCenter(hWnd);
 		
 		break;
@@ -420,16 +418,16 @@ LRESULT CALLBACK EditMenuDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 			switch (LOWORD(wp)) {
 				
-			case IDC_BTSTART: // •Û‘¶
+			case IDC_BTSTART: // ä¿å­˜
 				goto L_START;
-			case IDC_BTSTARTCUTCM: // CM ƒJƒbƒg
+			case IDC_BTSTARTCUTCM: // CM ã‚«ãƒƒãƒˆ
 				if(lpEwcData->dwSplitNum) lpEwcData->bCutCm = TRUE;
 				goto L_START;
-			case IDC_BTSPLIT: // •ªŠ„
+			case IDC_BTSPLIT: // åˆ†å‰²
 				if(lpEwcData->dwSplitNum) lpEwcData->bSplit = TRUE;
 				goto L_START;
-			case IDC_BTWAVEOUT: // ’®
-			case IDC_BTSTARTCUT: // Ø‚è”²‚«
+			case IDC_BTWAVEOUT: // è©¦è´
+			case IDC_BTSTARTCUT: // åˆ‡ã‚ŠæŠœã
 				lpEwcData->bCutTrack = TRUE; 
 L_START:
 			case IDOK:
@@ -438,11 +436,11 @@ L_START:
 				CopyMemory(lpEditSaveData,&editSaveData,sizeof(EDITSAVEDATA));
 
 				if(LOWORD(wp) == IDC_BTWAVEOUT)
-					EndDialog(hWnd, IDC_BTWAVEOUT); // Ä¶ŠJn
+					EndDialog(hWnd, IDC_BTWAVEOUT); // å†ç”Ÿé–‹å§‹
 				else if(LOWORD(wp) == IDOK)
 					EndDialog(hWnd, IDCANCEL);
 				else 
-					EndDialog(hWnd, IDC_BTSTART); // ƒRƒs[ŠJn
+					EndDialog(hWnd, IDC_BTSTART); // ã‚³ãƒ”ãƒ¼é–‹å§‹
 
 				return TRUE;
 				
@@ -452,12 +450,12 @@ L_START:
 				
 				return TRUE;
 				
-			case IDC_BTSAVESETTING: // İ’è•Û‘¶
+			case IDC_BTSAVESETTING: // è¨­å®šä¿å­˜
 				
 				if(SelectSaveFile(hWnd ,lpEwcData->szSettingFileName,
 					"Text Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0",
 					"txt",
-					"İ’è•Û‘¶"
+					"è¨­å®šä¿å­˜"
 					)){
 
 					hdFile = CreateFile(lpEwcData->szSettingFileName,GENERIC_WRITE,0,0,CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL,NULL); 
@@ -465,17 +463,17 @@ L_START:
 					Edit_GetText(GetDlgItem(hWnd,IDC_EDITSETTING),(LPSTR)szData,MAX_WAVFLTOPTBUF);
 					WriteFile(hdFile,szData,strlen(szData),&dwByte,NULL);
 					CloseHandle(hdFile);
-					MyMessageBox(hWnd, "Œ»İ‚Ìİ’è‚ğƒtƒ@ƒCƒ‹‚É•Û‘¶‚µ‚Ü‚µ‚½B", "ewc", MB_OK|MB_ICONINFORMATION);
+					MyMessageBox(hWnd, "ç¾åœ¨ã®è¨­å®šã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«ä¿å­˜ã—ã¾ã—ãŸã€‚", "ewc", MB_OK|MB_ICONINFORMATION);
 				}
 
 				return TRUE;
 
-			case IDC_BTLOADSETTING: // İ’è“Ç‚İ‚İ
+			case IDC_BTLOADSETTING: // è¨­å®šèª­ã¿è¾¼ã¿
 				
 				if(SelectLoadFile(hWnd ,lpEwcData->szSettingFileName,
 					"Text Files(*.txt)\0*.txt\0All Files(*.*)\0*.*\0\0",
 					"txt",
-					"İ’è“Ç‚İ‚İ")){
+					"è¨­å®šèª­ã¿è¾¼ã¿")){
 
 					hdFile = CreateFile(lpEwcData->szSettingFileName,GENERIC_READ,0,0,
 						OPEN_EXISTING, FILE_ATTRIBUTE_READONLY,NULL); 
@@ -489,25 +487,25 @@ L_START:
 				return TRUE;
 
 
-			case IDC_BTCLEAR: // ƒNƒŠƒA
+			case IDC_BTCLEAR: // ã‚¯ãƒªã‚¢
 				szData[0] = '\0';
 				Edit_SetText(GetDlgItem(hWnd,IDC_EDITSETTING),(LPCTSTR)szData);
 				return TRUE;
 
 
-		case IDC_BTHELP: // WAVFLT2 ƒwƒ‹ƒv
+		case IDC_BTHELP: // WAVFLT2 ãƒ˜ãƒ«ãƒ—
 			
 			CHAR path[MAX_PATH],driveName[MAX_PATH],pathName[MAX_PATH],str[MAX_PATH];
 			
-			// ƒwƒ‹ƒvƒtƒ@ƒCƒ‹‚ÌƒpƒXæ“¾
+			// ãƒ˜ãƒ«ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹å–å¾—
 			GetModuleFileName(NULL,str,CHR_BUF);
 			_splitpath(str,driveName,pathName,NULL, NULL);	
 			wsprintf(path,"%s%s",driveName,pathName);
 			wsprintf(str,"%s%s",path,"waveflt2.htm");
 			
-			// ŒÄ‚Ño‚µ
+			// å‘¼ã³å‡ºã—
 			if((WORD)ShellExecute(hWnd,NULL,str,NULL,path,SW_SHOWNORMAL) == ERROR_FILE_NOT_FOUND ){
-				MyMessageBox(hWnd,"ƒwƒ‹ƒvƒtƒ@ƒCƒ‹(waveflt2.htm)‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B","Error",MB_OK|MB_ICONERROR);
+				MyMessageBox(hWnd,"ãƒ˜ãƒ«ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«(waveflt2.htm)ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚","Error",MB_OK|MB_ICONERROR);
 			}
 			
 			return TRUE;
@@ -527,7 +525,7 @@ L_START:
 
 
 //-------------------------------------------------------------------
-//ƒfƒoƒCƒX‘I‘ğƒ_ƒCƒAƒƒO‚ÌƒvƒƒV[ƒWƒƒ
+//ãƒ‡ãƒã‚¤ã‚¹é¸æŠãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
 LRESULT CALLBACK SettingProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	static HWND hPlayWnd;
@@ -537,9 +535,9 @@ LRESULT CALLBACK SettingProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 	
     switch (msg) {
 		
-	case WM_INITDIALOG:  // ƒ_ƒCƒAƒƒO‰Šú‰»
+	case WM_INITDIALOG:  // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°åˆæœŸåŒ–
 		
-		// ƒ_ƒCƒAƒƒO‚ğ’†S‚ÉˆÚ“®
+		// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’ä¸­å¿ƒã«ç§»å‹•
 		SetDlgCenter(hWnd);
 		
 		lpEwcData = (LPEWCDATA)lp;
@@ -548,11 +546,11 @@ LRESULT CALLBACK SettingProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		if(lpEwcData->bShiftLock) Button_SetCheck(GetDlgItem(hWnd,IDC_CHKSHIFT), BST_CHECKED);
 		if(lpEwcData->bShowConsole) Button_SetCheck(GetDlgItem(hWnd,IDC_CHKSHOWCON), BST_CHECKED);
 		
-		// Ä¶ƒfƒoƒCƒX–¼ƒZƒbƒg
+		// å†ç”Ÿãƒ‡ãƒã‚¤ã‚¹åã‚»ãƒƒãƒˆ
 		GetWindowRect(hPlayWnd,&rt);
 		SetWindowPos(hPlayWnd,NULL,0,0,
 			rt.right-rt.left,(rt.bottom-rt.top)*3,SWP_NOMOVE|SWP_NOREPOSITION);
-		ComboBox_InsertString(hPlayWnd,0,"©“®‘I‘ğ");
+		ComboBox_InsertString(hPlayWnd,0,"è‡ªå‹•é¸æŠ");
 		for(i=0;i<lpEwcData->uDevNum;i++){
 			if(lpEwcData->waveOutCaps[i].wChannels > 0)
 				ComboBox_InsertString(hPlayWnd,i+1,lpEwcData->waveOutCaps[i].szPname);
@@ -567,14 +565,14 @@ LRESULT CALLBACK SettingProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		
 		switch (LOWORD(wp)) {
 			
-		case IDOK: // OK ‰Ÿ‚µ‚½
+		case IDOK: // OK æŠ¼ã—ãŸ
 			
 			if(IsDlgButtonChecked(hWnd,IDC_CHKSHIFT) == BST_CHECKED) lpEwcData->bShiftLock = TRUE;
 			else lpEwcData->bShiftLock = FALSE;
 			if(IsDlgButtonChecked(hWnd,IDC_CHKSHOWCON) == BST_CHECKED) lpEwcData->bShowConsole = TRUE;
 			else lpEwcData->bShowConsole = FALSE;
 
-			// Ä¶ƒfƒoƒCƒX
+			// å†ç”Ÿãƒ‡ãƒã‚¤ã‚¹
 			i = ComboBox_GetCurSel(hPlayWnd); 
 			lpEwcData->uDeviceID = WAVE_MAPPER*(i==0)+(i!=0)*(i-1);
 			
@@ -585,27 +583,27 @@ LRESULT CALLBACK SettingProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			EndDialog(hWnd, IDCANCEL);
 			return TRUE;
 			
-		case IDC_BTHELP: // ƒwƒ‹ƒv
+		case IDC_BTHELP: // ãƒ˜ãƒ«ãƒ—
 			
 			CHAR path[MAX_PATH],driveName[MAX_PATH],pathName[MAX_PATH],str[MAX_PATH];
 			
-			// ƒwƒ‹ƒvƒtƒ@ƒCƒ‹‚ÌƒpƒXæ“¾
+			// ãƒ˜ãƒ«ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‘ã‚¹å–å¾—
 			GetModuleFileName(NULL,str,CHR_BUF);
 			_splitpath(str,driveName,pathName,NULL, NULL);	
 			wsprintf(path,"%s%s",driveName,pathName);
 			wsprintf(str,"%s%s",path,"ewc.htm");
 			
-			// ŒÄ‚Ño‚µ
+			// å‘¼ã³å‡ºã—
 			if((WORD)ShellExecute(hWnd,NULL,str,NULL,path,SW_SHOWNORMAL) == ERROR_FILE_NOT_FOUND ){
-				MyMessageBox(hWnd,"ƒwƒ‹ƒvƒtƒ@ƒCƒ‹(ewc.htm)‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B","Error",MB_OK|MB_ICONERROR);
+				MyMessageBox(hWnd,"ãƒ˜ãƒ«ãƒ—ãƒ•ã‚¡ã‚¤ãƒ«(ewc.htm)ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚","Error",MB_OK|MB_ICONERROR);
 			}
 			
 			
 			return TRUE;
 
-		case IDC_BTMALTI: // ƒ}ƒ‹ƒ`ƒƒfƒBƒA
+		case IDC_BTMALTI: // ãƒãƒ«ãƒãƒ¡ãƒ‡ã‚£ã‚¢
 			
-			// ƒvƒƒpƒeƒBŒÄ‚Ño‚µ
+			// ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£å‘¼ã³å‡ºã—
 			STARTUPINFO startInfo;
 			PROCESS_INFORMATION proInfo;
 			memset(&startInfo,0,sizeof(STARTUPINFO));
@@ -613,7 +611,7 @@ LRESULT CALLBACK SettingProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			if(!CreateProcess(NULL,"RUNDLL32.EXE SHELL32.DLL,Control_RunDLL Mmsys.cpl"
 				,NULL,NULL,FALSE,0,
 				NULL,NULL,&startInfo,&proInfo)){
-				MyMessageBox(hWnd,"ƒ}ƒ‹ƒ`ƒƒfƒBƒAƒvƒƒpƒeƒB‚Ì‹N“®‚É¸”s‚µ‚Ü‚µ‚½B",
+				MyMessageBox(hWnd,"ãƒãƒ«ãƒãƒ¡ãƒ‡ã‚£ã‚¢ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸã€‚",
 					"Error",MB_OK|MB_ICONERROR);
 			}
 			
@@ -630,16 +628,16 @@ LRESULT CALLBACK SettingProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 
 //-------------------------------------------------------------------
-//ƒtƒ@ƒCƒ‹î•ñƒ_ƒCƒAƒƒO‚ÌƒvƒƒV[ƒWƒƒ
+//ãƒ•ã‚¡ã‚¤ãƒ«æƒ…å ±ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
 LRESULT CALLBACK InfoProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 
 	
     switch (msg) {
 		
-	case WM_INITDIALOG:  // ƒ_ƒCƒAƒƒO‰Šú‰»
+	case WM_INITDIALOG:  // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°åˆæœŸåŒ–
 		
-		// ƒ_ƒCƒAƒƒO‚ğ’†S‚ÉˆÚ“®
+		// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’ä¸­å¿ƒã«ç§»å‹•
 		SetDlgCenter(hWnd);
 
 		Edit_SetText(GetDlgItem(hWnd,IDC_EDITSETTING),(LPCTSTR)lp);
@@ -652,7 +650,7 @@ LRESULT CALLBACK InfoProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		
 		switch (LOWORD(wp)) {
 			
-		case IDOK: // OK ‰Ÿ‚µ‚½
+		case IDOK: // OK æŠ¼ã—ãŸ
 			EndDialog(hWnd, IDCANCEL);
 			return TRUE;
 			

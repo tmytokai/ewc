@@ -1,87 +1,85 @@
-// easy Wave Cutter
-// Copyright (c) 1999-2015 Tomoya Tokairin
-// –³‰¹•”•ªƒT[ƒ`—pŠÖ”
+ï»¿// ç„¡éŸ³éƒ¨åˆ†ã‚µãƒ¼ãƒç”¨é–¢æ•°
 
 #include "common.h"
 #include <math.h>
 
-// –³‰¹•”ƒT[ƒ`ƒ_ƒCƒAƒƒO‚ÆƒXƒŒƒbƒh‚É“n‚·ƒf[ƒ^Œ^
+// ç„¡éŸ³éƒ¨ã‚µãƒ¼ãƒãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã¨ã‚¹ãƒ¬ãƒƒãƒ‰ã«æ¸¡ã™ãƒ‡ãƒ¼ã‚¿å‹
 typedef struct
 {
 HWND hWnd;
-HWND hProgBar;  // ƒvƒƒOƒŒƒXƒo[‚Ìƒnƒ“ƒhƒ‹
-HANDLE hdFile; // ƒT[ƒ`‚·‚éƒtƒ@ƒCƒ‹ƒnƒ“ƒhƒ‹
-LONGLONG n64DataSize; //ƒtƒ@ƒCƒ‹ƒTƒCƒY
-LONGLONG n64DataOffset; //ƒf[ƒ^‚Ü‚Å‚ÌƒIƒtƒZƒbƒg
-WAVEFORMATEX waveFmt; // Wave ƒtƒH[ƒ}ƒbƒg
-LONGLONG* lpn64StartByte; // –³‰¹•”ŠJnˆÊ’u(ƒoƒCƒg)
-LONGLONG* lpn64EndByte;  // I—¹ˆÊ’u(ƒoƒCƒg)
-LPWORD lpwStatus; // ƒXƒe[ƒ^ƒX
-double dBound; // ‚µ‚«‚¢’l
-DWORD dwMaxCount;  // –³‰¹•”ŒŸõ‚ÌƒJƒEƒ“ƒ^‚ÌÅ‘å’l(1/25 •b’PˆÊ)
-BOOL bAvr; // •½‹Ï‰¹—Ê‚ÅŒŸõ
+HWND hProgBar;  // ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼ã®ãƒãƒ³ãƒ‰ãƒ«
+HANDLE hdFile; // ã‚µãƒ¼ãƒã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ³ãƒ‰ãƒ«
+LONGLONG n64DataSize; //ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º
+LONGLONG n64DataOffset; //ãƒ‡ãƒ¼ã‚¿ã¾ã§ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+WAVEFORMATEX waveFmt; // Wave ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+LONGLONG* lpn64StartByte; // ç„¡éŸ³éƒ¨é–‹å§‹ä½ç½®(ãƒã‚¤ãƒˆ)
+LONGLONG* lpn64EndByte;  // çµ‚äº†ä½ç½®(ãƒã‚¤ãƒˆ)
+LPWORD lpwStatus; // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
+double dBound; // ã—ãã„å€¤
+DWORD dwMaxCount;  // ç„¡éŸ³éƒ¨æ¤œç´¢ã®ã‚«ã‚¦ãƒ³ã‚¿ã®æœ€å¤§å€¤(1/25 ç§’å˜ä½)
+BOOL bAvr; // å¹³å‡éŸ³é‡ã§æ¤œç´¢
 }SEARCHDATA,*LPSEARCHDATA;
 
 
 //-------------------------------------------------------------------
-// –³‰¹•”ƒT[ƒ`ƒXƒŒƒbƒh
+// ç„¡éŸ³éƒ¨ã‚µãƒ¼ãƒã‚¹ãƒ¬ãƒƒãƒ‰
 DWORD WINAPI SearchThread(LPVOID lpSearchData) 
 {
 	
 	LPSEARCHDATA lpSdata = (LPSEARCHDATA)lpSearchData;
-	HWND hWnd  	// eƒ_ƒCƒAƒƒO‚ÌƒEƒBƒ“ƒhƒEƒnƒ“ƒhƒ‹
+	HWND hWnd  	// è¦ªãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ãƒãƒ³ãƒ‰ãƒ«
 		= lpSdata->hWnd; 
-	HWND hProgBar 	// isƒvƒƒOƒŒƒXƒo[‚Ìƒnƒ“ƒhƒ‹  
+	HWND hProgBar 	// é€²è¡Œãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼ã®ãƒãƒ³ãƒ‰ãƒ«  
 		= lpSdata->hProgBar; 
-	HANDLE hdFile 	// ƒtƒ@ƒCƒ‹ƒnƒ“ƒhƒ‹
+	HANDLE hdFile 	// ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ³ãƒ‰ãƒ«
 		= lpSdata->hdFile	; 
-	LONGLONG n64DataSize 	//ƒf[ƒ^ƒTƒCƒY
+	LONGLONG n64DataSize 	//ãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚º
 		= lpSdata->n64DataSize; 
-	WAVEFORMATEX waveFmt // Wave ƒtƒH[ƒ}ƒbƒg
+	WAVEFORMATEX waveFmt // Wave ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
 		= lpSdata->waveFmt;
-	LONGLONG n64DataOffset 	//ƒf[ƒ^‚Ü‚Å‚ÌƒIƒtƒZƒbƒg
+	LONGLONG n64DataOffset 	//ãƒ‡ãƒ¼ã‚¿ã¾ã§ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
 		= lpSdata->n64DataOffset; 
-	LONGLONG* lpn64StartByte 	// ŠJnˆÊ’u(ƒoƒCƒg)
+	LONGLONG* lpn64StartByte 	// é–‹å§‹ä½ç½®(ãƒã‚¤ãƒˆ)
 		= lpSdata->lpn64StartByte; 
-	LONGLONG* lpn64EndByte 	// I—¹ˆÊ’u(ƒoƒCƒg)
+	LONGLONG* lpn64EndByte 	// çµ‚äº†ä½ç½®(ãƒã‚¤ãƒˆ)
 		= lpSdata->lpn64EndByte; 
-	LPWORD lpwStatus 	// ƒXƒe[ƒ^ƒX
+	LPWORD lpwStatus 	// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
 		= lpSdata->lpwStatus; 
-	double dBound // dB, ‚µ‚«‚¢’l
+	double dBound // dB, ã—ãã„å€¤
 		= lpSdata->dBound; 
-	DWORD dwMaxCount // ƒJƒEƒ“ƒ^‚ÌÅ‘å’l
+	DWORD dwMaxCount // ã‚«ã‚¦ãƒ³ã‚¿ã®æœ€å¤§å€¤
 		= lpSdata->dwMaxCount; 
 	
-	// ƒtƒ@ƒCƒ‹“Ç‚İ‚İ•Û‘¶—p•Ï”
+	// ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ä¿å­˜ç”¨å¤‰æ•°
 	DWORD dwByte;
-	DWORD dwReadByte; // “Ç‚İ‚ŞƒoƒCƒg”
-	LONGLONG n64CurByte = *lpn64StartByte; //Œ»İˆÊ’u
-	LONGLONG n64StartByte = n64CurByte; // –³‰¹•”‚ÌŠJnˆÊ’u(byte)
-	LONGLONG n64EndByte; // –³‰¹•”‚ÌI—¹ˆÊ’u(byte)
-	DWORD dwMovePoint; // ƒtƒ@ƒCƒ‹ƒ|ƒCƒ“ƒ^‚ÌˆÚ“®—Ê
-	DWORD dwCount;  // –³‰¹•”ŒŸõ‚ÌƒJƒEƒ“ƒ^
-	LPBYTE lpBuffer = NULL; // ƒRƒs[—p‚Ìƒoƒbƒtƒ@
-	double dWaveLevel[2]; // “ü—ÍƒŒƒxƒ‹ŒvZ—Ê
+	DWORD dwReadByte; // èª­ã¿è¾¼ã‚€ãƒã‚¤ãƒˆæ•°
+	LONGLONG n64CurByte = *lpn64StartByte; //ç¾åœ¨ä½ç½®
+	LONGLONG n64StartByte = n64CurByte; // ç„¡éŸ³éƒ¨ã®é–‹å§‹ä½ç½®(byte)
+	LONGLONG n64EndByte; // ç„¡éŸ³éƒ¨ã®çµ‚äº†ä½ç½®(byte)
+	DWORD dwMovePoint; // ãƒ•ã‚¡ã‚¤ãƒ«ãƒã‚¤ãƒ³ã‚¿ã®ç§»å‹•é‡
+	DWORD dwCount;  // ç„¡éŸ³éƒ¨æ¤œç´¢ã®ã‚«ã‚¦ãƒ³ã‚¿
+	LPBYTE lpBuffer = NULL; // ã‚³ãƒ”ãƒ¼ç”¨ã®ãƒãƒƒãƒ•ã‚¡
+	double dWaveLevel[2]; // å…¥åŠ›ãƒ¬ãƒ™ãƒ«è¨ˆç®—é‡
 	double dMaxLevel;
-	LARGE_INTEGER LI; // SetFilePointer —p 
+	LARGE_INTEGER LI; // SetFilePointer ç”¨ 
 
-	BOOL bSucceed = FALSE; // ”­Œ©‚µ‚½‚ç TRUE
+	BOOL bSucceed = FALSE; // ç™ºè¦‹ã—ãŸã‚‰ TRUE
 	
 	DWORD i;
-	DWORD dwProgPos; // ƒvƒƒOƒŒƒXƒo[‚Ìƒ|ƒWƒVƒ‡ƒ“
+	DWORD dwProgPos; // ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼ã®ãƒã‚¸ã‚·ãƒ§ãƒ³
 	
-	// ƒnƒ“ƒhƒ‹‚ª NULL ‚Å‚È‚¢‚©ƒ`ƒFƒbƒN
+	// ãƒãƒ³ãƒ‰ãƒ«ãŒ NULL ã§ãªã„ã‹ãƒã‚§ãƒƒã‚¯
 	if(hdFile == NULL){ 
 		
-		MyMessageBox(hWnd, "ƒtƒ@ƒCƒ‹‚ªƒI[ƒvƒ“‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB", 
+		MyMessageBox(hWnd, "ãƒ•ã‚¡ã‚¤ãƒ«ãŒã‚ªãƒ¼ãƒ—ãƒ³ã•ã‚Œã¦ã„ã¾ã›ã‚“ã€‚", 
 			"Error", MB_OK|MB_ICONERROR);	
 		
-		// ¸”sƒƒbƒZ[ƒW‘—M
+		// å¤±æ•—ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡
 		SendMessage(hWnd,WM_MYENDCOPY,0,1L);
 		ExitThread(1L);
 	}
 
-	// ŠJnˆÊ’u‚ªƒf[ƒ^ƒTƒCƒY‚ğ’´‚¦‚Ä‚¢‚é
+	// é–‹å§‹ä½ç½®ãŒãƒ‡ãƒ¼ã‚¿ã‚µã‚¤ã‚ºã‚’è¶…ãˆã¦ã„ã‚‹æ™‚
 	if(n64CurByte > n64DataSize)
 	{
 		n64CurByte = n64DataSize;
@@ -90,73 +88,73 @@ DWORD WINAPI SearchThread(LPVOID lpSearchData)
 		goto L_EXIT;
 	}
 	
-	// isƒvƒƒOƒŒƒXƒo[İ’è	 
+	// é€²è¡Œãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒãƒ¼è¨­å®š	 
 	dwProgPos = ((DWORD)(n64CurByte/SAVEBUFSIZE));
 	SendMessage(hProgBar,PBM_SETRANGE,0,MAKELPARAM(0,(DWORD)(n64DataSize/SAVEBUFSIZE))); 
 	SendMessage(hProgBar,PBM_SETSTEP,(WPARAM)1,0);
 	SendMessage(hProgBar,PBM_SETPOS,(WPARAM)dwProgPos,0);   
 
-	// ƒŒƒxƒ‹’²® (-1 - 1 ‚É³‹K‰»)
+	// ãƒ¬ãƒ™ãƒ«èª¿æ•´ (-1 - 1 ã«æ­£è¦åŒ–)
 	dMaxLevel = GetMaxWaveLevel(waveFmt);
-	dBound = pow(10.,dBound/20);  // ƒŠƒjƒA’l‚É–ß‚·
+	dBound = pow(10.,dBound/20);  // ãƒªãƒ‹ã‚¢å€¤ã«æˆ»ã™
 	
-	// ƒ|ƒCƒ“ƒ^‚ÌˆÚ“®—Ê
-	// ˆê•bŠÔ‚É waveFmt.nSamplesPerSec ‰ñ‚àg‚Á‚Ä–³‰¹‚Ì”»’è‚ğ‚µ‚Ä‚¢‚½‚ç“ú‚ª•é‚ê‚é‚Ì‚Å
-	// waveFmt.nSamplesPerSec/S_POINT_PER_SEC “_‚²‚Æ‚É”»’è‚·‚é
+	// ãƒã‚¤ãƒ³ã‚¿ã®ç§»å‹•é‡
+	// ä¸€ç§’é–“ã« waveFmt.nSamplesPerSec å›ã‚‚ä½¿ã£ã¦ç„¡éŸ³ã®åˆ¤å®šã‚’ã—ã¦ã„ãŸã‚‰æ—¥ãŒæš®ã‚Œã‚‹ã®ã§
+	// waveFmt.nSamplesPerSec/S_POINT_PER_SEC ç‚¹ã”ã¨ã«åˆ¤å®šã™ã‚‹
 	dwMovePoint = waveFmt.nSamplesPerSec/S_POINT_PER_SEC;
 	
-	// ƒoƒbƒtƒ@ƒƒ‚ƒŠ‚ğŠm•Û
+	// ãƒãƒƒãƒ•ã‚¡ãƒ¡ãƒ¢ãƒªã‚’ç¢ºä¿
 	lpBuffer =(LPBYTE)GlobalAlloc(GPTR,sizeof(BYTE)*SAVEBUFSIZE);
 	if(lpBuffer == NULL)
 	{
-		MyMessageBox(hWnd, "ƒƒ‚ƒŠ‚ÌŠm•Û‚É¸”s‚µ‚Ü‚µ‚½B",
+		MyMessageBox(hWnd, "ãƒ¡ãƒ¢ãƒªã®ç¢ºä¿ã«å¤±æ•—ã—ã¾ã—ãŸã€‚",
 			"Error", MB_OK|MB_ICONERROR);
 		
-		// ¸”sƒƒbƒZ[ƒW‘—M
+		// å¤±æ•—ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸é€ä¿¡
 		SendMessage(hWnd,WM_MYENDCOPY,0,1L);
 		return 1;
 	}
 	
 	
 	//---------------------------------------
-	// ƒT[ƒ`ŠJn
+	// ã‚µãƒ¼ãƒé–‹å§‹
 	
 	dwCount = 0;
 	while(n64CurByte < n64DataSize && *lpwStatus==ID_SEARCHON)
 	{
-		// ƒvƒƒOƒŒƒXƒp[ƒAƒbƒv
+		// ãƒ—ãƒ­ã‚°ãƒ¬ã‚¹ãƒ‘ãƒ¼ã‚¢ãƒƒãƒ—
 		SendMessage(hProgBar,PBM_SETPOS,(WPARAM)dwProgPos,0);
 		dwProgPos++;
 		
-		// ƒf[ƒ^“Ç‚İ‚İƒTƒCƒYŒvZ
+		// ãƒ‡ãƒ¼ã‚¿èª­ã¿è¾¼ã¿ã‚µã‚¤ã‚ºè¨ˆç®—
 		dwReadByte = n64CurByte + SAVEBUFSIZE > n64DataSize
 			? (DWORD)(n64DataSize - n64CurByte) : SAVEBUFSIZE;
 		
-		// “Ç‚İ
-		LI.QuadPart = n64DataOffset+n64CurByte; // ƒT[ƒ`ŠJnˆÊ’u‚Éƒ|ƒCƒ“ƒ^ˆÚ“®
+		// èª­ã¿
+		LI.QuadPart = n64DataOffset+n64CurByte; // ã‚µãƒ¼ãƒé–‹å§‹ä½ç½®ã«ãƒã‚¤ãƒ³ã‚¿ç§»å‹•
 		SetFilePointer(hdFile,LI.LowPart, &LI.HighPart,FILE_BEGIN);
 		memset(lpBuffer,0,sizeof(BYTE)*SAVEBUFSIZE);
 		ReadFile(hdFile,lpBuffer,dwReadByte,&dwByte, NULL);
 		
-		// ƒoƒbƒtƒ@“à‚ğƒT[ƒ`
+		// ãƒãƒƒãƒ•ã‚¡å†…ã‚’ã‚µãƒ¼ãƒ
 		for(i = 0;i < dwByte/waveFmt.nBlockAlign ;i+=dwMovePoint)
 		{
 			if(lpSdata->bAvr)
-				//dwMovePoint“_‚Ì•½‹Ï‰¹—Êæ“¾
+				//dwMovePointç‚¹ã®å¹³å‡éŸ³é‡å–å¾—
 				WaveLevelAverage(dWaveLevel,lpBuffer+i*waveFmt.nBlockAlign,waveFmt,dwMovePoint*waveFmt.nBlockAlign);
 			else
-				// o—Í’læ“¾
+				// å‡ºåŠ›å€¤å–å¾—
 				WaveLevel(dWaveLevel,lpBuffer+i*waveFmt.nBlockAlign,waveFmt);
 
-			//³‹K‰»
+			//æ­£è¦åŒ–
 			dWaveLevel[0] /= dMaxLevel;
 			dWaveLevel[1] /= dMaxLevel;
 			
-			// –³‰¹
+			// ç„¡éŸ³
 			if(fabs(dWaveLevel[0]) <= dBound && fabs(dWaveLevel[1]) <= dBound) dwCount++;
-			else { // —L‰¹•”‚ªŒ»‚ê‚½
+			else { // æœ‰éŸ³éƒ¨ãŒç¾ã‚ŒãŸ
 				
-				if(dwCount >= dwMaxCount) {	// ŒŸõŠ®—¹
+				if(dwCount >= dwMaxCount) {	// æ¤œç´¢å®Œäº†
 					n64EndByte = n64StartByte+waveFmt.nBlockAlign*dwMovePoint*dwCount;
 					bSucceed = TRUE;
 					goto L_EXIT;
@@ -172,14 +170,14 @@ DWORD WINAPI SearchThread(LPVOID lpSearchData)
 
 L_EXIT:	
 	
-	// ƒƒ‚ƒŠŠJ•ú
+	// ãƒ¡ãƒ¢ãƒªé–‹æ”¾
 	if(lpBuffer) GlobalFree(lpBuffer);
 	
-	// ˆÊ’uƒZƒbƒg
+	// ä½ç½®ã‚»ãƒƒãƒˆ
 	*lpn64StartByte = n64StartByte;
 	*lpn64EndByte = n64EndByte;
 
-	// Œ‹‰Ê‘—M
+	// çµæœé€ä¿¡
 	SendMessage(hWnd,WM_MYENDCOPY,0,bSucceed);
 	
 	return(0);
@@ -188,24 +186,24 @@ L_EXIT:
 
 
 //-------------------------------------
-// –³‰¹•”ƒT[ƒ`ƒ_ƒCƒAƒƒO‚ÌƒvƒƒV[ƒWƒƒ
-// ƒXƒŒƒbƒh‚ğ“®‚©‚µ‚Ä‚é‚¾‚¯B
+// ç„¡éŸ³éƒ¨ã‚µãƒ¼ãƒãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã®ãƒ—ãƒ­ã‚·ãƒ¼ã‚¸ãƒ£
+// ã‚¹ãƒ¬ãƒƒãƒ‰ã‚’å‹•ã‹ã—ã¦ã‚‹ã ã‘ã€‚
 LRESULT CALLBACK SearchDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 {
 	
-	static HANDLE hThread;  // ƒXƒŒƒbƒh‚Ìƒnƒ“ƒhƒ‹
-	static DWORD threadId; // ƒXƒŒƒbƒh ID
-	static LPSEARCHDATA lpSearchData; // ƒXƒŒƒbƒh‚É“n‚·ƒf[ƒ^ƒ^ƒCƒv
-	static WORD wStatus; // ƒXƒe[ƒ^ƒX
+	static HANDLE hThread;  // ã‚¹ãƒ¬ãƒƒãƒ‰ã®ãƒãƒ³ãƒ‰ãƒ«
+	static DWORD threadId; // ã‚¹ãƒ¬ãƒƒãƒ‰ ID
+	static LPSEARCHDATA lpSearchData; // ã‚¹ãƒ¬ãƒƒãƒ‰ã«æ¸¡ã™ãƒ‡ãƒ¼ã‚¿ã‚¿ã‚¤ãƒ—
+	static WORD wStatus; // ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹
 	
 	switch (msg) {
 		
-	case WM_INITDIALOG:  // ƒ_ƒCƒAƒƒO‰Šú‰»
+	case WM_INITDIALOG:  // ãƒ€ã‚¤ã‚¢ãƒ­ã‚°åˆæœŸåŒ–
 		
-		// ƒ_ƒCƒAƒƒO‚ğ’†S‚ÉˆÚ“®
+		// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’ä¸­å¿ƒã«ç§»å‹•
 		SetDlgCenter(hWnd);
 		
-		// •Û‘¶ƒXƒŒƒbƒh‹N“®
+		// ä¿å­˜ã‚¹ãƒ¬ãƒƒãƒ‰èµ·å‹•
 		wStatus = ID_SEARCHON;
 		lpSearchData = (LPSEARCHDATA)lp;
 		lpSearchData->hWnd = hWnd;
@@ -218,17 +216,17 @@ LRESULT CALLBACK SearchDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 			0,(LPDWORD)&threadId);
 		
 		if(hThread == NULL){	   
-			MyMessageBox(hWnd, "ƒXƒŒƒbƒh‚Ì‹N“®‚É¸”s‚µ‚Ü‚µ‚½B", 
+			MyMessageBox(hWnd, "ã‚¹ãƒ¬ãƒƒãƒ‰ã®èµ·å‹•ã«å¤±æ•—ã—ã¾ã—ãŸã€‚", 
 				"Error", MB_OK|MB_ICONERROR);
 			EndDialog(hWnd, IDCANCEL); 
 		}
 		
 		break;
 		
-	case WM_MYENDCOPY: // ƒT[ƒ`Š®—¹
+	case WM_MYENDCOPY: // ã‚µãƒ¼ãƒå®Œäº†
 		
-		if((DWORD)lp == FALSE) EndDialog(hWnd, IDCANCEL); // ¸”s
-		else EndDialog(hWnd, IDOK);  // ¬Œ÷
+		if((DWORD)lp == FALSE) EndDialog(hWnd, IDCANCEL); // å¤±æ•—
+		else EndDialog(hWnd, IDOK);  // æˆåŠŸ
 		
 		break;
 		
@@ -236,7 +234,7 @@ LRESULT CALLBACK SearchDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 		
 		switch (LOWORD(wp)) {
 			
-		case IDCANCEL: // ’â~
+		case IDCANCEL: // åœæ­¢
 			
 			wStatus = ID_SEARCHOFF;
 			return TRUE;
@@ -255,24 +253,24 @@ LRESULT CALLBACK SearchDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 
 //-------------------------------------------
-// –³‰¹•”ƒT[ƒ`ŠJnŠÖ”
-// ÀÛ‚Íƒ_ƒCƒAƒƒO‚ğŠJ‚­‚¾‚¯B
+// ç„¡éŸ³éƒ¨ã‚µãƒ¼ãƒé–‹å§‹é–¢æ•°
+// å®Ÿéš›ã¯ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã‚’é–‹ãã ã‘ã€‚
 BOOL SearchNoSound(HWND hWnd,
 				   HINSTANCE hInst,
-				   HANDLE hdFile, // ƒT[ƒ`‚·‚éƒtƒ@ƒCƒ‹ƒnƒ“ƒhƒ‹
-				   LONGLONG n64DataSize, //ƒtƒ@ƒCƒ‹ƒTƒCƒY
-				   LONGLONG n64DataOffset, //ƒf[ƒ^‚Ü‚Å‚ÌƒIƒtƒZƒbƒg
-				   WAVEFORMATEX waveFmt, // Wave ƒtƒH[ƒ}ƒbƒg
-				   LONGLONG* lpn64StartByte, // ŠJnˆÊ’u(ƒoƒCƒg)
-				   LONGLONG* lpn64EndByte, // I—¹ˆÊ’u(ƒoƒCƒg)
-				   double dBound, // ‚µ‚«‚¢’l
-				   DWORD dwCount,  // –³‰¹•”ŒŸõ‚ÌƒJƒEƒ“ƒ^‚ÌÅ‘å’l
-				   BOOL bAvr	// •½‹Ï‰¹—Ê’l‚ğg—p
+				   HANDLE hdFile, // ã‚µãƒ¼ãƒã™ã‚‹ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ³ãƒ‰ãƒ«
+				   LONGLONG n64DataSize, //ãƒ•ã‚¡ã‚¤ãƒ«ã‚µã‚¤ã‚º
+				   LONGLONG n64DataOffset, //ãƒ‡ãƒ¼ã‚¿ã¾ã§ã®ã‚ªãƒ•ã‚»ãƒƒãƒˆ
+				   WAVEFORMATEX waveFmt, // Wave ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆ
+				   LONGLONG* lpn64StartByte, // é–‹å§‹ä½ç½®(ãƒã‚¤ãƒˆ)
+				   LONGLONG* lpn64EndByte, // çµ‚äº†ä½ç½®(ãƒã‚¤ãƒˆ)
+				   double dBound, // ã—ãã„å€¤
+				   DWORD dwCount,  // ç„¡éŸ³éƒ¨æ¤œç´¢ã®ã‚«ã‚¦ãƒ³ã‚¿ã®æœ€å¤§å€¤
+				   BOOL bAvr	// å¹³å‡éŸ³é‡å€¤ã‚’ä½¿ç”¨
 				   ){
 	
 	SEARCHDATA searchData;
 	
-	// ƒ_ƒCƒAƒƒO‚É“n‚·ƒf[ƒ^ƒZƒbƒg
+	// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ã«æ¸¡ã™ãƒ‡ãƒ¼ã‚¿ã‚»ãƒƒãƒˆ
 	searchData.hdFile = hdFile;
 	searchData.n64DataSize = n64DataSize;
 	searchData.waveFmt = waveFmt;
@@ -284,7 +282,7 @@ BOOL SearchNoSound(HWND hWnd,
 	searchData.dBound = dBound;
 	searchData.dwMaxCount = dwCount;
 	
-	// ƒ_ƒCƒAƒƒOƒ{ƒbƒNƒX•\¦‚Æ•Û‘¶ŠJn
+	// ãƒ€ã‚¤ã‚¢ãƒ­ã‚°ãƒœãƒƒã‚¯ã‚¹è¡¨ç¤ºã¨ä¿å­˜é–‹å§‹
 	if(DialogBoxParam(hInst,MAKEINTRESOURCE(IDD_SEARCH)
 		,hWnd,(DLGPROC)SearchDlgProc,
 		(LPARAM)&searchData) == IDCANCEL) return FALSE;
