@@ -179,7 +179,7 @@ LRESULT CALLBACK TrackDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp)
 					{
 						fread(&(lpEwcData->n64SplitMarkedPosByte[i]),1,sizeof(LONGLONG),f);
 						fread(&(lpEwcData->lnSplitMarkedPos[i]),1,sizeof(LONG),f);
-						if(lpEwcData->n64SplitMarkedPosByte[i] > lpEwcData->n64WaveDataSize) break;
+						if((unsigned long long) lpEwcData->n64SplitMarkedPosByte[i] > lpEwcData->n64WaveDataSize) break;
 						lpEwcData->dwSplitNum++;
 					}
 					

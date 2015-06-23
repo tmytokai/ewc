@@ -92,11 +92,11 @@ DWORD WINAPI StartWaveFlt(LPVOID lpVoid)
 	PROCESS_INFORMATION* pProInfo  // WaveFLT のプロセス情報
 		= lpEwcData->pProInfo; 
 
-	LONGLONG n64DataSize; 	//コピーするデータサイズ
+	unsigned long long n64DataSize; 	//コピーするデータサイズ
 	
 	// Wave データ用
-	LONGLONG n64SrcDataSize; // コピー元ファイルのデータサイズ
-	LONGLONG n64SrcDataOffset; // コピー元ファイルのヘッダオフセット
+	unsigned long long n64SrcDataSize; // コピー元ファイルのデータサイズ
+	unsigned long long n64SrcDataOffset; // コピー元ファイルのヘッダオフセット
 	
 	CHAR szStr[CHR_BUF];
 	DWORD dwExitCode;
@@ -126,7 +126,7 @@ DWORD WINAPI StartWaveFlt(LPVOID lpVoid)
 		ULONGLONG u64DiskFreeSpace; 
 		GetFreeHddSpace64(&u64DiskFreeSpace,lpszNewFileName);
 		
-		if((LONGLONG)u64DiskFreeSpace < n64DataSize/+1024)
+		if(u64DiskFreeSpace < n64DataSize/+1024)
 		{
 			wsprintf(szStr,"ドライブの空き容量 %lu M 必要な容量 %lu M\n\nドライブの空容量が足りません。ドライブを変更して下さい。"
 				,(DWORD)(u64DiskFreeSpace/1024/1024),(DWORD)(n64DataSize/1024/1024));

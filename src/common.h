@@ -146,8 +146,8 @@ WAVEOUTCAPS waveOutCaps[MAXDEVICENUMBER]; // 再生デバイス情報
 PROCESS_INFORMATION* pProInfo; // WaveFLT のプロセス情報
 LPWORD lpwStatus; // ステータス
 WAVEFORMATEX waveFmt; // Wave フォーマットデータ
-LONGLONG n64WaveDataOffset; // データまでのオフセットサイズ
-LONGLONG n64WaveDataSize;   // WAVE のデータサイズ
+unsigned long long n64WaveDataOffset; // データまでのオフセットサイズ
+unsigned long long n64WaveDataSize;   // WAVE のデータサイズ
 
 // ファイル関係
 HANDLE hdFile; // ファイルのハンドル
@@ -246,11 +246,13 @@ void WaveLevelAverage(double dLevel[2],  // output of left and right
 			   WAVEFORMATEX waveFmt,
 			   DWORD dwSize
 			   );
-BOOL GetWaveFormat(char* lpszFileName, // file name or 'stdin'
-				   LPWAVEFORMATEX lpWaveFmt, 
-				   LONGLONG* lpn64WaveDataSize, // size of data
-				   LONGLONG* lpn64WaveOffset, // offset to data chunk
-				   char* lpszErr 
+
+// get WAVE format
+const bool GetWaveFormat(const char* filename, // name or 'stdin'
+				   WAVEFORMATEX* waveformat, 
+				   unsigned long long* datasize, // data size (byte)
+				   unsigned long long* offset, // offset to data chunk (byte)
+				   char* errmsg 
 				   );
 
 // 再生関係(playwave.cpp)

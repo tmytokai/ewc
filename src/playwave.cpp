@@ -26,11 +26,12 @@
 // 共通の関数(wavefunc.cpp 内)
 BOOL SetWaveHdr(HWND,LPWAVEHDR,LONG,DWORD);
 BOOL DelWaveHdr(HWND,LPWAVEHDR);
-BOOL GetWaveFormat(char* lpszFileName, // file name or 'stdin'
-				   LPWAVEFORMATEX lpWaveFmt, 
-				   LONGLONG* lpn64WaveDataSize, // size of data
-				   LONGLONG* lpn64WaveOffset, // offset to data chunk
-				   char* lpszErr 
+// get WAVE format
+const bool GetWaveFormat(const char* filename, // name or 'stdin'
+				   WAVEFORMATEX* waveformat, 
+				   unsigned long long* datasize, // data size (byte)
+				   unsigned long long* offset, // offset to data chunk (byte)
+				   char* errmsg 
 				   );
 VOID WaveLevelMaxPeak(double dPeak[2],
 					  LPBYTE lpWaveData,  // data
@@ -203,8 +204,8 @@ DWORD WINAPI PlayWaveThread(LPVOID lpPlayData)
 	DWORD dwStartTime =  ((LPPLAYDATA)lpPlayData)->dwStartTime; // 再生開始位置(ミリ秒)
 	HANDLE hdFile = ((LPPLAYDATA)lpPlayData)->hdFile; // 再生ファイルのハンドル
 	WAVEFORMATEX waveFmt = ((LPPLAYDATA)lpPlayData)->waveFmt; // wave フォーマット
-	LONGLONG n64WaveDataSize = ((LPPLAYDATA)lpPlayData)->n64WaveDataSize; // データ部分までのオフセット 
-	LONGLONG n64WaveOffset = ((LPPLAYDATA)lpPlayData)->n64WaveOffset;  // ファイルのサイズ
+	unsigned long long n64WaveDataSize = ((LPPLAYDATA)lpPlayData)->n64WaveDataSize; // データ部分までのオフセット 
+	unsigned long long n64WaveOffset = ((LPPLAYDATA)lpPlayData)->n64WaveOffset;  // ファイルのサイズ
 
 
 	HWAVEOUT hWaveOut;  // 再生デバイスのハンドル
@@ -213,7 +214,7 @@ DWORD WINAPI PlayWaveThread(LPVOID lpPlayData)
 	DWORD dwWaveBlockTime; // バッファの記録時間
 	DWORD dwWaveBlockByte; //バッファのバイト数
 	DWORD dwByte; // 読み込みバイト数
-	LONGLONG n64CurDataSize;  // 現在の演奏位置
+	unsigned long long  n64CurDataSize;  // 現在の演奏位置
 	WORD wCurWaveHdr;  // 現在使用している wave ヘッダの番号
 	BOOL bCloseFile = FALSE; // ファイルをクローズするか
 	LONG i; // 雑用
