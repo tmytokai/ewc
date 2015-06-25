@@ -161,9 +161,9 @@ BEGIN
     CONTROL         "コンソールを表示する",IDC_CHKSHOWCON,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,86,103,79,10
     GROUPBOX        "再生サウンドデバイス選択",IDC_STATIC,7,39,173,54
-    LTEXT           "Easy Wave Cutter Ver.17.06.2015",IDC_STATIC,39,11,
+    LTEXT           "Easy Wave Cutter Ver.2015.06.25",IDC_STATIC,39,11,
                     115,8
-    LTEXT           "Copyright (c) 1999-2015,Tomoya Tokairin",IDC_STATIC,33,
+    LTEXT           "Copyright (c) 1999-2015,T.Tokairin",IDC_STATIC,33,
                     24,122,8
 END
 
